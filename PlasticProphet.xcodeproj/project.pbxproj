@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8814CBF12EA6879F00A7E406 /* LogicalView.md in Resources */ = {isa = PBXBuildFile; fileRef = 8814CBEC2EA6879F00A7E406 /* LogicalView.md */; };
+		8814CBF22EA6879F00A7E406 /* PhysicalView.md in Resources */ = {isa = PBXBuildFile; fileRef = 8814CBED2EA6879F00A7E406 /* PhysicalView.md */; };
+		8814CBF32EA6879F00A7E406 /* Plastic Prophet App Flow V1.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 8814CBEE2EA6879F00A7E406 /* Plastic Prophet App Flow V1.pdf */; };
+		8814CBF42EA6879F00A7E406 /* DevelopmentView.md in Resources */ = {isa = PBXBuildFile; fileRef = 8814CBEB2EA6879F00A7E406 /* DevelopmentView.md */; };
+		8814CBF52EA6879F00A7E406 /* ProcessGeofenceRecomendation.md in Resources */ = {isa = PBXBuildFile; fileRef = 8814CBEF2EA6879F00A7E406 /* ProcessGeofenceRecomendation.md */; };
 		891F5F732E9E90E900A880E5 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 891F5F722E9E90E200A880E5 /* .gitignore */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +33,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8814CBEB2EA6879F00A7E406 /* DevelopmentView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DevelopmentView.md; sourceTree = "<group>"; };
+		8814CBEC2EA6879F00A7E406 /* LogicalView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LogicalView.md; sourceTree = "<group>"; };
+		8814CBED2EA6879F00A7E406 /* PhysicalView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PhysicalView.md; sourceTree = "<group>"; };
+		8814CBEE2EA6879F00A7E406 /* Plastic Prophet App Flow V1.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Plastic Prophet App Flow V1.pdf"; sourceTree = "<group>"; };
+		8814CBEF2EA6879F00A7E406 /* ProcessGeofenceRecomendation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ProcessGeofenceRecomendation.md; sourceTree = "<group>"; };
 		891F5F142E941BA700A880E5 /* PlasticProphet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlasticProphet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F212E941BA800A880E5 /* PlasticProphetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F2B2E941BA800A880E5 /* PlasticProphetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,9 +87,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8814CBF02EA6879F00A7E406 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				8814CBEB2EA6879F00A7E406 /* DevelopmentView.md */,
+				8814CBEC2EA6879F00A7E406 /* LogicalView.md */,
+				8814CBED2EA6879F00A7E406 /* PhysicalView.md */,
+				8814CBEE2EA6879F00A7E406 /* Plastic Prophet App Flow V1.pdf */,
+				8814CBEF2EA6879F00A7E406 /* ProcessGeofenceRecomendation.md */,
+			);
+			path = docs;
+			sourceTree = "<group>";
+		};
 		891F5F0B2E941BA700A880E5 = {
 			isa = PBXGroup;
 			children = (
+				8814CBF02EA6879F00A7E406 /* docs */,
 				891F5F722E9E90E200A880E5 /* .gitignore */,
 				891F5F162E941BA700A880E5 /* PlasticProphet */,
 				891F5F242E941BA800A880E5 /* PlasticProphetTests */,
@@ -177,7 +200,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					891F5F132E941BA700A880E5 = {
 						CreatedOnToolsVersion = 16.4;
@@ -218,6 +241,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8814CBF12EA6879F00A7E406 /* LogicalView.md in Resources */,
+				8814CBF22EA6879F00A7E406 /* PhysicalView.md in Resources */,
+				8814CBF32EA6879F00A7E406 /* Plastic Prophet App Flow V1.pdf in Resources */,
+				8814CBF42EA6879F00A7E406 /* DevelopmentView.md in Resources */,
+				8814CBF52EA6879F00A7E406 /* ProcessGeofenceRecomendation.md in Resources */,
 				891F5F732E9E90E900A880E5 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -334,6 +362,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -390,6 +419,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
