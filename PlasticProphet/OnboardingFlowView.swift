@@ -24,9 +24,11 @@ struct OnboardingFlowView: View {
                     VStack(spacing: 40) {
                         VStack(spacing: 12) {
                             Text("Welcome to")
-                                .font(.custom("Montserrat", size: 32))
+                                .font(.custom("Montserrat", size: 38))
                                 .fontWeight(.black)
                                 .foregroundColor(.black)
+                                .multilineTextAlignment(.center)
+                                .tracking(-1.5)
                                 .shadow(color: Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.25), radius: 2, x: 0, y: 4)
                                 .minimumScaleFactor(0.5)
                                 .lineLimit(1)
@@ -34,7 +36,7 @@ struct OnboardingFlowView: View {
                             Image("App Logo Black")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 180, height: 180)
+                                .frame(width: 280, height: 280)
                         }
 
                         Button(action: { withAnimation { step = .tos } }) {
@@ -42,13 +44,13 @@ struct OnboardingFlowView: View {
                                 Text("Let's Get Started!")
                                     .font(.custom("Montserrat", size: 22))
                                     .fontWeight(.heavy)
-                                    .foregroundColor(Color(red: 0.16, green: 0.76, blue: 0.24))
+                                    .foregroundColor(Color.black)
                             }
                             .padding(16)
                             .frame(maxWidth: .infinity)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color.white)
+                                    .fill(Color.ppGreen.opacity(0.75))
                                     .shadow(color: Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.15), radius: 8, x: 0, y: 4)
                             )
                             .overlay(
@@ -70,6 +72,7 @@ struct OnboardingFlowView: View {
                         .font(.custom("Montserrat", size: 28))
                         .fontWeight(.bold)
                         .foregroundColor(.black)
+                        .tracking(-1.5)
                         .padding(.top, 20)
                         .padding(.bottom, 16)
                     
@@ -135,7 +138,7 @@ struct OnboardingFlowView: View {
                     
                     VStack(spacing: 16) {
                         Toggle("I accept Terms of Service", isOn: $app.acceptedTos)
-                            .font(.custom("Montserrat", size: 16))
+                            .font(.custom("Montserrat", size: 20))
                             .fontWeight(.medium)
                             .tint(Color(hex: "2ac33c"))
                             .padding(.horizontal)
@@ -144,12 +147,12 @@ struct OnboardingFlowView: View {
                             Text("Continue")
                                 .font(.custom("Montserrat", size: 20))
                                 .fontWeight(.black)
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                                 .frame(maxWidth: .infinity)
                                 .padding(16)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(app.acceptedTos ? Color(hex: "2ac33c") : Color.gray)
+                                        .fill(app.acceptedTos ? Color(hex: "2ac33c") : Color.ppGreen.opacity(0.4))
                                 )
                                 .shadow(color: Color(hex: "0a3a0e").opacity(0.3), radius: 4, x: 0, y: 2)
                         }
@@ -167,6 +170,7 @@ struct OnboardingFlowView: View {
                             .font(.custom("Montserrat", size: 28))
                             .fontWeight(.bold)
                             .foregroundColor(.black)
+                            .tracking(-1.5)
                         
                         Text("To provide you with the best experience, PlasticProphet needs access to your camera and location.")
                             .font(.custom("Montserrat", size: 15))
@@ -196,7 +200,7 @@ struct OnboardingFlowView: View {
                                 get: { app.permissions.cameraAuthorized },
                                 set: { app.markPermissions(camera: $0) }
                             ))
-                            .font(.custom("Montserrat", size: 16))
+                            .font(.custom("Montserrat", size: 18))
                             .fontWeight(.medium)
                             .tint(Color(hex: "2ac33c"))
                         }
@@ -223,7 +227,7 @@ struct OnboardingFlowView: View {
                                 get: { app.permissions.locationAuthorized },
                                 set: { app.markPermissions(location: $0) }
                             ))
-                            .font(.custom("Montserrat", size: 16))
+                            .font(.custom("Montserrat", size: 18))
                             .fontWeight(.medium)
                             .tint(Color(hex: "2ac33c"))
                         }
@@ -240,12 +244,12 @@ struct OnboardingFlowView: View {
                         Text("Continue")
                             .font(.custom("Montserrat", size: 20))
                             .fontWeight(.black)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                             .frame(maxWidth: .infinity)
                             .padding(16)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(app.permissions.allGranted ? Color(hex: "2ac33c") : Color.gray)
+                                    .fill(app.permissions.allGranted ? Color(hex: "2ac33c") : Color.ppGreen.opacity(0.4))
                             )
                             .shadow(color: Color(hex: "0a3a0e").opacity(0.3), radius: 4, x: 0, y: 2)
                     }
@@ -261,6 +265,7 @@ struct OnboardingFlowView: View {
                         .font(.custom("Montserrat", size: 28))
                         .fontWeight(.bold)
                         .foregroundColor(.black)
+                        .tracking(-1.5)
                     
                     Text("Search or scan to add your cards. Popular cards are shown below; tap a card tile to select it.")
                         .font(.custom("Montserrat", size: 14))
@@ -296,9 +301,9 @@ struct OnboardingFlowView: View {
                             step = .done
                         }) {
                             Text("Skip for now")
-                                .font(.custom("Montserrat", size: 16))
+                                .font(.custom("Montserrat", size: 20))
                                 .fontWeight(.bold)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.black)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
                                 .padding(.horizontal, 8)
@@ -315,15 +320,15 @@ struct OnboardingFlowView: View {
                             step = .done
                         }) {
                             Text("Finish")
-                                .font(.custom("Montserrat", size: 16))
+                                .font(.custom("Montserrat", size: 20))
                                 .fontWeight(.black)
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
                                 .padding(.horizontal, 8)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(app.cards.isEmpty ? Color.gray : Color(hex: "2ac33c"))
+                                        .fill(app.cards.isEmpty ? Color.ppGreen.opacity(0.3) : Color(hex: "2ac33c"))
                                 )
                                 .shadow(color: Color(hex: "0a3a0e").opacity(0.3), radius: 4, x: 0, y: 2)
                                 .minimumScaleFactor(0.7)
@@ -384,7 +389,7 @@ struct OnboardingFlowView: View {
                         Image("App Logo Black")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 120, height: 120)
+                            .frame(width: 300, height: 300)
                         
                         HStack(spacing: 8) {
                             Text("All Set!")

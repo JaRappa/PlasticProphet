@@ -119,14 +119,16 @@ private struct CardTile: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color.ppGreen.opacity(isSelected ? 0.7 : 0.4))
+                    .fill(Color.ppGreen.opacity(isSelected ? 0.4 : 0.2))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .stroke(isSelected ? Color.ppGreen : Color.clear, lineWidth: isSelected ? 2.5 : 0)
             )
+            .scaleEffect(isSelected ? 0.98 : 1.0)
         }
         .buttonStyle(.plain)
+        .simultaneousGesture(TapGesture().onEnded { })
         .animation(.easeInOut(duration: 0.15), value: isSelected)
     }
 }

@@ -35,8 +35,8 @@ extension Color {
     static let ppShadow = Color(hex: "0a3a0e")
     
     // Network colors
-    static let visaBlue = Color(hex: "1434cb")
-    static let mastercardRed = Color(hex: "eb001b")
-    static let amexBlue = Color(hex: "016fd0")
-    static let discoverOrange = Color(hex: "e55c20")
+    static let visaBlue = Color(hex: "1434cb").opacity(0.8)
+    static let mastercardRed = Color(hex: "eb001b").opacity(0.7)
+    static let amexBlue = Color(hex: "016fd0").opacity(0.8)
+    static let discoverOrange = Color(hex: "e55c20").opacity(0.8)
 }

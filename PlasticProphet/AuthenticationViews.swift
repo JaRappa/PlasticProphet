@@ -70,6 +70,7 @@ struct AuthLandingView: View {
 }
 
 // MARK: - Sign In View
+// MARK: - Sign In View
 struct SignInView: View {
     @EnvironmentObject var app: AppState
     @Environment(\.dismiss) private var dismiss
@@ -171,7 +172,7 @@ struct SignInView: View {
                     Text("Sign In")
                         .font(.custom("Montserrat", size: 20))
                         .fontWeight(.black)
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding(16)
                         .background(
@@ -203,8 +204,15 @@ struct SignInView: View {
     
     private func signIn() {
         // TODO: Add real authentication
-        // For now, just mark as authenticated
+        // For now, just mark as authenticated with mock data
         app.isAuthenticated = true
+        
+        // Add mock user data based on email
+        // Extract name from email or use default
+        let emailPrefix = email.components(separatedBy: "@").first ?? "User"
+        app.userFirstName = emailPrefix.capitalized
+        app.userLastName = "Account"
+        app.userEmail = email
     }
 }
 
