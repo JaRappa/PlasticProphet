@@ -21,7 +21,7 @@ struct AuthLandingView: View {
                     Image("App Logo Black")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 200, height: 200)
+                        .frame(width: 300, height: 300)
                     
                     Spacer()
                     
@@ -75,7 +75,13 @@ struct SignInView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var email: String = ""
     @State private var password: String = ""
+    @State private var showPassword: Bool = false
     @State private var showForgotPassword = false
+    @FocusState private var focusedField: SignInField?
+    
+    enum SignInField {
+        case email, password
+    }
     
     var body: some View {
         ZStack {
@@ -107,8 +113,13 @@ struct SignInView: View {
                             .padding()
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(focusedField == .email ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
                             .keyboardType(.emailAddress)
                             .textInputAutocapitalization(.never)
+                            .focused($focusedField, equals: .email)
                     }
                     
                     // Password
@@ -118,11 +129,30 @@ struct SignInView: View {
                             .fontWeight(.medium)
                             .foregroundColor(.black)
                         
-                        SecureField("Password", text: $password)
-                            .font(.custom("Montserrat", size: 16))
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
+                        HStack {
+                            if showPassword {
+                                TextField("Password", text: $password)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .password)
+                            } else {
+                                SecureField("Password", text: $password)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .password)
+                            }
+                            
+                            Button(action: { showPassword.toggle() }) {
+                                Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.trailing, 8)
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
+                        )
                     }
                     
                     // Forgot Password
@@ -187,6 +217,13 @@ struct SignUpView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
+    @State private var showPassword: Bool = false
+    @State private var showConfirmPassword: Bool = false
+    @FocusState private var focusedField: SignUpField?
+    
+    enum SignUpField {
+        case firstName, lastName, email, password, confirmPassword
+    }
     
     private var isValidPassword: Bool {
         password.count >= 8 &&
@@ -228,6 +265,11 @@ struct SignUpView: View {
                             .padding()
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(focusedField == .firstName ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
+                            .focused($focusedField, equals: .firstName)
                     }
                     
                     // Last Name
@@ -242,6 +284,11 @@ struct SignUpView: View {
                             .padding()
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(focusedField == .lastName ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
+                            .focused($focusedField, equals: .lastName)
                     }
                     
                     // Email
@@ -256,8 +303,13 @@ struct SignUpView: View {
                             .padding()
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(focusedField == .email ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
                             .keyboardType(.emailAddress)
                             .textInputAutocapitalization(.never)
+                            .focused($focusedField, equals: .email)
                     }
                     
                     // Password
@@ -267,11 +319,30 @@ struct SignUpView: View {
                             .fontWeight(.medium)
                             .foregroundColor(.black)
                         
-                        SecureField("Password", text: $password)
-                            .font(.custom("Montserrat", size: 16))
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
+                        HStack {
+                            if showPassword {
+                                TextField("Password", text: $password)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .password)
+                            } else {
+                                SecureField("Password", text: $password)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .password)
+                            }
+                            
+                            Button(action: { showPassword.toggle() }) {
+                                Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.trailing, 8)
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
+                        )
                         
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Your password must include at least:")
@@ -296,11 +367,30 @@ struct SignUpView: View {
                             .fontWeight(.medium)
                             .foregroundColor(.black)
                         
-                        SecureField("Password", text: $confirmPassword)
-                            .font(.custom("Montserrat", size: 16))
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
+                        HStack {
+                            if showConfirmPassword {
+                                TextField("Confirm Password", text: $confirmPassword)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .confirmPassword)
+                            } else {
+                                SecureField("Confirm Password", text: $confirmPassword)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .confirmPassword)
+                            }
+                            
+                            Button(action: { showConfirmPassword.toggle() }) {
+                                Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.trailing, 8)
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(focusedField == .confirmPassword ? Color.ppGreen : Color.clear, lineWidth: 2)
+                        )
                     }
                     
                     // Sign Up Button
@@ -313,13 +403,13 @@ struct SignUpView: View {
                             .padding(16)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(canSignUp ? Color.ppGreen : Color.ppGreen.opacity(0.5))
+                                    .fill(canSignUp ? Color.ppGreen : Color.ppGreen.opacity(0.3))
                             )
                             .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
                     }
                     .disabled(!canSignUp)
-                    .padding(.top, 20)
-                    .padding(.bottom, 40)
+                                    .padding(.top, 20)
+                                    .padding(.bottom, 40)
                 }
                 .padding(.horizontal, 32)
             }
@@ -351,6 +441,7 @@ struct ForgotPasswordView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var email: String = ""
     @State private var showVerification = false
+    @FocusState private var emailFocused: Bool
     
     var body: some View {
         ZStack {
@@ -381,8 +472,13 @@ struct ForgotPasswordView: View {
                         .padding()
                         .background(Color.gray.opacity(0.1))
                         .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(emailFocused ? Color.ppGreen : Color.clear, lineWidth: 2)
+                        )
                         .keyboardType(.emailAddress)
                         .textInputAutocapitalization(.never)
+                        .focused($emailFocused)
                 }
                 .padding(.top, 20)
                 
@@ -476,6 +572,10 @@ struct VerificationCodeView: View {
                             .frame(width: 60, height: 60)
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(focusedField == index ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
                             .keyboardType(.numberPad)
                             .focused($focusedField, equals: index)
                             .onChange(of: code[index]) { _, newValue in
@@ -543,7 +643,14 @@ struct ResetPasswordView: View {
     @EnvironmentObject var app: AppState
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
+    @State private var showPassword: Bool = false
+    @State private var showConfirmPassword: Bool = false
     @State private var showSuccess = false
+    @FocusState private var focusedField: ResetField?
+    
+    enum ResetField {
+        case password, confirmPassword
+    }
     
     private var isValidPassword: Bool {
         password.count >= 8 &&
@@ -594,11 +701,30 @@ struct ResetPasswordView: View {
                 
                 // Password
                 VStack(alignment: .leading, spacing: 8) {
-                    SecureField("Password", text: $password)
-                        .font(.custom("Montserrat", size: 16))
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(8)
+                    HStack {
+                        if showPassword {
+                            TextField("Password", text: $password)
+                                .font(.custom("Montserrat", size: 16))
+                                .focused($focusedField, equals: .password)
+                        } else {
+                            SecureField("Password", text: $password)
+                                .font(.custom("Montserrat", size: 16))
+                                .focused($focusedField, equals: .password)
+                        }
+                        
+                        Button(action: { showPassword.toggle() }) {
+                            Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.trailing, 8)
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
+                    )
                 }
                 
                 // Confirm Password
@@ -608,11 +734,30 @@ struct ResetPasswordView: View {
                         .fontWeight(.medium)
                         .foregroundColor(.black)
                     
-                    SecureField("Password", text: $confirmPassword)
-                        .font(.custom("Montserrat", size: 16))
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(8)
+                    HStack {
+                        if showConfirmPassword {
+                            TextField("Confirm Password", text: $confirmPassword)
+                                .font(.custom("Montserrat", size: 16))
+                                .focused($focusedField, equals: .confirmPassword)
+                        } else {
+                            SecureField("Confirm Password", text: $confirmPassword)
+                                .font(.custom("Montserrat", size: 16))
+                                .focused($focusedField, equals: .confirmPassword)
+                        }
+                        
+                        Button(action: { showConfirmPassword.toggle() }) {
+                            Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.trailing, 8)
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(focusedField == .confirmPassword ? Color.ppGreen : Color.clear, lineWidth: 2)
+                    )
                 }
                 
                 Spacer()
