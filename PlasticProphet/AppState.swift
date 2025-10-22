@@ -6,13 +6,23 @@ import SwiftUI
 
 @MainActor
 final class AppState: ObservableObject {
+    // Authentication
+    @Published var isAuthenticated: Bool = false
+    @Published var userFirstName: String = ""
+    @Published var userLastName: String = ""
+    @Published var userEmail: String = ""
+    
+    // Onboarding
     @Published var onboardingCompleted: Bool = false
     @Published var acceptedTos: Bool = false
     @Published var permissions = PermissionsStatus()
+    
+    // App Data
     @Published var cards: [Card] = []
     @Published var latestRecommendation: Recommendation? = nil
     @Published var showingScanner: Bool = false
     @Published var showingSettings: Bool = false
+    
     // 0 = Wallet, 1 = Home, 2 = Profile
     @Published var selectedTab: Int = 0
 
@@ -43,5 +53,18 @@ final class AppState: ObservableObject {
 
     func proceedIfReady() {
         if acceptedTos && permissions.allGranted && !cards.isEmpty { onboardingCompleted = true }
+    }
+    
+    // Sign out function
+    func signOut() {
+        isAuthenticated = false
+        onboardingCompleted = false
+        acceptedTos = false
+        cards.removeAll()
+        latestRecommendation = nil
+        userFirstName = ""
+        userLastName = ""
+        userEmail = ""
+        permissions = PermissionsStatus()
     }
 }

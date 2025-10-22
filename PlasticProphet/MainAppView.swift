@@ -7,14 +7,26 @@ struct MainAppView: View {
     @EnvironmentObject var app: AppState
 
     var body: some View {
-        TabView {
+        TabView(selection: $app.selectedTab) {
             HomeView()
-                .tabItem { Label("Home", systemImage: "house") }
-            CardsView()
-                .tabItem { Label("Cards", systemImage: "creditcard") }
+                .tabItem {
+                    Label("Home", systemImage: "house.fill")
+                }
+                .tag(0)
+            
+            WalletView()
+                .tabItem {
+                    Label("Cards", systemImage: "creditcard.fill")
+                }
+                .tag(1)
+            
             SettingsView()
-                .tabItem { Label("Settings", systemImage: "gear") }
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape.fill")
+                }
+                .tag(2)
         }
+        .accentColor(Color.ppGreen)
         .sheet(isPresented: $app.showingScanner) { ScannerView() }
     }
 }
@@ -33,11 +45,20 @@ struct HomeView: View {
                     Button("Simulate Geofence Recommendation") {
                         app.fetchRecommendation(for: "Coffee Shop")
                     }
-                    .buttonStyle(.borderedProminent)
+                    .font(.custom("Montserrat", size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(app.cards.isEmpty ? Color.gray : Color.ppGreen)
+                    )
                     .disabled(app.cards.isEmpty)
+                    
                     if app.cards.isEmpty {
                         Text("Add at least one card to get recommendations.")
-                            .font(.footnote)
+                            .font(.custom("Montserrat", size: 12))
                             .foregroundStyle(.secondary)
                             .padding(.top, 8)
                     }
@@ -52,9 +73,12 @@ struct HomeView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button { app.showingScanner = true } label: { Image(systemName: "camera.viewfinder") }
-                .disabled(app.cards.isEmpty)
-                .help("Scan new merchant (placeholder)")
+            Button { app.showingScanner = true } label: {
+                Image(systemName: "camera.viewfinder")
+                    .foregroundColor(Color.ppGreen)
+            }
+            .disabled(app.cards.isEmpty)
+            .help("Scan new merchant (placeholder)")
         }
     }
 }
@@ -65,51 +89,26 @@ struct RecommendationCard: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "creditcard.fill")
-                    .foregroundStyle(Color.accentColor)
-                Text(rec.card.name).font(.headline)
+                    .foregroundStyle(Color.ppGreen)
+                Text(rec.card.name)
+                    .font(.custom("Montserrat", size: 18))
+                    .fontWeight(.bold)
             }
-            Text("Merchant: \(rec.merchantName)").font(.subheadline)
-            Text(rec.rewardText).font(.body).bold()
-            Text(rec.rationale).font(.footnote).foregroundStyle(.secondary)
+            Text("Merchant: \(rec.merchantName)")
+                .font(.custom("Montserrat", size: 16))
+                .fontWeight(.medium)
+            Text(rec.rewardText)
+                .font(.custom("Montserrat", size: 16))
+                .fontWeight(.bold)
+                .foregroundColor(Color.ppGreen)
+            Text(rec.rationale)
+                .font(.custom("Montserrat", size: 14))
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
         .shadow(radius: 2, y: 1)
-    }
-}
-
-struct CardsView: View {
-    @EnvironmentObject var app: AppState
-    var body: some View {
-        NavigationStack {
-            VStack(spacing: 12) {
-                if app.cards.isEmpty {
-                    ContentUnavailableView("No Cards", systemImage: "creditcard.trianglebadge.exclamation", description: Text("Add a mock card to begin."))
-                } else {
-                    List(app.cards) { card in
-                        VStack(alignment: .leading) {
-                            Text(card.name).bold()
-                            Text(card.rewardSummary).font(.caption).foregroundStyle(.secondary)
-                        }
-                    }
-                }
-                HStack {
-                    Button("Add VISA") { app.addMockCard(network: "VISA") }
-                    Button("Add MC") { app.addMockCard(network: "MC") }
-                    Button("Add Amex") { app.addMockCard(network: "Amex") }
-                }
-                .buttonStyle(.bordered)
-            }
-            .padding(.horizontal)
-            .navigationTitle("Cards")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button { app.showingScanner = true } label: { Image(systemName: "camera") }
-                        .disabled(app.cards.isEmpty)
-                }
-            }
-        }
     }
 }
 
@@ -121,22 +120,37 @@ struct ScannerView: View {
         NavigationStack {
             VStack(spacing: 24) {
                 Text("Scanner Placeholder")
-                    .font(.title3)
+                    .font(.custom("Montserrat", size: 20))
+                    .fontWeight(.bold)
                 TextField("Enter 6 BIN digits", text: $scannedDigits)
+                    .font(.custom("Montserrat", size: 16))
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 240)
                 Button("Suggest Card Types") {
-                    // For now just add a single mock suggestion
-                    if !scannedDigits.isEmpty { app.addMockCard(network: "BIN" + String(scannedDigits.prefix(2))) }
+                    if !scannedDigits.isEmpty {
+                        app.addMockCard(network: "BIN" + String(scannedDigits.prefix(2)))
+                    }
                     dismiss()
                 }
-                .buttonStyle(.borderedProminent)
+                .font(.custom("Montserrat", size: 16))
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .padding()
+                .background(Color.ppGreen)
+                .cornerRadius(10)
+                
                 Button("Cancel", role: .cancel) { dismiss() }
+                    .font(.custom("Montserrat", size: 16))
             }
             .padding()
             .navigationTitle("Scan")
-            .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() } } }
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") { dismiss() }
+                        .font(.custom("Montserrat", size: 16))
+                }
+            }
         }
     }
 }
@@ -144,22 +158,76 @@ struct ScannerView: View {
 struct SettingsView: View {
     @EnvironmentObject var app: AppState
     @State private var notificationsEnabled = true
+    @State private var showingSignOutAlert = false
+    
     var body: some View {
         NavigationStack {
             Form {
-                Section("Permissions (Simulated)") {
-                    Label(app.permissions.cameraAuthorized ? "Camera Granted" : "Camera Missing", systemImage: app.permissions.cameraAuthorized ? "checkmark.circle" : "xmark.circle")
-                        .foregroundStyle(app.permissions.cameraAuthorized ? .green : .red)
-                    Label(app.permissions.locationAuthorized ? "Location Granted" : "Location Missing", systemImage: app.permissions.locationAuthorized ? "checkmark.circle" : "xmark.circle")
-                        .foregroundStyle(app.permissions.locationAuthorized ? .green : .red)
+                // User Info Section
+                Section {
+                    HStack {
+                        Image(systemName: "person.circle.fill")
+                            .font(.system(size: 50))
+                            .foregroundColor(Color.ppGreen)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("\(app.userFirstName) \(app.userLastName)")
+                                .font(.custom("Montserrat", size: 18))
+                                .fontWeight(.bold)
+                            Text(app.userEmail)
+                                .font(.custom("Montserrat", size: 14))
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.leading, 8)
+                    }
+                    .padding(.vertical, 8)
                 }
+                
+                Section("Permissions") {
+                    HStack {
+                        Label {
+                            Text(app.permissions.cameraAuthorized ? "Camera Granted" : "Camera Missing")
+                                .font(.custom("Montserrat", size: 16))
+                        } icon: {
+                            Image(systemName: app.permissions.cameraAuthorized ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                .foregroundStyle(app.permissions.cameraAuthorized ? .green : .red)
+                        }
+                    }
+                    
+                    HStack {
+                        Label {
+                            Text(app.permissions.locationAuthorized ? "Location Granted" : "Location Missing")
+                                .font(.custom("Montserrat", size: 16))
+                        } icon: {
+                            Image(systemName: app.permissions.locationAuthorized ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                .foregroundStyle(app.permissions.locationAuthorized ? .green : .red)
+                        }
+                    }
+                }
+                
                 Section("Notifications") {
                     Toggle("Local Notifications", isOn: $notificationsEnabled)
+                        .font(.custom("Montserrat", size: 16))
+                        .tint(Color.ppGreen)
                 }
+                
                 Section("Account") {
-                    Button("Delete Account") { /* placeholder */ }
-                        .tint(.red)
+                    Button(action: { showingSignOutAlert = true }) {
+                        HStack {
+                            Image(systemName: "arrow.right.square")
+                            Text("Sign Out")
+                                .font(.custom("Montserrat", size: 16))
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundColor(Color.ppGreen)
+                    }
+                    
+                    Button("Delete Account") {
+                        // TODO: Implement account deletion
+                    }
+                    .font(.custom("Montserrat", size: 16))
+                    .foregroundColor(.red)
                 }
+                
                 Section("Debug") {
                     Button("Reset Onboarding") {
                         app.onboardingCompleted = false
@@ -167,9 +235,19 @@ struct SettingsView: View {
                         app.cards.removeAll()
                         app.latestRecommendation = nil
                     }
+                    .font(.custom("Montserrat", size: 16))
+                    .foregroundColor(.orange)
                 }
             }
             .navigationTitle("Settings")
+        }
+        .alert("Sign Out", isPresented: $showingSignOutAlert) {
+            Button("Cancel", role: .cancel) { }
+            Button("Sign Out", role: .destructive) {
+                app.signOut()
+            }
+        } message: {
+            Text("Are you sure you want to sign out?")
         }
     }
 }

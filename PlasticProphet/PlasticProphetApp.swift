@@ -16,7 +16,7 @@ struct PlasticProphetApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            MainAppView()
+            ContentView()  // ✅ Changed from MainAppView() to ContentView()
                 .environmentObject(AppState())
         }
     }

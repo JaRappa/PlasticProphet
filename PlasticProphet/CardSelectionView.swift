@@ -1,4 +1,3 @@
-// filepath: /Users/jakerappa/Documents/Pace/PlasticProphet/PlasticProphet/CardSelectionView.swift
 // CardSelectionView.swift
 // Search + grid of popular cards with selectable tiles that highlight when selected
 
@@ -15,11 +14,6 @@ private let popularCardCatalog: [Card] = [
     Card(name: "Capital One SavorOne", network: "Mastercard", last4: "0000", rewardSummary: "3% Dining / 3% Grocery / 3% Entertainment"),
     Card(name: "Wells Fargo Active Cash", network: "Visa", last4: "0000", rewardSummary: "2% Everywhere"),
 ]
-
-private extension Color {
-    // #2AC33C
-    static let selectionGreen = Color(red: 0x2A/255.0, green: 0xC3/255.0, blue: 0x3C/255.0)
-}
 
 struct CardSelectionView: View {
     @EnvironmentObject var app: AppState
@@ -38,13 +32,17 @@ struct CardSelectionView: View {
             HStack(spacing: 8) {
                 TextField("Search cards", text: $query)
                     .textFieldStyle(.roundedBorder)
+                    .font(.custom("Montserrat", size: 16))
                 Button {
                     // Simulate scan adding a mock card
                     app.addMockCard(network: ["Visa","Mastercard","Amex"].randomElement()!)
                 } label: {
                     Image(systemName: "camera")
+                        .font(.system(size: 18))
+                        .foregroundColor(Color.ppGreen)
                 }
                 .buttonStyle(.bordered)
+                .tint(Color.ppGreen)
                 .accessibilityLabel("Scan card")
             }
 
@@ -76,37 +74,56 @@ private struct CardTile: View {
     let card: Card
     let isSelected: Bool
     let onTap: () -> Void
+    
+    private var networkColor: Color {
+        switch card.network.lowercased() {
+        case "visa":
+            return Color.visaBlue
+        case "mastercard":
+            return Color.mastercardRed
+        case "amex":
+            return Color.amexBlue
+        case "discover":
+            return Color.discoverOrange
+        default:
+            return .secondary
+        }
+    }
 
     var body: some View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
                     Text(card.network)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.custom("Montserrat", size: 12))
+                        .fontWeight(.semibold)
+                        .foregroundColor(networkColor)
                     Spacer()
                     if isSelected {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(Color.selectionGreen)
+                            .foregroundStyle(Color.ppGreen)
+                            .font(.system(size: 20))
                     }
                 }
                 Text(card.name)
-                    .font(.subheadline)
+                    .font(.custom("Montserrat", size: 15))
                     .fontWeight(.semibold)
+                    .foregroundColor(.black)
                     .multilineTextAlignment(.leading)
                 Text(card.rewardSummary)
-                    .font(.caption2)
+                    .font(.custom("Montserrat", size: 11))
+                    .fontWeight(.regular)
                     .foregroundStyle(.secondary)
             }
             .padding(12)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(isSelected ? Color.selectionGreen.opacity(0.12) : Color(.secondarySystemBackground))
+                    .fill(Color.ppGreen.opacity(isSelected ? 0.7 : 0.4))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .stroke(isSelected ? Color.selectionGreen : Color.gray.opacity(0.2), lineWidth: isSelected ? 2 : 1)
+                    .stroke(isSelected ? Color.ppGreen : Color.clear, lineWidth: isSelected ? 2.5 : 0)
             )
         }
         .buttonStyle(.plain)
