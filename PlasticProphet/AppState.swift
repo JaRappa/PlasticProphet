@@ -13,6 +13,8 @@ final class AppState: ObservableObject {
     @Published var latestRecommendation: Recommendation? = nil
     @Published var showingScanner: Bool = false
     @Published var showingSettings: Bool = false
+    // 0 = Wallet, 1 = Home, 2 = Profile
+    @Published var selectedTab: Int = 0
 
     // Simulated recommendation lookup
     func fetchRecommendation(for merchant: String? = nil) {

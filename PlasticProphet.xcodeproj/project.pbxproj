@@ -27,6 +27,8 @@
 		891F5F142E941BA700A880E5 /* PlasticProphet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlasticProphet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F212E941BA800A880E5 /* PlasticProphetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F2B2E941BA800A880E5 /* PlasticProphetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4B1A2C3D4E5B00000000001 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = data; name = "Montserrat-Regular.ttf"; path = "Fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		F4B1A2C3D4E5B00000000002 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = data; name = "Montserrat-SemiBold.ttf"; path = "Fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -72,6 +74,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		88415F672EA9351400E45262 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				F4B1A2C3D4E5B00000000001 /* Montserrat-Regular.ttf */,
+				F4B1A2C3D4E5B00000000002 /* Montserrat-SemiBold.ttf */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		891F5F0B2E941BA700A880E5 = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +90,7 @@
 				891F5F242E941BA800A880E5 /* PlasticProphetTests */,
 				891F5F2E2E941BA800A880E5 /* PlasticProphetUITests */,
 				891F5F152E941BA700A880E5 /* Products */,
+				88415F672EA9351400E45262 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};

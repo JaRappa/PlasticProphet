@@ -9,11 +9,15 @@ import SwiftUI
 
 @main
 struct PlasticProphetApp: App {
-    @StateObject private var appState = AppState()
+    init() {
+        // Register any fonts the developer placed in the app bundle under a `Fonts/` folder.
+        // This allows using Font.custom("Montserrat", ...) without editing Info.plist.
+        FontRegistration.registerFonts()
+    }
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(appState)
+            MainAppView()
+                .environmentObject(AppState())
         }
     }
 }
