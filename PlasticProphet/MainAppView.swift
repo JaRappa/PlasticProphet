@@ -1,5 +1,5 @@
 // MainAppView.swift
-// Tab shell for post-onboarding experience
+// Tab shell for post-onboarding experience - Home, Wallet, Profile
 
 import SwiftUI
 
@@ -16,13 +16,13 @@ struct MainAppView: View {
             
             WalletView()
                 .tabItem {
-                    Label("Cards", systemImage: "creditcard.fill")
+                    Label("Wallet", systemImage: "creditcard.fill")
                 }
                 .tag(1)
             
-            SettingsView()
+            ProfileView()
                 .tabItem {
-                    Label("Settings", systemImage: "gearshape.fill")
+                    Label("Profile", systemImage: "person.fill")
                 }
                 .tag(2)
         }
@@ -33,17 +33,284 @@ struct MainAppView: View {
 
 struct HomeView: View {
     @EnvironmentObject var app: AppState
+    @State private var showFABMenu = false
+    @State private var showManualEntry = false
+    @State private var showCardSelection = false
+    
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    if let rec = app.latestRecommendation {
-                        RecommendationCard(rec: rec)
-                    } else {
-                        ContentUnavailableView("No Recommendation", systemImage: "location.circle", description: Text("Trigger a geofence or tap refresh to simulate."))
+            ZStack {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        // Title
+                        Text("Home")
+                            .font(.custom("Montserrat", size: 32))
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                            .tracking(-1.5)
+                            .padding(.horizontal)
+                            .padding(.top, 8)
+                        
+                        Text("Best Deals Near You")
+                            .font(.custom("Montserrat", size: 20))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.ppGreen)
+                            .padding(.horizontal)
+                        
+                        if let rec = app.latestRecommendation {
+                            RecommendationCard(rec: rec)
+                                .padding(.horizontal)
+                        } else {
+                            // Empty state
+                            VStack(spacing: 16) {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
+                                    .frame(height: 160)
+                                    .overlay(
+                                        VStack(spacing: 8) {
+                                            Image(systemName: "location.circle")
+                                                .font(.system(size: 40))
+                                                .foregroundColor(.gray.opacity(0.5))
+                                            Text("No recommendations yet")
+                                                .font(.custom("Montserrat", size: 16))
+                                                .fontWeight(.medium)
+                                                .foregroundColor(.gray)
+                                            Text("Add cards and enable location")
+                                                .font(.custom("Montserrat", size: 12))
+                                                .foregroundColor(.gray.opacity(0.7))
+                                        }
+                                    )
+                                    .padding(.horizontal)
+                            }
+                        }
+                        
+                        Button("Simulate Geofence Recommendation") {
+                            app.fetchRecommendation(for: "Coffee Shop")
+                        }
+                        .font(.custom("Montserrat", size: 16))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(14)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(app.cards.isEmpty ? Color.gray : Color.ppGreen)
+                        )
+                        .disabled(app.cards.isEmpty)
+                        .padding(.horizontal)
+                        
+                        if app.cards.isEmpty {
+                            Text("Add at least one card to get recommendations.")
+                                .font(.custom("Montserrat", size: 12))
+                                .foregroundStyle(.secondary)
+                                .padding(.horizontal)
+                        }
+                        
+                        // Extra padding for FAB
+                        Color.clear.frame(height: 80)
                     }
-                    Button("Simulate Geofence Recommendation") {
-                        app.fetchRecommendation(for: "Coffee Shop")
+                    .padding(.vertical)
+                }
+                .background(Color(.systemGroupedBackground))
+                
+                // Backdrop when menu is open - behind everything
+                if showFABMenu {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                showFABMenu = false
+                            }
+                        }
+                        .transition(.opacity)
+                }
+                
+                // FAB Menu - on top
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 16) {
+                            // Menu options
+                            if showFABMenu {
+                                FABMenuItem(
+                                    icon: "magnifyingglass",
+                                    title: "Search Cards",
+                                    color: Color.ppGreen
+                                ) {
+                                    withAnimation { showFABMenu = false }
+                                    showCardSelection = true
+                                }
+                                .transition(.scale.combined(with: .opacity))
+                                
+                                FABMenuItem(
+                                    icon: "camera.fill",
+                                    title: "Scan Card",
+                                    color: Color.ppGreen
+                                ) {
+                                    withAnimation { showFABMenu = false }
+                                    app.showingScanner = true
+                                }
+                                .transition(.scale.combined(with: .opacity))
+                                
+                                FABMenuItem(
+                                    icon: "pencil",
+                                    title: "Manual Entry",
+                                    color: Color.ppGreen
+                                ) {
+                                    withAnimation { showFABMenu = false }
+                                    showManualEntry = true
+                                }
+                                .transition(.scale.combined(with: .opacity))
+                            }
+                            
+                            // Main FAB Button
+                            Button(action: {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                    showFABMenu.toggle()
+                                }
+                            }) {
+                                ZStack {
+                                    Circle()
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [Color.ppGreen, Color.ppGreen.opacity(0.8)],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .frame(width: 60, height: 60)
+                                        .shadow(color: Color.ppShadow.opacity(0.4), radius: 12, x: 0, y: 6)
+                                    
+                                    Image(systemName: showFABMenu ? "xmark" : "plus")
+                                        .font(.system(size: 24, weight: .semibold))
+                                        .foregroundColor(.white)
+                                        .rotationEffect(.degrees(showFABMenu ? 90 : 0))
+                                }
+                            }
+                        }
+                        .padding(.trailing, 20)
+                        .padding(.bottom, 100)
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showManualEntry) {
+            HomeManualAddView(showManual: $showManualEntry)
+                .environmentObject(app)
+        }
+        .sheet(isPresented: $showCardSelection) {
+            NavigationStack {
+                CardSelectionView()
+                    .environmentObject(app)
+                    .navigationTitle("Search Cards")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Done") {
+                                showCardSelection = false
+                            }
+                            .font(.custom("Montserrat", size: 16))
+                            .foregroundColor(Color.ppGreen)
+                        }
+                    }
+            }
+        }
+    }
+}
+
+// MARK: - FAB Menu Item
+struct FABMenuItem: View {
+    let icon: String
+    let title: String
+    let color: Color
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Text(title)
+                    .font(.custom("Montserrat", size: 15))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                
+                ZStack {
+                    Circle()
+                        .fill(color)
+                        .frame(width: 48, height: 48)
+                        .shadow(color: Color.ppShadow.opacity(0.3), radius: 8, x: 0, y: 4)
+                    
+                    Image(systemName: icon)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .background(
+                Capsule()
+                    .fill(Color.white)
+                    .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 4)
+            )
+        }
+    }
+}
+
+// MARK: - Home Manual Add View
+struct HomeManualAddView: View {
+    @EnvironmentObject var app: AppState
+    @Binding var showManual: Bool
+    @Environment(\.dismiss) private var dismiss
+    @State private var cardNumber: String = ""
+    @State private var network: String = ""
+    @State private var rewards: String = ""
+
+    var body: some View {
+        ZStack {
+            Color(.systemGroupedBackground).ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                // Header
+                HStack {
+                    Spacer()
+                    Text("Add Card Manually")
+                        .font(.custom("Montserrat", size: 18))
+                        .fontWeight(.bold)
+                    Spacer()
+                }
+                .padding()
+                .background(Color.white)
+                
+                Form {
+                    Section(header: Text("Card Info").font(.custom("Montserrat", size: 14))) {
+                        TextField("Card number", text: $cardNumber)
+                            .keyboardType(.numberPad)
+                            .font(.custom("Montserrat", size: 16))
+                        TextField("Card type (e.g. Visa)", text: $network)
+                            .font(.custom("Montserrat", size: 16))
+                        TextField("Rewards summary", text: $rewards)
+                            .font(.custom("Montserrat", size: 16))
+                    }
+
+                    Section {
+                        Button("Add Card") {
+                            let digits = cardNumber.filter { $0.isNumber }
+                            guard digits.count >= 4 else { return }
+                            let last4 = String(digits.suffix(4))
+                            let name = network.isEmpty ? "Manual Card ••••\(last4)" : "\(network) ••••\(last4)"
+                            let card = Card(name: name, network: network.isEmpty ? "Unknown" : network, last4: last4, rewardSummary: rewards)
+                            app.cards.append(card)
+                            dismiss()
+                        }
+                        .font(.custom("Montserrat", size: 16))
+                        .disabled(cardNumber.filter { $0.isNumber }.count < 4)
+                    }
+                }
+                
+                // Bottom buttons
+                HStack(spacing: 16) {
+                    Button("Close") {
+                        dismiss()
                     }
                     .font(.custom("Montserrat", size: 16))
                     .fontWeight(.semibold)
@@ -51,34 +318,27 @@ struct HomeView: View {
                     .frame(maxWidth: .infinity)
                     .padding(14)
                     .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(app.cards.isEmpty ? Color.gray : Color.ppGreen)
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(Color.ppGreen)
                     )
-                    .disabled(app.cards.isEmpty)
                     
-                    if app.cards.isEmpty {
-                        Text("Add at least one card to get recommendations.")
-                            .font(.custom("Montserrat", size: 12))
-                            .foregroundStyle(.secondary)
-                            .padding(.top, 8)
+                    Button("Cancel") {
+                        dismiss()
                     }
+                    .font(.custom("Montserrat", size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(Color.red)
+                    )
                 }
-                .padding()
+                .padding(.horizontal, 20)
+                .padding(.vertical, 20)
+                .background(Color.white)
             }
-            .navigationTitle("PlasticProphet")
-            .toolbar { toolbarContent }
-        }
-    }
-
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Button { app.showingScanner = true } label: {
-                Image(systemName: "camera.viewfinder")
-                    .foregroundColor(Color.ppGreen)
-            }
-            .disabled(app.cards.isEmpty)
-            .help("Scan new merchant (placeholder)")
         }
     }
 }
@@ -86,29 +346,38 @@ struct HomeView: View {
 struct RecommendationCard: View {
     let rec: Recommendation
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "creditcard.fill")
                     .foregroundStyle(Color.ppGreen)
+                    .font(.system(size: 20))
                 Text(rec.card.name)
                     .font(.custom("Montserrat", size: 18))
                     .fontWeight(.bold)
             }
-            Text("Merchant: \(rec.merchantName)")
-                .font(.custom("Montserrat", size: 16))
-                .fontWeight(.medium)
+            
+            HStack {
+                Image(systemName: "mappin.circle.fill")
+                    .foregroundColor(.gray)
+                Text("Merchant: \(rec.merchantName)")
+                    .font(.custom("Montserrat", size: 16))
+                    .fontWeight(.medium)
+            }
+            
             Text(rec.rewardText)
                 .font(.custom("Montserrat", size: 16))
                 .fontWeight(.bold)
                 .foregroundColor(Color.ppGreen)
+            
             Text(rec.rationale)
                 .font(.custom("Montserrat", size: 14))
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
-        .shadow(radius: 2, y: 1)
+        .padding(16)
+        .background(Color.white)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -116,138 +385,75 @@ struct ScannerView: View {
     @EnvironmentObject var app: AppState
     @Environment(\.dismiss) private var dismiss
     @State private var scannedDigits: String = ""
+    
     var body: some View {
-        NavigationStack {
+        ZStack {
+            Color.white.ignoresSafeArea()
+            
             VStack(spacing: 24) {
+                Spacer()
+                
                 Text("Scanner Placeholder")
-                    .font(.custom("Montserrat", size: 20))
+                    .font(.custom("Montserrat", size: 24))
                     .fontWeight(.bold)
+                
                 TextField("Enter 6 BIN digits", text: $scannedDigits)
                     .font(.custom("Montserrat", size: 16))
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 240)
+                    .padding()
+                
                 Button("Suggest Card Types") {
                     if !scannedDigits.isEmpty {
                         app.addMockCard(network: "BIN" + String(scannedDigits.prefix(2)))
                     }
                     dismiss()
                 }
-                .font(.custom("Montserrat", size: 16))
+                .font(.custom("Montserrat", size: 18))
                 .fontWeight(.bold)
                 .foregroundColor(.white)
-                .padding()
-                .background(Color.ppGreen)
-                .cornerRadius(10)
+                .frame(maxWidth: .infinity)
+                .padding(16)
+                .background(
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(Color.ppGreen)
+                )
+                .padding(.horizontal, 40)
                 
-                Button("Cancel", role: .cancel) { dismiss() }
+                Spacer()
+                
+                // Bottom buttons
+                HStack(spacing: 16) {
+                    Button("Close") {
+                        dismiss()
+                    }
                     .font(.custom("Montserrat", size: 16))
-            }
-            .padding()
-            .navigationTitle("Scan")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") { dismiss() }
-                        .font(.custom("Montserrat", size: 16))
-                }
-            }
-        }
-    }
-}
-
-struct SettingsView: View {
-    @EnvironmentObject var app: AppState
-    @State private var notificationsEnabled = true
-    @State private var showingSignOutAlert = false
-    
-    var body: some View {
-        NavigationStack {
-            Form {
-                // User Info Section
-                Section {
-                    HStack {
-                        Image(systemName: "person.circle.fill")
-                            .font(.system(size: 50))
-                            .foregroundColor(Color.ppGreen)
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("\(app.userFirstName) \(app.userLastName)")
-                                .font(.custom("Montserrat", size: 18))
-                                .fontWeight(.bold)
-                            Text(app.userEmail)
-                                .font(.custom("Montserrat", size: 14))
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.leading, 8)
-                    }
-                    .padding(.vertical, 8)
-                }
-                
-                Section("Permissions") {
-                    HStack {
-                        Label {
-                            Text(app.permissions.cameraAuthorized ? "Camera Granted" : "Camera Missing")
-                                .font(.custom("Montserrat", size: 16))
-                        } icon: {
-                            Image(systemName: app.permissions.cameraAuthorized ? "checkmark.circle.fill" : "xmark.circle.fill")
-                                .foregroundStyle(app.permissions.cameraAuthorized ? .green : .red)
-                        }
-                    }
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(Color.ppGreen)
+                    )
                     
-                    HStack {
-                        Label {
-                            Text(app.permissions.locationAuthorized ? "Location Granted" : "Location Missing")
-                                .font(.custom("Montserrat", size: 16))
-                        } icon: {
-                            Image(systemName: app.permissions.locationAuthorized ? "checkmark.circle.fill" : "xmark.circle.fill")
-                                .foregroundStyle(app.permissions.locationAuthorized ? .green : .red)
-                        }
-                    }
-                }
-                
-                Section("Notifications") {
-                    Toggle("Local Notifications", isOn: $notificationsEnabled)
-                        .font(.custom("Montserrat", size: 16))
-                        .tint(Color.ppGreen)
-                }
-                
-                Section("Account") {
-                    Button(action: { showingSignOutAlert = true }) {
-                        HStack {
-                            Image(systemName: "arrow.right.square")
-                            Text("Sign Out")
-                                .font(.custom("Montserrat", size: 16))
-                                .fontWeight(.semibold)
-                        }
-                        .foregroundColor(Color.ppGreen)
-                    }
-                    
-                    Button("Delete Account") {
-                        // TODO: Implement account deletion
+                    Button("Cancel") {
+                        dismiss()
                     }
                     .font(.custom("Montserrat", size: 16))
-                    .foregroundColor(.red)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(Color.red)
+                    )
                 }
-                
-                Section("Debug") {
-                    Button("Reset Onboarding") {
-                        app.onboardingCompleted = false
-                        app.acceptedTos = false
-                        app.cards.removeAll()
-                        app.latestRecommendation = nil
-                    }
-                    .font(.custom("Montserrat", size: 16))
-                    .foregroundColor(.orange)
-                }
+                .padding(.horizontal, 40)
+                .padding(.bottom, 40)
             }
-            .navigationTitle("Settings")
-        }
-        .alert("Sign Out", isPresented: $showingSignOutAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Sign Out", role: .destructive) {
-                app.signOut()
-            }
-        } message: {
-            Text("Are you sure you want to sign out?")
         }
     }
 }

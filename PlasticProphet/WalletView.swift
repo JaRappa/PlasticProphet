@@ -12,13 +12,16 @@ struct WalletView: View {
         ZStack {
             VStack(alignment: .leading, spacing: 18) {
                 Text("Wallet")
-                    .font(.custom("Montserrat", size: 24))
+                    .font(.custom("Montserrat", size: 32))
                     .fontWeight(.bold)
                     .foregroundColor(.black)
+                    .padding(.top, 20)
+                    .tracking(-1.5)
                 Text("Your Cards")
                     .font(.custom("Montserrat", size: 20))
                     .fontWeight(.medium)
                     .foregroundColor(Color(red: 0.16, green: 0.76, blue: 0.24))
+                    .tracking(-0.5)
 
                 if app.cards.isEmpty {
                     // empty state with dotted card and FAB
@@ -28,9 +31,10 @@ struct WalletView: View {
                             .frame(height: 100)
                             .overlay(
                                 Text("Please Add Card...")
-                                    .font(.custom("Montserrat", size: 12))
+                                    .font(.custom("Montserrat", size: 14))
                                     .fontWeight(.medium)
                                     .foregroundColor(Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.50))
+                                    .padding(.top, 12)
                                     .padding(.leading, 12), alignment: .topLeading
                             )
                     }
