@@ -5,8 +5,9 @@ import SwiftUI
 
 struct WalletView: View {
     @EnvironmentObject var app: AppState
-    @State private var fabOpen: Bool = false
+    @State private var showFABMenu: Bool = false
     @State private var showManualEntry: Bool = false
+    @State private var showCardSelection: Bool = false
 
     var body: some View {
         ZStack {
@@ -19,68 +20,28 @@ struct WalletView: View {
                     .tracking(-1.5)
                 Text("Your Cards")
                     .font(.custom("Montserrat", size: 20))
-                    .fontWeight(.medium)
-                    .foregroundColor(Color(red: 0.16, green: 0.76, blue: 0.24))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.ppGreen)
                     .tracking(-0.5)
 
                 if app.cards.isEmpty {
-                    // empty state with dotted card and FAB
+                    // empty state with dotted card
                     VStack(alignment: .leading, spacing: 8) {
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.30), style: StrokeStyle(lineWidth: 0.5, dash: [6]))
+                            .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
                             .frame(height: 100)
                             .overlay(
                                 Text("Please Add Card...")
                                     .font(.custom("Montserrat", size: 14))
                                     .fontWeight(.medium)
-                                    .foregroundColor(Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.50))
+                                    .foregroundColor(.gray.opacity(0.5))
                                     .padding(.top, 12)
                                     .padding(.leading, 12), alignment: .topLeading
                             )
                     }
-                    .padding(16)
-                    .frame(height: 100)
+                    .padding(.horizontal, 16)
 
                     Spacer()
-
-                    // Floating area for FAB and options
-                    VStack {
-                        Spacer()
-                        HStack {
-                            Spacer()
-                            ZStack {
-                                if fabOpen {
-                                    VStack(spacing: 12) {
-                                        fabOption(icon: "magnifyingglass", title: "Search") {
-                                            // TODO: hook up search
-                                        }
-                                        fabOption(icon: "camera", title: "Scan") {
-                                            app.showingScanner = true
-                                        }
-                                        fabOption(icon: "pencil", title: "Manual Entry") {
-                                            showManualEntry = true
-                                        }
-                                    }
-                                    .transition(.move(edge: .trailing).combined(with: .opacity))
-                                }
-
-                                Button(action: { withAnimation { fabOpen.toggle() } }) {
-                                    ZStack {
-                                        Circle()
-                                            .fill(Color(red: 0.16, green: 0.76, blue: 0.24).opacity(0.70))
-                                            .frame(width: 56, height: 56)
-                                            .shadow(color: Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.25), radius: 10, y: 6)
-                                        Text("+")
-                                            .font(.custom("Montserrat", size: 40))
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(.white)
-                                    }
-                                }
-                                .offset(x: 0, y: 0)
-                            }
-                            .padding()
-                        }
-                    }
                 } else {
                     // show a simple list of cards
                     ScrollView {
@@ -112,35 +73,101 @@ struct WalletView: View {
                 }
             }
             .padding(16)
-            .sheet(isPresented: $showManualEntry) {
-                NavigationStack {
-                    ManualAddView(showManual: $showManualEntry)
-                        .environmentObject(app)
+            
+            // Backdrop when menu is open
+            if showFABMenu {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            showFABMenu = false
+                        }
+                    }
+                    .transition(.opacity)
+            }
+            
+            // FAB Menu
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    VStack(alignment: .trailing, spacing: 16) {
+                        // Menu options
+                        if showFABMenu {
+                            FABMenuItem(
+                                icon: "magnifyingglass",
+                                title: "Search Cards",
+                                color: .ppGreen
+                            ) {
+                                withAnimation { showFABMenu = false }
+                                showCardSelection = true
+                            }
+                            .transition(.scale.combined(with: .opacity))
+                            
+                            FABMenuItem(
+                                icon: "camera.fill",
+                                title: "Scan Card",
+                                color: .ppGreen
+                            ) {
+                                withAnimation { showFABMenu = false }
+                                app.showingScanner = true
+                            }
+                            .transition(.scale.combined(with: .opacity))
+                            
+                            FABMenuItem(
+                                icon: "pencil",
+                                title: "Manual Entry",
+                                color: .ppGreen
+                            ) {
+                                withAnimation { showFABMenu = false }
+                                showManualEntry = true
+                            }
+                            .transition(.scale.combined(with: .opacity))
+                        }
+                        
+                        // Main FAB Button
+                        Button(action: {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                showFABMenu.toggle()
+                            }
+                        }) {
+                            ZStack {
+                                Circle()
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [Color.ppGreen, Color.ppGreen.opacity(0.8)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .frame(width: 60, height: 60)
+                                    .shadow(color: Color.ppShadow.opacity(0.4), radius: 12, x: 0, y: 6)
+                                
+                                Image(systemName: showFABMenu ? "xmark" : "plus")
+                                    .font(.system(size: 24, weight: .semibold))
+                                    .foregroundColor(.white)
+                                    .rotationEffect(.degrees(showFABMenu ? 90 : 0))
+                            }
+                        }
+                    }
+                    .padding(.trailing, 20)
+                    .padding(.bottom, 100)
                 }
             }
         }
         .navigationBarHidden(true)
-    }
-
-    @ViewBuilder
-    private func fabOption(icon: String, title: String, action: @escaping () -> Void) -> some View {
-        Button(action: { withAnimation { action(); fabOpen = false } }) {
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .foregroundColor(.white)
-                    .frame(width: 19, height: 19)
-                Text(title)
-                    .font(.custom("Montserrat", size: 16))
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
+        .sheet(isPresented: $showManualEntry) {
+            NavigationStack {
+                ManualAddView(showManual: $showManualEntry)
+                    .environmentObject(app)
             }
-            .padding(EdgeInsets(top: 16, leading: 32, bottom: 16, trailing: 32))
-            .background(Color(red: 0.16, green: 0.76, blue: 0.24))
-            .cornerRadius(28)
-            .shadow(color: Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.25), radius: 8, y: 4)
+        }
+        .sheet(isPresented: $showCardSelection) {
+            CardSelectionView()
+                .environmentObject(app)
+            }
         }
     }
-}
 
 struct ManualAddView: View {
     @EnvironmentObject var app: AppState

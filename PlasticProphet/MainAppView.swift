@@ -70,7 +70,7 @@ struct HomeView: View {
                                         VStack(spacing: 8) {
                                             Image(systemName: "location.circle")
                                                 .font(.system(size: 40))
-                                                .foregroundColor(.gray.opacity(0.5))
+                                                .foregroundColor(.ppGreen.opacity(0.5))
                                             Text("No recommendations yet")
                                                 .font(.custom("Montserrat", size: 16))
                                                 .fontWeight(.medium)
@@ -94,7 +94,7 @@ struct HomeView: View {
                         .padding(14)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(app.cards.isEmpty ? Color.gray : Color.ppGreen)
+                                .fill(app.cards.isEmpty ? Color.ppGreen.opacity(0.3) : Color.ppGreen)
                         )
                         .disabled(app.cards.isEmpty)
                         .padding(.horizontal)
@@ -103,6 +103,8 @@ struct HomeView: View {
                             Text("Add at least one card to get recommendations.")
                                 .font(.custom("Montserrat", size: 12))
                                 .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity)
                                 .padding(.horizontal)
                         }
                         
@@ -200,21 +202,8 @@ struct HomeView: View {
                 .environmentObject(app)
         }
         .sheet(isPresented: $showCardSelection) {
-            NavigationStack {
-                CardSelectionView()
-                    .environmentObject(app)
-                    .navigationTitle("Search Cards")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done") {
-                                showCardSelection = false
-                            }
-                            .font(.custom("Montserrat", size: 16))
-                            .foregroundColor(Color.ppGreen)
-                        }
-                    }
-            }
+            CardSelectionView()
+                .environmentObject(app)
         }
     }
 }
@@ -232,7 +221,7 @@ struct FABMenuItem: View {
                 Text(title)
                     .font(.custom("Montserrat", size: 15))
                     .fontWeight(.semibold)
-                    .foregroundColor(.white)
+                    .foregroundColor(.ppGreen)
                 
                 ZStack {
                     Circle()

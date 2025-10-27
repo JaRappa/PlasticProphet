@@ -17,6 +17,7 @@ private let popularCardCatalog: [Card] = [
 
 struct CardSelectionView: View {
     @EnvironmentObject var app: AppState
+    @Environment(\.dismiss) private var dismiss
     @State private var query: String = ""
 
     private var filteredCatalog: [Card] {
@@ -28,33 +29,83 @@ struct CardSelectionView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 8) {
-                TextField("Search cards", text: $query)
-                    .textFieldStyle(.roundedBorder)
-                    .font(.custom("Montserrat", size: 16))
-                Button {
-                    // Simulate scan adding a mock card
-                    app.addMockCard(network: ["Visa","Mastercard","Amex"].randomElement()!)
-                } label: {
-                    Image(systemName: "camera")
-                        .font(.system(size: 18))
-                        .foregroundColor(Color.ppGreen)
-                }
-                .buttonStyle(.bordered)
-                .tint(Color.ppGreen)
-                .accessibilityLabel("Scan card")
+        VStack(spacing: 0) {
+            // Custom header
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Search Cards")
+                    .font(.custom("Montserrat", size: 32))
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
+                    .tracking(-1.5)
             }
-
-            let columns = [GridItem(.adaptive(minimum: 150), spacing: 12)]
-            LazyVGrid(columns: columns, spacing: 12) {
-                ForEach(filteredCatalog) { card in
-                    CardTile(card: card, isSelected: isSelected(card)) {
-                        toggle(card)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+            .padding(.bottom, 16)
+            .background(Color.white)
+            
+            // Search and cards content
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack(spacing: 8) {
+                        TextField("Search cards", text: $query)
+                            .textFieldStyle(.roundedBorder)
+                            .font(.custom("Montserrat", size: 16))
+                        Button {
+                            // Simulate scan adding a mock card
+                            app.addMockCard(network: ["Visa","Mastercard","Amex"].randomElement()!)
+                        } label: {
+                            Image(systemName: "camera")
+                                .font(.system(size: 18))
+                                .foregroundColor(Color.ppGreen)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(Color.ppGreen)
+                        .accessibilityLabel("Scan card")
                     }
+                    .padding(.horizontal, 20)
+                    
+                    let columns = [GridItem(.adaptive(minimum: 150), spacing: 12)]
+                    LazyVGrid(columns: columns, spacing: 12) {
+                        ForEach(filteredCatalog) { card in
+                            CardTile(card: card, isSelected: isSelected(card)) {
+                                toggle(card)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    
+                    // Extra padding for bottom button
+                    Color.clear.frame(height: 100)
                 }
+                .padding(.vertical, 16)
             }
+            .background(Color(.systemGroupedBackground))
+            
+            // Bottom Done button
+            VStack(spacing: 0) {
+                Divider()
+                
+                Button(action: {
+                    dismiss()
+                }) {
+                    Text("Done")
+                        .font(.custom("Montserrat", size: 18))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.ppGreen)
+                        )
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
+            }
+            .background(Color.white)
         }
+        .background(Color(.systemGroupedBackground))
     }
 
     private func isSelected(_ card: Card) -> Bool {
@@ -89,15 +140,27 @@ private struct CardTile: View {
             return .secondary
         }
     }
+    
+    private var logoName: String {
+        switch card.network.lowercased() {
+        case "visa":
+            return "Visa Logo"
+        case "mastercard":
+            return "MC Logo"
+        case "amex":
+            return "Amex Logo"
+        case "discover":
+            return "Discovery Logo"
+        default:
+            return ""
+        }
+    }
 
     var body: some View {
         Button(action: onTap) {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 8) {
+                // Checkmark in top right corner
                 HStack {
-                    Text(card.network)
-                        .font(.custom("Montserrat", size: 12))
-                        .fontWeight(.semibold)
-                        .foregroundColor(networkColor)
                     Spacer()
                     if isSelected {
                         Image(systemName: "checkmark.circle.fill")
@@ -105,18 +168,38 @@ private struct CardTile: View {
                             .font(.system(size: 20))
                     }
                 }
-                Text(card.name)
-                    .font(.custom("Montserrat", size: 15))
-                    .fontWeight(.semibold)
-                    .foregroundColor(.black)
-                    .multilineTextAlignment(.leading)
-                Text(card.rewardSummary)
-                    .font(.custom("Montserrat", size: 11))
-                    .fontWeight(.regular)
-                    .foregroundStyle(.secondary)
+                
+                // Card name and rewards
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(card.name)
+                        .font(.custom("Montserrat", size: 15))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.black)
+                        .multilineTextAlignment(.leading)
+                    Text(card.rewardSummary)
+                        .font(.custom("Montserrat", size: 11))
+                        .fontWeight(.regular)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Spacer()
+                
+                // Network logo at bottom
+                HStack {
+                    if !logoName.isEmpty {
+                        Image(logoName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 24)
+                            .frame(maxWidth: 50)
+                        
+                    }
+                    Spacer()
+                }
             }
             .padding(12)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(height: 140) // Fixed height for consistent layout
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .fill(Color.ppGreen.opacity(isSelected ? 0.4 : 0.2))
@@ -136,5 +219,4 @@ private struct CardTile: View {
 #Preview {
     CardSelectionView()
         .environmentObject(AppState())
-        .padding()
 }

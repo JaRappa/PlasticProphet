@@ -31,7 +31,7 @@ struct AuthLandingView: View {
                             Text("Sign Up")
                                 .font(.custom("Montserrat", size: 20))
                                 .fontWeight(.black)
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(16)
                                 .background(
@@ -45,7 +45,7 @@ struct AuthLandingView: View {
                             Text("Sign In")
                                 .font(.custom("Montserrat", size: 20))
                                 .fontWeight(.black)
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(16)
                                 .background(
@@ -406,7 +406,7 @@ struct SignUpView: View {
                         Text("Continue")
                             .font(.custom("Montserrat", size: 20))
                             .fontWeight(.black)
-                            .foregroundColor(.black)
+                            .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding(16)
                             .background(
@@ -497,7 +497,7 @@ struct ForgotPasswordView: View {
                     Text("Enter")
                         .font(.custom("Montserrat", size: 20))
                         .fontWeight(.black)
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding(16)
                         .background(
@@ -608,7 +608,7 @@ struct VerificationCodeView: View {
                     Text("Enter")
                         .font(.custom("Montserrat", size: 20))
                         .fontWeight(.black)
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding(16)
                         .background(
@@ -775,7 +775,7 @@ struct ResetPasswordView: View {
                     Text("Enter")
                         .font(.custom("Montserrat", size: 20))
                         .fontWeight(.black)
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding(16)
                         .background(
