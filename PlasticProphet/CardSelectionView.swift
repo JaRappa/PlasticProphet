@@ -19,6 +19,10 @@ struct CardSelectionView: View {
     @EnvironmentObject var app: AppState
     @Environment(\.dismiss) private var dismiss
     @State private var query: String = ""
+    
+    // Parameters to control what's shown
+    var showHeader: Bool = true
+    var showDoneButton: Bool = true
 
     private var filteredCatalog: [Card] {
         let q = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
@@ -30,19 +34,21 @@ struct CardSelectionView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Custom header
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Search Cards")
-                    .font(.custom("Montserrat", size: 32))
-                    .fontWeight(.bold)
-                    .foregroundColor(.black)
-                    .tracking(-1.5)
+            // Custom header (optional)
+            if showHeader {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Search Cards")
+                        .font(.custom("Montserrat", size: 32))
+                        .fontWeight(.bold)
+                        .foregroundColor(.black)
+                        .tracking(-1.5)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                .padding(.top, 30)
+                .padding(.bottom, 16)
+                .background(Color.white)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-            .padding(.bottom, 16)
-            .background(Color.white)
             
             // Search and cards content
             ScrollView {
@@ -75,35 +81,39 @@ struct CardSelectionView: View {
                     }
                     .padding(.horizontal, 20)
                     
-                    // Extra padding for bottom button
-                    Color.clear.frame(height: 100)
+                    // Extra padding for bottom button (only if button is shown)
+                    if showDoneButton {
+                        Color.clear.frame(height: 100)
+                    }
                 }
                 .padding(.vertical, 16)
             }
             .background(Color(.systemGroupedBackground))
             
-            // Bottom Done button
-            VStack(spacing: 0) {
-                Divider()
-                
-                Button(action: {
-                    dismiss()
-                }) {
-                    Text("Done")
-                        .font(.custom("Montserrat", size: 18))
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.ppGreen)
-                        )
+            // Bottom Done button (optional)
+            if showDoneButton {
+                VStack(spacing: 0) {
+                    Divider()
+                    
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Text("Done")
+                            .font(.custom("Montserrat", size: 18))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color.ppGreen)
+                            )
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 16)
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
+                .background(Color.white)
             }
-            .background(Color.white)
         }
         .background(Color(.systemGroupedBackground))
     }
@@ -192,7 +202,6 @@ private struct CardTile: View {
                             .scaledToFit()
                             .frame(height: 24)
                             .frame(maxWidth: 50)
-                        
                     }
                     Spacer()
                 }

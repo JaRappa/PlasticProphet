@@ -44,7 +44,7 @@ struct OnboardingFlowView: View {
                                 Text("Let's Get Started!")
                                     .font(.custom("Montserrat", size: 22))
                                     .fontWeight(.heavy)
-                                    .foregroundColor(Color.black)
+                                    .foregroundColor(Color.white)
                             }
                             .padding(16)
                             .frame(maxWidth: .infinity)
@@ -147,7 +147,7 @@ struct OnboardingFlowView: View {
                             Text("Continue")
                                 .font(.custom("Montserrat", size: 20))
                                 .fontWeight(.black)
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(16)
                                 .background(
@@ -244,7 +244,7 @@ struct OnboardingFlowView: View {
                         Text("Continue")
                             .font(.custom("Montserrat", size: 20))
                             .fontWeight(.black)
-                            .foregroundColor(.black)
+                            .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding(16)
                             .background(
@@ -277,7 +277,7 @@ struct OnboardingFlowView: View {
                         .padding(.horizontal)
 
                     // Card selection component with search + camera button + popular tiles
-                    CardSelectionView()
+                    CardSelectionView(showHeader: false, showDoneButton: false)
                         .environmentObject(app)
 
                     Button(action: { showManualEntry = true }) {
@@ -303,7 +303,7 @@ struct OnboardingFlowView: View {
                             Text("Skip for now")
                                 .font(.custom("Montserrat", size: 20))
                                 .fontWeight(.bold)
-                                .foregroundColor(.black)
+                                .foregroundColor(.gray)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
                                 .padding(.horizontal, 8)
@@ -322,7 +322,7 @@ struct OnboardingFlowView: View {
                             Text("Finish")
                                 .font(.custom("Montserrat", size: 20))
                                 .fontWeight(.black)
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
                                 .padding(.horizontal, 8)
@@ -396,6 +396,7 @@ struct OnboardingFlowView: View {
                                 .font(.custom("Montserrat", size: 32))
                                 .fontWeight(.bold)
                                 .foregroundColor(.black)
+                                .tracking(-1.5)
                             Image(systemName: "checkmark.seal.fill")
                                 .font(.title)
                                 .foregroundStyle(Color(hex: "2ac33c"))
