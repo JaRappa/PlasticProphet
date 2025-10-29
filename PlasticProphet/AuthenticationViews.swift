@@ -203,16 +203,9 @@ struct SignInView: View {
     }
     
     private func signIn() {
-        // TODO: Add real authentication
-        // For now, just mark as authenticated with mock data
-        app.isAuthenticated = true
-        
-        // Add mock user data based on email
-        // Extract name from email or use default
-        let emailPrefix = email.components(separatedBy: "@").first ?? "User"
-        app.userFirstName = emailPrefix.capitalized
-        app.userLastName = "Account"
-        app.userEmail = email
+        Task {
+            await app.signIn(email: email, password: password)
+        }
     }
 }
 
@@ -228,6 +221,8 @@ struct SignUpView: View {
     @State private var showPassword: Bool = false
     @State private var showConfirmPassword: Bool = false
     @FocusState private var focusedField: SignUpField?
+    @State private var showVerification = false
+    @State private var signUpEmail = ""
     
     enum SignUpField {
         case firstName, lastName, email, password, confirmPassword
@@ -416,8 +411,8 @@ struct SignUpView: View {
                             .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
                     }
                     .disabled(!canSignUp)
-                                    .padding(.top, 20)
-                                    .padding(.bottom, 40)
+                    .padding(.top, 20)
+                    .padding(.bottom, 40)
                 }
                 .padding(.horizontal, 32)
             }
@@ -431,406 +426,419 @@ struct SignUpView: View {
                         .font(.system(size: 20))
                 }
             }
+        }
+        .sheet(isPresented: $showVerification) {
+            CognitoVerificationView(email: signUpEmail)
+                .environmentObject(app)
         }
     }
     
     private func signUp() {
-        // TODO: Add real authentication
-        // For now, just mark as authenticated and show onboarding
-        app.isAuthenticated = true
-        app.userFirstName = firstName
-        app.userLastName = lastName
-        app.userEmail = email
+        signUpEmail = email // Save for verification
+        
+        Task {
+            await app.signUp(
+                email: email,
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName
+            )
+            
+            await MainActor.run {
+                showVerification = true
+            }
+        }
     }
 }
-
-// MARK: - Forgot Password View
-struct ForgotPasswordView: View {
-    @Environment(\.dismiss) private var dismiss
-    @State private var email: String = ""
-    @State private var showVerification = false
-    @FocusState private var emailFocused: Bool
-    
-    var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
+        
+        // MARK: - Forgot Password View
+        struct ForgotPasswordView: View {
+            @Environment(\.dismiss) private var dismiss
+            @State private var email: String = ""
+            @State private var showVerification = false
+            @FocusState private var emailFocused: Bool
             
-            VStack(alignment: .leading, spacing: 24) {
-                // Card icon
-                Image(systemName: "creditcard.fill")
-                    .font(.system(size: 50))
-                    .foregroundColor(Color.ppGreen)
-                    .rotationEffect(.degrees(15))
-                    .padding(.top, 20)
-                
-                Text("Forgot Password")
-                    .font(.custom("Montserrat", size: 32))
-                    .fontWeight(.bold)
-                    .foregroundColor(.black)
-                
-                // Email
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Email Address")
-                        .font(.custom("Montserrat", size: 14))
-                        .fontWeight(.medium)
-                        .foregroundColor(.black)
+            var body: some View {
+                ZStack {
+                    Color.white.ignoresSafeArea()
                     
-                    TextField("Email Address", text: $email)
-                        .font(.custom("Montserrat", size: 16))
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(emailFocused ? Color.ppGreen : Color.clear, lineWidth: 2)
-                        )
-                        .keyboardType(.emailAddress)
-                        .textInputAutocapitalization(.never)
-                        .focused($emailFocused)
-                }
-                .padding(.top, 20)
-                
-                Spacer()
-                
-                // Enter Button
-                Button(action: { showVerification = true }) {
-                    Text("Enter")
-                        .font(.custom("Montserrat", size: 20))
-                        .fontWeight(.black)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.ppGreen)
-                        )
-                        .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
-                }
-                .disabled(email.isEmpty)
-                .opacity(email.isEmpty ? 0.5 : 1.0)
-                .padding(.bottom, 40)
-            }
-            .padding(.horizontal, 32)
-        }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "arrow.left")
-                        .foregroundColor(.black)
-                        .font(.system(size: 20))
-                }
-            }
-        }
-        .navigationDestination(isPresented: $showVerification) {
-            VerificationCodeView(email: email)
-        }
-    }
-}
-
-// MARK: - Verification Code View
-struct VerificationCodeView: View {
-    @Environment(\.dismiss) private var dismiss
-    let email: String
-    @State private var code: [String] = ["", "", "", ""]
-    @FocusState private var focusedField: Int?
-    @State private var showResetPassword = false
-    
-    var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
-            
-            VStack(alignment: .center, spacing: 24) {
-                // Card icon
-                Image(systemName: "creditcard.fill")
-                    .font(.system(size: 50))
-                    .foregroundColor(Color.ppGreen)
-                    .rotationEffect(.degrees(15))
-                    .padding(.top, 20)
-                
-                // Fixed text without concatenation
-                VStack(spacing: 4) {
-                    Text("We sent a two-step authentication")
-                        .font(.custom("Montserrat", size: 16))
-                        .foregroundColor(.black)
-                    HStack(spacing: 4) {
-                        Text("code to")
-                            .font(.custom("Montserrat", size: 16))
-                            .foregroundColor(.black)
-                        Text(email)
-                            .font(.custom("Montserrat", size: 16))
-                            .fontWeight(.bold)
+                    VStack(alignment: .leading, spacing: 24) {
+                        // Card icon
+                        Image(systemName: "creditcard.fill")
+                            .font(.system(size: 50))
                             .foregroundColor(Color.ppGreen)
-                        Text(".")
-                            .font(.custom("Montserrat", size: 16))
-                            .foregroundColor(.black)
-                    }
-                }
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-                .padding(.top, 40)
-                
-                // Code input boxes
-                HStack(spacing: 16) {
-                    ForEach(0..<4, id: \.self) { index in
-                        TextField("", text: $code[index])
-                            .font(.custom("Montserrat", size: 24))
+                            .rotationEffect(.degrees(15))
+                            .padding(.top, 20)
+                        
+                        Text("Forgot Password")
+                            .font(.custom("Montserrat", size: 32))
                             .fontWeight(.bold)
-                            .multilineTextAlignment(.center)
-                            .frame(width: 60, height: 60)
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(12)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(focusedField == index ? Color.ppGreen : Color.clear, lineWidth: 2)
-                            )
-                            .keyboardType(.numberPad)
-                            .focused($focusedField, equals: index)
-                            .onChange(of: code[index]) { _, newValue in
-                                if newValue.count == 1 && index < 3 {
-                                    focusedField = index + 1
-                                } else if newValue.isEmpty && index > 0 {
-                                    focusedField = index - 1
-                                }
-                                // Limit to 1 character
-                                if newValue.count > 1 {
-                                    code[index] = String(newValue.prefix(1))
-                                }
-                            }
+                            .foregroundColor(.black)
+                        
+                        // Email
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Email Address")
+                                .font(.custom("Montserrat", size: 14))
+                                .fontWeight(.medium)
+                                .foregroundColor(.black)
+                            
+                            TextField("Email Address", text: $email)
+                                .font(.custom("Montserrat", size: 16))
+                                .padding()
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(8)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(emailFocused ? Color.ppGreen : Color.clear, lineWidth: 2)
+                                )
+                                .keyboardType(.emailAddress)
+                                .textInputAutocapitalization(.never)
+                                .focused($emailFocused)
+                        }
+                        .padding(.top, 20)
+                        
+                        Spacer()
+                        
+                        // Enter Button
+                        Button(action: { showVerification = true }) {
+                            Text("Enter")
+                                .font(.custom("Montserrat", size: 20))
+                                .fontWeight(.black)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(16)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color.ppGreen)
+                                )
+                                .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
+                        }
+                        .disabled(email.isEmpty)
+                        .opacity(email.isEmpty ? 0.5 : 1.0)
+                        .padding(.bottom, 40)
+                    }
+                    .padding(.horizontal, 32)
+                }
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: { dismiss() }) {
+                            Image(systemName: "arrow.left")
+                                .foregroundColor(.black)
+                                .font(.system(size: 20))
+                        }
                     }
                 }
-                .padding(.top, 32)
-                
-                Spacer()
-                
-                // Enter Button
-                Button(action: { showResetPassword = true }) {
-                    Text("Enter")
-                        .font(.custom("Montserrat", size: 20))
-                        .fontWeight(.black)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(isCodeComplete ? Color.ppGreen : Color.gray)
-                        )
-                        .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
-                }
-                .disabled(!isCodeComplete)
-                .padding(.horizontal, 32)
-                .padding(.bottom, 40)
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "arrow.left")
-                        .foregroundColor(.black)
-                        .font(.system(size: 20))
+                .navigationDestination(isPresented: $showVerification) {
+                    VerificationCodeView(email: email)
                 }
             }
         }
-        .navigationDestination(isPresented: $showResetPassword) {
-            ResetPasswordView()
-        }
-        .onAppear {
-            focusedField = 0
-        }
-    }
-    
-    private var isCodeComplete: Bool {
-        code.allSatisfy { !$0.isEmpty }
-    }
-}
-
-// MARK: - Reset Password View
-struct ResetPasswordView: View {
-    @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var app: AppState
-    @State private var password: String = ""
-    @State private var confirmPassword: String = ""
-    @State private var showPassword: Bool = false
-    @State private var showConfirmPassword: Bool = false
-    @State private var showSuccess = false
-    @FocusState private var focusedField: ResetField?
-    
-    enum ResetField {
-        case password, confirmPassword
-    }
-    
-    private var isValidPassword: Bool {
-        password.count >= 8 &&
-        password.range(of: "[A-Z]", options: .regularExpression) != nil &&
-        password.range(of: "[a-z]", options: .regularExpression) != nil &&
-        password.range(of: "[^A-Za-z0-9]", options: .regularExpression) != nil
-    }
-    
-    private var canReset: Bool {
-        isValidPassword && password == confirmPassword
-    }
-    
-    var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
+        
+        // MARK: - Verification Code View
+        struct VerificationCodeView: View {
+            @Environment(\.dismiss) private var dismiss
+            let email: String
+            @State private var code: [String] = ["", "", "", ""]
+            @FocusState private var focusedField: Int?
+            @State private var showResetPassword = false
             
-            VStack(alignment: .leading, spacing: 24) {
-                // Card icon
-                Image(systemName: "creditcard.fill")
-                    .font(.system(size: 50))
-                    .foregroundColor(Color.ppGreen)
-                    .rotationEffect(.degrees(15))
-                    .padding(.top, 20)
-                
-                // Password requirements
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Password")
-                        .font(.custom("Montserrat", size: 14))
-                        .fontWeight(.semibold)
-                        .foregroundColor(.black)
+            var body: some View {
+                ZStack {
+                    Color.white.ignoresSafeArea()
                     
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Your password must include at least:")
-                            .font(.custom("Montserrat", size: 11))
-                            .foregroundColor(.secondary)
-                        Text("• 8 characters")
-                            .font(.custom("Montserrat", size: 11))
-                            .foregroundColor(.secondary)
-                        Text("• One uppercase and one lowercase characters")
-                            .font(.custom("Montserrat", size: 11))
-                            .foregroundColor(.secondary)
-                        Text("• One special character")
-                            .font(.custom("Montserrat", size: 11))
-                            .foregroundColor(.secondary)
+                    VStack(alignment: .center, spacing: 24) {
+                        // Card icon
+                        Image(systemName: "creditcard.fill")
+                            .font(.system(size: 50))
+                            .foregroundColor(Color.ppGreen)
+                            .rotationEffect(.degrees(15))
+                            .padding(.top, 20)
+                        
+                        // Fixed text without concatenation
+                        VStack(spacing: 4) {
+                            Text("We sent a two-step authentication")
+                                .font(.custom("Montserrat", size: 16))
+                                .foregroundColor(.black)
+                            HStack(spacing: 4) {
+                                Text("code to")
+                                    .font(.custom("Montserrat", size: 16))
+                                    .foregroundColor(.black)
+                                Text(email)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.ppGreen)
+                                Text(".")
+                                    .font(.custom("Montserrat", size: 16))
+                                    .foregroundColor(.black)
+                            }
+                        }
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 32)
+                        .padding(.top, 40)
+                        
+                        // Code input boxes
+                        HStack(spacing: 16) {
+                            ForEach(0..<4, id: \.self) { index in
+                                TextField("", text: $code[index])
+                                    .font(.custom("Montserrat", size: 24))
+                                    .fontWeight(.bold)
+                                    .multilineTextAlignment(.center)
+                                    .frame(width: 60, height: 60)
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(12)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(focusedField == index ? Color.ppGreen : Color.clear, lineWidth: 2)
+                                    )
+                                    .keyboardType(.numberPad)
+                                    .focused($focusedField, equals: index)
+                                    .onChange(of: code[index]) { _, newValue in
+                                        if newValue.count == 1 && index < 3 {
+                                            focusedField = index + 1
+                                        } else if newValue.isEmpty && index > 0 {
+                                            focusedField = index - 1
+                                        }
+                                        // Limit to 1 character
+                                        if newValue.count > 1 {
+                                            code[index] = String(newValue.prefix(1))
+                                        }
+                                    }
+                            }
+                        }
+                        .padding(.top, 32)
+                        
+                        Spacer()
+                        
+                        // Enter Button
+                        Button(action: { showResetPassword = true }) {
+                            Text("Enter")
+                                .font(.custom("Montserrat", size: 20))
+                                .fontWeight(.black)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(16)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(isCodeComplete ? Color.ppGreen : Color.gray)
+                                )
+                                .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
+                        }
+                        .disabled(!isCodeComplete)
+                        .padding(.horizontal, 32)
+                        .padding(.bottom, 40)
                     }
                 }
-                .padding(.top, 20)
-                
-                // Password
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        if showPassword {
-                            TextField("Password", text: $password)
-                                .font(.custom("Montserrat", size: 16))
-                                .focused($focusedField, equals: .password)
-                        } else {
-                            SecureField("Password", text: $password)
-                                .font(.custom("Montserrat", size: 16))
-                                .focused($focusedField, equals: .password)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: { dismiss() }) {
+                            Image(systemName: "arrow.left")
+                                .foregroundColor(.black)
+                                .font(.system(size: 20))
+                        }
+                    }
+                }
+                .navigationDestination(isPresented: $showResetPassword) {
+                    ResetPasswordView()
+                }
+                .onAppear {
+                    focusedField = 0
+                }
+            }
+            
+            private var isCodeComplete: Bool {
+                code.allSatisfy { !$0.isEmpty }
+            }
+        }
+        
+        // MARK: - Reset Password View
+        struct ResetPasswordView: View {
+            @Environment(\.dismiss) private var dismiss
+            @EnvironmentObject var app: AppState
+            @State private var password: String = ""
+            @State private var confirmPassword: String = ""
+            @State private var showPassword: Bool = false
+            @State private var showConfirmPassword: Bool = false
+            @State private var showSuccess = false
+            @FocusState private var focusedField: ResetField?
+            
+            enum ResetField {
+                case password, confirmPassword
+            }
+            
+            private var isValidPassword: Bool {
+                password.count >= 8 &&
+                password.range(of: "[A-Z]", options: .regularExpression) != nil &&
+                password.range(of: "[a-z]", options: .regularExpression) != nil &&
+                password.range(of: "[^A-Za-z0-9]", options: .regularExpression) != nil
+            }
+            
+            private var canReset: Bool {
+                isValidPassword && password == confirmPassword
+            }
+            
+            var body: some View {
+                ZStack {
+                    Color.white.ignoresSafeArea()
+                    
+                    VStack(alignment: .leading, spacing: 24) {
+                        // Card icon
+                        Image(systemName: "creditcard.fill")
+                            .font(.system(size: 50))
+                            .foregroundColor(Color.ppGreen)
+                            .rotationEffect(.degrees(15))
+                            .padding(.top, 20)
+                        
+                        // Password requirements
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Password")
+                                .font(.custom("Montserrat", size: 14))
+                                .fontWeight(.semibold)
+                                .foregroundColor(.black)
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Your password must include at least:")
+                                    .font(.custom("Montserrat", size: 11))
+                                    .foregroundColor(.secondary)
+                                Text("• 8 characters")
+                                    .font(.custom("Montserrat", size: 11))
+                                    .foregroundColor(.secondary)
+                                Text("• One uppercase and one lowercase characters")
+                                    .font(.custom("Montserrat", size: 11))
+                                    .foregroundColor(.secondary)
+                                Text("• One special character")
+                                    .font(.custom("Montserrat", size: 11))
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.top, 20)
+                        
+                        // Password
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                if showPassword {
+                                    TextField("Password", text: $password)
+                                        .font(.custom("Montserrat", size: 16))
+                                        .focused($focusedField, equals: .password)
+                                } else {
+                                    SecureField("Password", text: $password)
+                                        .font(.custom("Montserrat", size: 16))
+                                        .focused($focusedField, equals: .password)
+                                }
+                                
+                                Button(action: { showPassword.toggle() }) {
+                                    Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.trailing, 8)
+                            }
+                            .padding()
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
                         }
                         
-                        Button(action: { showPassword.toggle() }) {
-                            Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
-                                .foregroundColor(.gray)
-                        }
-                        .padding(.trailing, 8)
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
-                    )
-                }
-                
-                // Confirm Password
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Confirm Password")
-                        .font(.custom("Montserrat", size: 14))
-                        .fontWeight(.medium)
-                        .foregroundColor(.black)
-                    
-                    HStack {
-                        if showConfirmPassword {
-                            TextField("Confirm Password", text: $confirmPassword)
-                                .font(.custom("Montserrat", size: 16))
-                                .focused($focusedField, equals: .confirmPassword)
-                        } else {
-                            SecureField("Confirm Password", text: $confirmPassword)
-                                .font(.custom("Montserrat", size: 16))
-                                .focused($focusedField, equals: .confirmPassword)
+                        // Confirm Password
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Confirm Password")
+                                .font(.custom("Montserrat", size: 14))
+                                .fontWeight(.medium)
+                                .foregroundColor(.black)
+                            
+                            HStack {
+                                if showConfirmPassword {
+                                    TextField("Confirm Password", text: $confirmPassword)
+                                        .font(.custom("Montserrat", size: 16))
+                                        .focused($focusedField, equals: .confirmPassword)
+                                } else {
+                                    SecureField("Confirm Password", text: $confirmPassword)
+                                        .font(.custom("Montserrat", size: 16))
+                                        .focused($focusedField, equals: .confirmPassword)
+                                }
+                                
+                                Button(action: { showConfirmPassword.toggle() }) {
+                                    Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.trailing, 8)
+                            }
+                            .padding()
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(focusedField == .confirmPassword ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
                         }
                         
-                        Button(action: { showConfirmPassword.toggle() }) {
-                            Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
-                                .foregroundColor(.gray)
+                        Spacer()
+                        
+                        // Enter Button
+                        Button(action: resetPassword) {
+                            Text("Enter")
+                                .font(.custom("Montserrat", size: 20))
+                                .fontWeight(.black)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(16)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(canReset ? Color.ppGreen : Color.gray)
+                                )
+                                .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
                         }
-                        .padding(.trailing, 8)
+                        .disabled(!canReset)
+                        .padding(.bottom, 40)
                     }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(focusedField == .confirmPassword ? Color.ppGreen : Color.clear, lineWidth: 2)
-                    )
+                    .padding(.horizontal, 32)
                 }
-                
-                Spacer()
-                
-                // Enter Button
-                Button(action: resetPassword) {
-                    Text("Enter")
-                        .font(.custom("Montserrat", size: 20))
-                        .fontWeight(.black)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(canReset ? Color.ppGreen : Color.gray)
-                        )
-                        .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: { dismiss() }) {
+                            Image(systemName: "arrow.left")
+                                .foregroundColor(.black)
+                                .font(.system(size: 20))
+                        }
+                    }
                 }
-                .disabled(!canReset)
-                .padding(.bottom, 40)
-            }
-            .padding(.horizontal, 32)
-        }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "arrow.left")
-                        .foregroundColor(.black)
-                        .font(.system(size: 20))
+                .alert("Password Reset", isPresented: $showSuccess) {
+                    Button("OK") {
+                        // Pop back to sign in
+                        dismiss()
+                    }
+                } message: {
+                    Text("Your password has been successfully reset. Please sign in with your new password.")
                 }
             }
-        }
-        .alert("Password Reset", isPresented: $showSuccess) {
-            Button("OK") {
-                // Pop back to sign in
-                dismiss()
+            
+            private func resetPassword() {
+                // TODO: Add real password reset
+                showSuccess = true
             }
-        } message: {
-            Text("Your password has been successfully reset. Please sign in with your new password.")
         }
-    }
+        
+        // MARK: - Previews
+        #Preview("Landing") {
+            AuthLandingView()
+                .environmentObject(AppState())
+        }
+        
+        #Preview("Sign In") {
+            NavigationStack {
+                SignInView()
+                    .environmentObject(AppState())
+            }
+        }
+        
+        #Preview("Sign Up") {
+            NavigationStack {
+                SignUpView()
+                    .environmentObject(AppState())
+            }
+        }
     
-    private func resetPassword() {
-        // TODO: Add real password reset
-        showSuccess = true
-    }
-}
-
-// MARK: - Previews
-#Preview("Landing") {
-    AuthLandingView()
-        .environmentObject(AppState())
-}
-
-#Preview("Sign In") {
-    NavigationStack {
-        SignInView()
-            .environmentObject(AppState())
-    }
-}
-
-#Preview("Sign Up") {
-    NavigationStack {
-        SignUpView()
-            .environmentObject(AppState())
-    }
-}
