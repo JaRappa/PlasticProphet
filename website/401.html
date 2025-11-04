@@ -4,16 +4,34 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>401 — Unauthorized — Plastic Prophet</title>
+  <script>
+    // Apply stored theme immediately to prevent flash
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if(t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      }catch(e){}
+    })();
+  </script>
   <style>
-    :root{--bg:#0b0d12;--card:#11141b;--ink:#e9eef6;--muted:#a7b1c2;--accent:#2ac33c;--radius:14px}
+    /* Light theme default */
+    :root{--bg:#f6f8fb;--card:#ffffff;--ink:#0b1220;--muted:#556070;--accent:#2ac33c;--radius:14px;--border:#e6eef8;--logo-bg:#ffffff}
+
+    @media (prefers-color-scheme: dark){
+      :root{--bg:#0b0d12;--card:#11141b;--ink:#e9eef6;--muted:#a7b1c2;--accent:#2ac33c;--radius:14px;--border:#223049;--logo-bg:#1a232f}
+    }
+
+    [data-theme="dark"]{--bg:#0b0d12;--card:#11141b;--ink:#e9eef6;--muted:#a7b1c2;--border:#223049;--logo-bg:#1a232f}
+    [data-theme="light"]{--bg:#f6f8fb;--card:#ffffff;--ink:#0b1220;--muted:#556070;--border:#e6eef8;--logo-bg:#ffffff}
+
     *{box-sizing:border-box}
     body{
       margin:0;background:var(--bg);color:var(--ink);
       font:16px/1.5 system-ui,-apple-system,Segoe UI,Inter,Helvetica,sans-serif;
       display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;
     }
-    .box{background:var(--card);border-radius:var(--radius);padding:32px;max-width:520px;width:100%;text-align:center;border:1px solid #223049;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    .logo{width:256px;height:256px;margin:0 auto 18px;border-radius:12px;background:#1a232f url('/images/PoliceCardy.png') center/cover no-repeat;border:1px solid #233044}
+    .box{background:var(--card);border-radius:var(--radius);padding:32px;max-width:520px;width:100%;text-align:center;border:1px solid var(--border);box-shadow:0 10px 30px rgba(0,0,0,.12)}
+    .logo{width:256px;height:256px;margin:0 auto 18px;border-radius:12px;background:var(--logo-bg) url('/images/PoliceCardy.png') center/contain no-repeat;border:1px solid var(--border)}
     h1{margin:0 0 8px;font-size:1.8rem}
     p{margin:0 0 20px;color:var(--muted)}
     .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}

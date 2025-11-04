@@ -4,13 +4,26 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Plastic Prophet — Privacy</title>
+  <script>
+    // Prevent theme flash by applying stored theme early
+    (function(){ try{ const t = localStorage.getItem('theme'); if(t==='light'||t==='dark') document.documentElement.setAttribute('data-theme', t); }catch(e){} })();
+  </script>
   <style>
-    body{margin:0;background:#0b0d12;color:#e9eef6;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif}
+    :root{--bg:#f6f8fb;--card:#ffffff;--ink:#0b1220;--muted:#556070;--accent:#2ac33c;--border:#e6eef8}
+
+    @media (prefers-color-scheme: dark){
+      :root{--bg:#0b0d12;--card:#11141b;--ink:#e9eef6;--muted:#a7b1c2;--accent:#2ac33c;--border:#223049}
+    }
+
+    [data-theme="dark"]{--bg:#0b0d12;--card:#11141b;--ink:#e9eef6;--muted:#a7b1c2;--border:#223049}
+    [data-theme="light"]{--bg:#f6f8fb;--card:#ffffff;--ink:#0b1220;--muted:#556070;--border:#e6eef8}
+
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif}
     .wrap{max-width:820px;margin:0 auto;padding:32px 20px}
-    a{color:#9fe6bf;text-decoration:none}
-    .card{background:#11141b;border:1px solid #223049;border-radius:12px;padding:20px}
+    a{color:#1b8f57;text-decoration:none}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
     h1{margin-top:0}
-    .muted{color:#a7b1c2}
+    .muted{color:var(--muted)}
   </style>
 </head>
 <body>

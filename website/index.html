@@ -5,26 +5,75 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Plastic Prophet — Smarter Card Picks</title>
 
+  <script>
+    // Apply a stored theme override (if present) immediately to avoid flash.
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if(t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      }catch(e){}
+    })();
+  </script>
+
   <link rel="icon" href="images/tpplogo.png" />
 
   <style>
-    :root { --bg:#0b0d12; --card:#11141b; --ink:#e9eef6; --muted:#a7b1c2; --accent:#2ac33c; --max:980px; --radius:14px; }
+    /* Light theme by default */
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --ink:#0b1220;
+      --muted:#556070;
+      --accent:#2ac33c;
+      --max:980px;
+      --radius:14px;
+      --border:#e6eef8;
+      --logo-bg:#ffffff;
+      --hero-bg:linear-gradient(180deg,#f6faf8,#eef7ef);
+    }
+
+    /* Respect system dark mode */
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0b0d12; --card:#11141b; --ink:#e9eef6; --muted:#a7b1c2; --accent:#2ac33c; --max:980px; --radius:14px; --border:#223049; --logo-bg:#1a232f; --hero-bg:#0e131b;
+      }
+    }
+
+    /* Allow an explicit override via document attribute (set by JS) */
+    [data-theme="dark"]{
+      --bg:#0b0d12; --card:#11141b; --ink:#e9eef6; --muted:#a7b1c2; --border:#223049; --logo-bg:#1a232f; --hero-bg:#1a232f;
+    }
+    [data-theme="light"]{
+      --bg:#f6f8fb; --card:#ffffff; --ink:#0b1220; --muted:#556070; --border:#e6eef8; --logo-bg:#ffffff; --hero-bg:linear-gradient(180deg,#f6faf8,#eef7ef);
+    }
+
     *{box-sizing:border-box;}
-    body{margin:0;background:#0b0d12;color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Inter,Helvetica,sans-serif;}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Inter,Helvetica,sans-serif;}
     a{color:inherit;text-decoration:none;}
     img{max-width:100%;height:auto;}
     .wrap{max-width:var(--max);margin:0 auto;padding:24px;}
     header{display:flex;align-items:center;justify-content:space-between;padding:12px 0;}
     .brand{display:flex;align-items:center;gap:12px;}
-  .logo{width:40px;height:40px;border-radius:10px;background:#1a232f url('images/tpplogo.png') center/cover no-repeat;}
+  .logo{width:40px;height:40px;border-radius:10px;background:var(--logo-bg) url('images/tpplogo.png') center/contain no-repeat;border:1px solid var(--border);}
     h1{font-size:clamp(2rem,4vw,2.7rem);margin:.4em 0;}
     .lead{color:var(--muted);margin:0 0 24px;}
-    .btn{display:inline-block;padding:14px 20px;border-radius:12px;background:var(--accent);color:#071b12;font-weight:600;}
-  .hero-art{margin-top:24px;border-radius:var(--radius);background:#0e131b url('images/PlasticProphetBlackGreenOutlineUpscale.png') center/contain no-repeat;aspect-ratio:16/9;padding:0 18px;}
+    .btn{display:inline-block;padding:14px 20px;border-radius:12px;background:var(--accent);color:#071b12;font-weight:600;border:none}
+  .hero-art{margin-top:24px;border-radius:var(--radius);background-color:var(--hero-bg);background-image:url('images/PlasticProphetBlackGreenOutlineUpscale.png');background-repeat:no-repeat;background-position:center;background-size:contain;aspect-ratio:16/9;padding:0 18px;border:1px solid var(--border);box-shadow:0 8px 20px rgba(16,24,32,0.06);background-clip:padding-box}
     section{margin:48px 0;}
-    .card{background:var(--card);padding:18px;border-radius:var(--radius);border:1px solid #223049;}
+    .card{background:var(--card);padding:18px;border-radius:var(--radius);border:1px solid var(--border);}
     .muted{color:var(--muted);}
     footer{padding:32px 0;color:var(--muted);text-align:center;font-size:.85rem;}
+    input,button{font:inherit}
+    /* Input theming */
+    :root{--input-bg:transparent;--input-border:var(--border);--input-color:var(--ink);--placeholder:#8a98a6}
+    @media (prefers-color-scheme: dark){
+      :root{--input-bg:rgba(255,255,255,0.02);--input-border:#2b3847;--input-color:var(--ink);--placeholder:#9aa6b2}
+    }
+    [data-theme="dark"]{--input-bg:rgba(255,255,255,0.02);--input-border:#2b3847;--input-color:var(--ink);--placeholder:#9aa6b2}
+    [data-theme="light"]{--input-bg:#ffffff;--input-border:#e6eef8;--input-color:var(--ink);--placeholder:#8a98a6}
+
+    input[type="email"]{flex:1;padding:10px;border-radius:8px;border:1px solid var(--input-border);background:var(--input-bg);color:var(--input-color)}
+    input[type="email"]::placeholder{color:var(--placeholder)}
   </style>
 </head>
 
@@ -96,7 +145,7 @@
     <h3 id="waitlist-title" style="margin-top:0">Join the waitlist</h3>
     <p class="muted">Enter your email and we'll notify you when Plastic Prophet launches.</p>
     <form id="waitlist-form" style="display:flex;gap:8px;margin-top:12px;">
-      <input id="waitlist-email" type="email" placeholder="Your email" required style="flex:1;padding:10px;border-radius:8px;border:1px solid #233044;background:#0b0d12;color:var(--ink);" />
+  <input id="waitlist-email" type="email" placeholder="Your email" required />
       <button type="submit" class="btn">Notify me</button>
     </form>
     <p id="waitlist-msg" class="muted" style="margin-top:12px;display:none;"></p>
