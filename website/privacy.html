@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Plastic Prophet — Privacy</title>
+  <style>
+    body{margin:0;background:#0b0d12;color:#e9eef6;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif}
+    .wrap{max-width:820px;margin:0 auto;padding:32px 20px}
+    a{color:#9fe6bf;text-decoration:none}
+    .card{background:#11141b;border:1px solid #223049;border-radius:12px;padding:20px}
+    h1{margin-top:0}
+    .muted{color:#a7b1c2}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="card">
+      <h1>Privacy Policy</h1>
+      <p class="muted">Plastic Prophet is built with privacy in mind. This page describes what data is collected and how it is used.</p>
+      <h2>What we collect</h2>
+      <ul>
+        <li>App diagnostics and analytics (opt-in).</li>
+        <li>Precise location data (GPS coordinates) when you grant location permission.</li>
+        <li>Non-sensitive purchase metadata and category patterns derived from your activity. We do not collect full payment card numbers or bank account details.</li>
+      </ul>
+
+      <h2>How we use data</h2>
+      <p>We use collected data to improve recommendations, surface relevant offers, and make the app more reliable. Precise location data helps determine the types of places you visit so we can suggest which credit card rewards are most relevant at those locations.</p>
+
+      <h2>Account and financial data</h2>
+      <p>Plastic Prophet requires an account to store preferences and non-sensitive metadata. We never collect or store full card numbers, CVV codes, or bank account numbers. Any payment methods or wallets you link remain on your device unless you explicitly choose to share them.</p>
+
+      <h2>Choices and controls</h2>
+      <p>You control what we collect:</p>
+      <ul>
+        <li>Turn off location access in your device settings to stop precise GPS collection (this may reduce recommendation accuracy).</li>
+        <li>Opt out of analytics in the app settings to limit diagnostics data sent to our servers.</li>
+        <li>Contact us to request access, correction, or deletion of your account data.</li>
+      </ul>
+
+      <p>We do not sell personal data. We may share aggregated, de-identified analytics with partners to improve features, but we do not share personal identity information with advertisers.</p>
+
+      <h2>Contact</h2>
+      <p>Email <a href="mailto:Help@PlasticProphet.com">Help@PlasticProphet.com</a> with questions or data requests.</p>
+      <p class="muted">Last updated: <span id="d"></span></p>
+    </div>
+    <p style="margin-top:16px"><a href="index.html">← Back to home</a></p>
+  </main>
+  <script>document.getElementById('d').textContent=new Date().toISOString().slice(0,10);</script>
+</body>
+</html>

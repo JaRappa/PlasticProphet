@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Page Not Found — Plastic Prophet</title>
+
+  <style>
+    :root { --bg:#0b0d12; --card:#11141b; --ink:#e9eef6; --muted:#a7b1c2; --accent:#2ac33c; --radius:14px; }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font:16px/1.5 system-ui,-apple-system,Segoe UI,Inter,Helvetica,sans-serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      padding:24px;
+    }
+    .box{
+      background:var(--card);
+      border:1px solid #223049;
+      border-radius:var(--radius);
+      padding:32px;
+      max-width:420px;
+      width:100%;
+      text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    h1{margin:0 0 12px;font-size:1.9rem;}
+    p{color:var(--muted);margin:0 0 24px;}
+    a.btn{
+      display:inline-block;
+      padding:12px 18px;
+      border-radius:12px;
+      background:var(--accent);
+      color:#071b12;
+      font-weight:600;
+      text-decoration:none;
+    }
+    .logo{
+      width:256px;
+      height:256px;
+      margin:0 auto 18px;
+      border-radius:12px;
+      background:#1a232f url('images/LostCardy.png') center/cover no-repeat;
+      border:1px solid #233044;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <div class="logo" aria-hidden="true"></div>
+    <h1>404 — Not Found</h1>
+    <p>Looks like this page wandered off. Maybe check the URL or return home.</p>
+    <a class="btn" href="index.html">Back to Homepage</a>
+  </div>
+</body>
+</html>
