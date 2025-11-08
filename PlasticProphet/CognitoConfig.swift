@@ -8,11 +8,11 @@ struct CognitoConfig {
     
     /// AWS Cognito User Pool ID
     /// Example: us-east-1_AbCdEfGhI
-    static let userPoolId = "us-east-1_aIieIzW0n"
+    static let userPoolId = "us-east-1_V2s48Yy0h"
     
     /// App Client ID for PlasticProphet iOS app
     /// Example: 1a2b3c4d5e6f7g8h9i0j
-    static let appClientId = "5hp5ac86vrf9bn63rqp6uehjk6"
+    static let appClientId = "4odq1p8fovp5vtmjobhdqke2rl"
     
     /// AWS Region where User Pool is hosted
     /// Example: us-east-1, us-west-2, eu-west-1
