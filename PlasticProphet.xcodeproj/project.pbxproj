@@ -12,6 +12,28 @@
 		8814CBF32EA6879F00A7E406 /* Plastic Prophet App Flow V1.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 8814CBEE2EA6879F00A7E406 /* Plastic Prophet App Flow V1.pdf */; };
 		8814CBF42EA6879F00A7E406 /* DevelopmentView.md in Resources */ = {isa = PBXBuildFile; fileRef = 8814CBEB2EA6879F00A7E406 /* DevelopmentView.md */; };
 		8814CBF52EA6879F00A7E406 /* ProcessGeofenceRecomendation.md in Resources */ = {isa = PBXBuildFile; fileRef = 8814CBEF2EA6879F00A7E406 /* ProcessGeofenceRecomendation.md */; };
+		88E0BE282EBEDFD90035A9BC /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88E0BE102EBEDFD90035A9BC /* Montserrat-Bold.ttf */; };
+		88E0BE292EBEDFD90035A9BC /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88E0BE122EBEDFD90035A9BC /* Montserrat-SemiBold.ttf */; };
+		88E0BE2A2EBEDFD90035A9BC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 88E0BE132EBEDFD90035A9BC /* README.md */; };
+		88E0BE2B2EBEDFD90035A9BC /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88E0BE112EBEDFD90035A9BC /* Montserrat-Regular.ttf */; };
+		88E0BE2C2EBEDFD90035A9BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88E0BE162EBEDFD90035A9BC /* Assets.xcassets */; };
+		88E0BE2D2EBEDFD90035A9BC /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE1F2EBEDFD90035A9BC /* MainAppView.swift */; };
+		88E0BE2E2EBEDFD90035A9BC /* CognitoAuthServiceNoSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE192EBEDFD90035A9BC /* CognitoAuthServiceNoSDK.swift */; };
+		88E0BE2F2EBEDFD90035A9BC /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE1C2EBEDFD90035A9BC /* ColorExtensions.swift */; };
+		88E0BE302EBEDFD90035A9BC /* FontRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE1E2EBEDFD90035A9BC /* FontRegistration.swift */; };
+		88E0BE312EBEDFD90035A9BC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE242EBEDFD90035A9BC /* SettingsView.swift */; };
+		88E0BE322EBEDFD90035A9BC /* WalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE262EBEDFD90035A9BC /* WalletView.swift */; };
+		88E0BE332EBEDFD90035A9BC /* PlasticProphetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE222EBEDFD90035A9BC /* PlasticProphetApp.swift */; };
+		88E0BE342EBEDFD90035A9BC /* OnboardingFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE212EBEDFD90035A9BC /* OnboardingFlowView.swift */; };
+		88E0BE352EBEDFD90035A9BC /* CognitoConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE1A2EBEDFD90035A9BC /* CognitoConfig.swift */; };
+		88E0BE362EBEDFD90035A9BC /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE202EBEDFD90035A9BC /* Models.swift */; };
+		88E0BE372EBEDFD90035A9BC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE1D2EBEDFD90035A9BC /* ContentView.swift */; };
+		88E0BE382EBEDFD90035A9BC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE232EBEDFD90035A9BC /* ProfileView.swift */; };
+		88E0BE392EBEDFD90035A9BC /* CardSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE182EBEDFD90035A9BC /* CardSelectionView.swift */; };
+		88E0BE3A2EBEDFD90035A9BC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE152EBEDFD90035A9BC /* AppState.swift */; };
+		88E0BE3B2EBEDFD90035A9BC /* CognitoVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE1B2EBEDFD90035A9BC /* CognitoVerificationView.swift */; };
+		88E0BE3C2EBEDFD90035A9BC /* AuthenticationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE172EBEDFD90035A9BC /* AuthenticationViews.swift */; };
+		88E0BE3D2EBEDFD90035A9BC /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E0BE252EBEDFD90035A9BC /* SplashScreenView.swift */; };
 		891F5F732E9E90E900A880E5 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 891F5F722E9E90E200A880E5 /* .gitignore */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +60,28 @@
 		8814CBED2EA6879F00A7E406 /* PhysicalView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PhysicalView.md; sourceTree = "<group>"; };
 		8814CBEE2EA6879F00A7E406 /* Plastic Prophet App Flow V1.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Plastic Prophet App Flow V1.pdf"; sourceTree = "<group>"; };
 		8814CBEF2EA6879F00A7E406 /* ProcessGeofenceRecomendation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ProcessGeofenceRecomendation.md; sourceTree = "<group>"; };
+		88E0BE102EBEDFD90035A9BC /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		88E0BE112EBEDFD90035A9BC /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		88E0BE122EBEDFD90035A9BC /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
+		88E0BE132EBEDFD90035A9BC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		88E0BE152EBEDFD90035A9BC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		88E0BE162EBEDFD90035A9BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		88E0BE172EBEDFD90035A9BC /* AuthenticationViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViews.swift; sourceTree = "<group>"; };
+		88E0BE182EBEDFD90035A9BC /* CardSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSelectionView.swift; sourceTree = "<group>"; };
+		88E0BE192EBEDFD90035A9BC /* CognitoAuthServiceNoSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoAuthServiceNoSDK.swift; sourceTree = "<group>"; };
+		88E0BE1A2EBEDFD90035A9BC /* CognitoConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoConfig.swift; sourceTree = "<group>"; };
+		88E0BE1B2EBEDFD90035A9BC /* CognitoVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoVerificationView.swift; sourceTree = "<group>"; };
+		88E0BE1C2EBEDFD90035A9BC /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
+		88E0BE1D2EBEDFD90035A9BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		88E0BE1E2EBEDFD90035A9BC /* FontRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontRegistration.swift; sourceTree = "<group>"; };
+		88E0BE1F2EBEDFD90035A9BC /* MainAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
+		88E0BE202EBEDFD90035A9BC /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		88E0BE212EBEDFD90035A9BC /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowView.swift; sourceTree = "<group>"; };
+		88E0BE222EBEDFD90035A9BC /* PlasticProphetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlasticProphetApp.swift; sourceTree = "<group>"; };
+		88E0BE232EBEDFD90035A9BC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		88E0BE242EBEDFD90035A9BC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		88E0BE252EBEDFD90035A9BC /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
+		88E0BE262EBEDFD90035A9BC /* WalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletView.swift; sourceTree = "<group>"; };
 		891F5F142E941BA700A880E5 /* PlasticProphet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlasticProphet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F212E941BA800A880E5 /* PlasticProphetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F2B2E941BA800A880E5 /* PlasticProphetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,11 +89,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		891F5F162E941BA700A880E5 /* PlasticProphet */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = PlasticProphet;
-			sourceTree = "<group>";
-		};
 		891F5F242E941BA800A880E5 /* PlasticProphetTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = PlasticProphetTests;
@@ -99,12 +138,49 @@
 			path = docs;
 			sourceTree = "<group>";
 		};
+		88E0BE142EBEDFD90035A9BC /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				88E0BE102EBEDFD90035A9BC /* Montserrat-Bold.ttf */,
+				88E0BE112EBEDFD90035A9BC /* Montserrat-Regular.ttf */,
+				88E0BE122EBEDFD90035A9BC /* Montserrat-SemiBold.ttf */,
+				88E0BE132EBEDFD90035A9BC /* README.md */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		88E0BE272EBEDFD90035A9BC /* PlasticProphet */ = {
+			isa = PBXGroup;
+			children = (
+				88E0BE142EBEDFD90035A9BC /* Fonts */,
+				88E0BE152EBEDFD90035A9BC /* AppState.swift */,
+				88E0BE162EBEDFD90035A9BC /* Assets.xcassets */,
+				88E0BE172EBEDFD90035A9BC /* AuthenticationViews.swift */,
+				88E0BE182EBEDFD90035A9BC /* CardSelectionView.swift */,
+				88E0BE192EBEDFD90035A9BC /* CognitoAuthServiceNoSDK.swift */,
+				88E0BE1A2EBEDFD90035A9BC /* CognitoConfig.swift */,
+				88E0BE1B2EBEDFD90035A9BC /* CognitoVerificationView.swift */,
+				88E0BE1C2EBEDFD90035A9BC /* ColorExtensions.swift */,
+				88E0BE1D2EBEDFD90035A9BC /* ContentView.swift */,
+				88E0BE1E2EBEDFD90035A9BC /* FontRegistration.swift */,
+				88E0BE1F2EBEDFD90035A9BC /* MainAppView.swift */,
+				88E0BE202EBEDFD90035A9BC /* Models.swift */,
+				88E0BE212EBEDFD90035A9BC /* OnboardingFlowView.swift */,
+				88E0BE222EBEDFD90035A9BC /* PlasticProphetApp.swift */,
+				88E0BE232EBEDFD90035A9BC /* ProfileView.swift */,
+				88E0BE242EBEDFD90035A9BC /* SettingsView.swift */,
+				88E0BE252EBEDFD90035A9BC /* SplashScreenView.swift */,
+				88E0BE262EBEDFD90035A9BC /* WalletView.swift */,
+			);
+			path = PlasticProphet;
+			sourceTree = "<group>";
+		};
 		891F5F0B2E941BA700A880E5 = {
 			isa = PBXGroup;
 			children = (
 				8814CBF02EA6879F00A7E406 /* docs */,
 				891F5F722E9E90E200A880E5 /* .gitignore */,
-				891F5F162E941BA700A880E5 /* PlasticProphet */,
+				88E0BE272EBEDFD90035A9BC /* PlasticProphet */,
 				891F5F242E941BA800A880E5 /* PlasticProphetTests */,
 				891F5F2E2E941BA800A880E5 /* PlasticProphetUITests */,
 				891F5F152E941BA700A880E5 /* Products */,
@@ -135,9 +211,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				891F5F162E941BA700A880E5 /* PlasticProphet */,
 			);
 			name = PlasticProphet;
 			packageProductDependencies = (
@@ -247,6 +320,11 @@
 				8814CBF42EA6879F00A7E406 /* DevelopmentView.md in Resources */,
 				8814CBF52EA6879F00A7E406 /* ProcessGeofenceRecomendation.md in Resources */,
 				891F5F732E9E90E900A880E5 /* .gitignore in Resources */,
+				88E0BE282EBEDFD90035A9BC /* Montserrat-Bold.ttf in Resources */,
+				88E0BE292EBEDFD90035A9BC /* Montserrat-SemiBold.ttf in Resources */,
+				88E0BE2A2EBEDFD90035A9BC /* README.md in Resources */,
+				88E0BE2B2EBEDFD90035A9BC /* Montserrat-Regular.ttf in Resources */,
+				88E0BE2C2EBEDFD90035A9BC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +349,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88E0BE2D2EBEDFD90035A9BC /* MainAppView.swift in Sources */,
+				88E0BE2E2EBEDFD90035A9BC /* CognitoAuthServiceNoSDK.swift in Sources */,
+				88E0BE2F2EBEDFD90035A9BC /* ColorExtensions.swift in Sources */,
+				88E0BE302EBEDFD90035A9BC /* FontRegistration.swift in Sources */,
+				88E0BE312EBEDFD90035A9BC /* SettingsView.swift in Sources */,
+				88E0BE322EBEDFD90035A9BC /* WalletView.swift in Sources */,
+				88E0BE332EBEDFD90035A9BC /* PlasticProphetApp.swift in Sources */,
+				88E0BE342EBEDFD90035A9BC /* OnboardingFlowView.swift in Sources */,
+				88E0BE352EBEDFD90035A9BC /* CognitoConfig.swift in Sources */,
+				88E0BE362EBEDFD90035A9BC /* Models.swift in Sources */,
+				88E0BE372EBEDFD90035A9BC /* ContentView.swift in Sources */,
+				88E0BE382EBEDFD90035A9BC /* ProfileView.swift in Sources */,
+				88E0BE392EBEDFD90035A9BC /* CardSelectionView.swift in Sources */,
+				88E0BE3A2EBEDFD90035A9BC /* AppState.swift in Sources */,
+				88E0BE3B2EBEDFD90035A9BC /* CognitoVerificationView.swift in Sources */,
+				88E0BE3C2EBEDFD90035A9BC /* AuthenticationViews.swift in Sources */,
+				88E0BE3D2EBEDFD90035A9BC /* SplashScreenView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
