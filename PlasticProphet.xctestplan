@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "1C98EE34-CC97-4CEC-8001-17E46955F3EF",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:PlasticProphet.xcodeproj",
+      "identifier" : "891F5F132E941BA700A880E5",
+      "name" : "PlasticProphet"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:PlasticProphet.xcodeproj",
+        "identifier" : "891F5F202E941BA800A880E5",
+        "name" : "PlasticProphetTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:PlasticProphet.xcodeproj",
+        "identifier" : "891F5F2A2E941BA800A880E5",
+        "name" : "PlasticProphetUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
