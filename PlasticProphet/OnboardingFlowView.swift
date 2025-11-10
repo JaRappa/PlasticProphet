@@ -357,8 +357,32 @@ struct OnboardingFlowView: View {
                                     let digits = manualCardNumber.filter { $0.isNumber }
                                     guard digits.count >= 4 else { return }
                                     let last4 = String(digits.suffix(4))
-                                    let name = manualNetwork.isEmpty ? "Manual Card ••••\(last4)" : "\(manualNetwork) ••••\(last4)"
-                                    let card = Card(name: name, network: manualNetwork.isEmpty ? "Unknown" : manualNetwork, last4: last4, rewardSummary: manualRewards)
+                                    let cardName = manualNetwork.isEmpty ? "Manual Card ••••\(last4)" : "\(manualNetwork) ••••\(last4)"
+                                    
+                                    // Determine card network from input
+                                    let cardNetwork: CardNetwork
+                                    let networkLower = manualNetwork.lowercased()
+                                    if networkLower.contains("visa") {
+                                        cardNetwork = .visa
+                                    } else if networkLower.contains("master") {
+                                        cardNetwork = .mastercard
+                                    } else if networkLower.contains("amex") || networkLower.contains("american") {
+                                        cardNetwork = .amex
+                                    } else if networkLower.contains("discover") {
+                                        cardNetwork = .discover
+                                    } else {
+                                        cardNetwork = .other
+                                    }
+                                    
+                                    let card = Card(
+                                        id: Int.random(in: 10000...99999),
+                                        userId: 0,
+                                        cardType: "Manual",
+                                        cardNetwork: cardNetwork,
+                                        cardIssuer: manualNetwork.isEmpty ? "Unknown" : manualNetwork,
+                                        cardName: cardName,
+                                        addedAt: Date()
+                                    )
                                     app.cards.append(card)
 
                                     manualCardNumber = ""

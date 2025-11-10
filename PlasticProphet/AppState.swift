@@ -26,6 +26,16 @@ final class AppState: ObservableObject {
     @Published var showingScanner: Bool = false
     @Published var showingSettings: Bool = false
     
+    // Wallet Service
+    let walletService = WalletService()
+    
+    // User ID from Cognito (will be set after authentication)
+    @Published var userId: Int?
+    
+    // Loading states
+    @Published var isLoadingWallet: Bool = false
+    @Published var walletError: String?
+    
     // 0 = Wallet, 1 = Home, 2 = Profile
     @Published var selectedTab: Int = 0
     
@@ -76,7 +86,17 @@ final class AppState: ObservableObject {
                 self.userEmail = attributes["email"] ?? email
                 self.userFirstName = attributes["given_name"] ?? "User"
                 self.userLastName = attributes["family_name"] ?? ""
+                
+                // TODO: Fetch user_id from your backend
+                // For now, use a placeholder. You'll need to:
+                // 1. Store user_id in Cognito custom attributes, OR
+                // 2. Call your backend to get user_id by email
+                // Example: self.userId = try await fetchUserIdFromBackend(email: email)
             }
+            
+            // Fetch wallet after successful sign in
+            await fetchWallet()
+            
         } catch {
             print("❌ Sign in failed: \(error)")
             print("❌ Error details: \(error.localizedDescription)")
@@ -127,11 +147,132 @@ final class AppState: ObservableObject {
     }
 
     // MARK: - Card Management
+    
+    /// Fetch all cards from the backend
+    func fetchWallet() async {
+        guard let userId = userId else {
+            print("❌ No user ID available")
+            return
+        }
+        
+        await MainActor.run { isLoadingWallet = true }
+        
+        do {
+            let fetchedCards = try await walletService.fetchWallet(userId: userId)
+            await MainActor.run {
+                self.cards = fetchedCards
+                self.isLoadingWallet = false
+                self.walletError = nil
+                print("✅ Wallet loaded: \(fetchedCards.count) cards")
+            }
+        } catch {
+            await MainActor.run {
+                self.isLoadingWallet = false
+                self.walletError = error.localizedDescription
+                print("❌ Failed to fetch wallet: \(error)")
+            }
+        }
+    }
+    
+    /// Add a new card to the wallet
+    func addCard(
+        network: CardNetwork,
+        type: String? = nil,
+        issuer: String? = nil,
+        name: String? = nil
+    ) async -> Bool {
+        guard let userId = userId else {
+            print("❌ No user ID available")
+            return false
+        }
+        
+        do {
+            let newCard = try await walletService.addCard(
+                userId: userId,
+                cardNetwork: network,
+                cardType: type,
+                cardIssuer: issuer,
+                cardName: name
+            )
+            
+            await MainActor.run {
+                self.cards.append(newCard)
+                print("✅ Card added: \(newCard.displayName)")
+            }
+            return true
+        } catch {
+            await MainActor.run {
+                self.walletError = error.localizedDescription
+                print("❌ Failed to add card: \(error)")
+            }
+            return false
+        }
+    }
+    
+    /// Remove a card from the wallet
+    func removeCard(_ card: Card) async -> Bool {
+        guard let userId = userId else {
+            print("❌ No user ID available")
+            return false
+        }
+        
+        do {
+            try await walletService.removeCard(userId: userId, cardId: card.id)
+            
+            await MainActor.run {
+                self.cards.removeAll { $0.id == card.id }
+                print("✅ Card removed: \(card.displayName)")
+            }
+            return true
+        } catch {
+            await MainActor.run {
+                self.walletError = error.localizedDescription
+                print("❌ Failed to remove card: \(error)")
+            }
+            return false
+        }
+    }
+    
+    /// Update card information
+    func updateCard(
+        _ card: Card,
+        type: String? = nil,
+        issuer: String? = nil,
+        name: String? = nil
+    ) async -> Bool {
+        guard let userId = userId else {
+            print("❌ No user ID available")
+            return false
+        }
+        
+        do {
+            let updatedCard = try await walletService.updateCard(
+                userId: userId,
+                cardId: card.id,
+                cardType: type,
+                cardIssuer: issuer,
+                cardName: name
+            )
+            
+            await MainActor.run {
+                if let index = self.cards.firstIndex(where: { $0.id == card.id }) {
+                    self.cards[index] = updatedCard
+                    print("✅ Card updated: \(updatedCard.displayName)")
+                }
+            }
+            return true
+        } catch {
+            await MainActor.run {
+                self.walletError = error.localizedDescription
+                print("❌ Failed to update card: \(error)")
+            }
+            return false
+        }
+    }
 
     func addMockCard(network: String) {
-        let suffix = String(Int.random(in: 1000...9999))
-        let card = Card(name: "Rewards \(network) \(suffix)", network: network, last4: suffix, rewardSummary: "5% Dining / 3% Grocery")
-        cards.append(card)
+        // This is deprecated - use addCard() with proper API call
+        print("⚠️ addMockCard is deprecated - use addCard() instead")
     }
 
     // MARK: - Permissions

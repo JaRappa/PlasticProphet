@@ -1,5 +1,5 @@
 // WalletView.swift
-// Shows user's cards and a FAB for add options when no cards exist
+// Shows user's cards with real API integration
 
 import SwiftUI
 
@@ -8,67 +8,104 @@ struct WalletView: View {
     @State private var showFABMenu: Bool = false
     @State private var showManualEntry: Bool = false
     @State private var showCardSelection: Bool = false
+    @State private var showEditCard: Card?
+    @State private var cardToDelete: Card?
+    @State private var showDeleteAlert = false
 
     var body: some View {
         ZStack {
             VStack(alignment: .leading, spacing: 18) {
+                // Header
                 Text("Wallet")
                     .font(.custom("Montserrat", size: 32))
                     .fontWeight(.bold)
                     .foregroundColor(.black)
                     .padding(.top, 20)
                     .tracking(-1.5)
+                
                 Text("Your Cards")
                     .font(.custom("Montserrat", size: 20))
                     .fontWeight(.semibold)
                     .foregroundColor(.ppGreen)
                     .tracking(-0.5)
 
-                if app.cards.isEmpty {
-                    // empty state with dotted card
+                // Error Message
+                if let error = app.walletError {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.red)
+                        Text(error)
+                            .font(.custom("Montserrat", size: 14))
+                            .foregroundColor(.red)
+                    }
+                    .padding()
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(8)
+                    .padding(.horizontal)
+                }
+                
+                // Loading State
+                if app.isLoadingWallet {
+                    VStack {
+                        ProgressView()
+                            .scaleEffect(1.5)
+                            .padding()
+                        Text("Loading wallet...")
+                            .font(.custom("Montserrat", size: 14))
+                            .foregroundColor(.gray)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                // Empty State
+                else if app.cards.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
                             .frame(height: 100)
                             .overlay(
-                                Text("Please Add Card...")
-                                    .font(.custom("Montserrat", size: 14))
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.gray.opacity(0.5))
-                                    .padding(.top, 12)
-                                    .padding(.leading, 12), alignment: .topLeading
+                                VStack(spacing: 8) {
+                                    Image(systemName: "creditcard")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(.gray.opacity(0.3))
+                                    Text("No cards yet")
+                                        .font(.custom("Montserrat", size: 16))
+                                        .fontWeight(.medium)
+                                        .foregroundColor(.gray.opacity(0.5))
+                                    Text("Tap + to add your first card")
+                                        .font(.custom("Montserrat", size: 12))
+                                        .foregroundColor(.gray.opacity(0.4))
+                                }
                             )
                     }
                     .padding(.horizontal, 16)
+                    .padding(.top, 40)
 
                     Spacer()
-                } else {
-                    // show a simple list of cards
+                }
+                // Cards List
+                else {
                     ScrollView {
                         VStack(spacing: 12) {
                             ForEach(app.cards) { card in
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text(card.name)
-                                            .font(.custom("Montserrat", size: 16))
-                                            .fontWeight(.semibold)
-                                        Text(card.rewardSummary)
-                                            .font(.custom("Montserrat", size: 12))
-                                            .foregroundColor(.secondary)
+                                CardRowView(card: card)
+                                    .onTapGesture {
+                                        showEditCard = card
                                     }
-                                    Spacer()
-                                    Text("••••\(card.last4)")
-                                        .font(.custom("Montserrat", size: 14))
-                                        .fontWeight(.medium)
-                                }
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .shadow(radius: 1)
-                                .padding(.horizontal)
+                                    .contextMenu {
+                                        Button(role: .destructive) {
+                                            cardToDelete = card
+                                            showDeleteAlert = true
+                                        } label: {
+                                            Label("Delete Card", systemImage: "trash")
+                                        }
+                                    }
                             }
                         }
                         .padding(.top)
+                        .padding(.horizontal)
+                    }
+                    .refreshable {
+                        await app.fetchWallet()
                     }
                 }
             }
@@ -156,59 +193,268 @@ struct WalletView: View {
             }
         }
         .navigationBarHidden(true)
+        .sheet(isPresented: $app.showingScanner) {
+            ScannerView()
+        }
         .sheet(isPresented: $showManualEntry) {
             NavigationStack {
-                ManualAddView(showManual: $showManualEntry)
+                AddCardView(isPresented: $showManualEntry)
+                    .environmentObject(app)
+            }
+        }
+        .sheet(item: $showEditCard) { card in
+            NavigationStack {
+                EditCardView(card: card, isPresented: .constant(true))
                     .environmentObject(app)
             }
         }
         .sheet(isPresented: $showCardSelection) {
             CardSelectionView()
                 .environmentObject(app)
+        }
+        .alert("Delete Card", isPresented: $showDeleteAlert, presenting: cardToDelete) { card in
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
+                Task {
+                    _ = await app.removeCard(card)
+                }
+            }
+        } message: { card in
+            Text("Are you sure you want to delete \(card.displayName)?")
+        }
+        .onAppear {
+            // Load wallet when view appears
+            Task {
+                await app.fetchWallet()
             }
         }
     }
+}
 
-struct ManualAddView: View {
+// MARK: - Card Row View
+struct CardRowView: View {
+    let card: Card
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            // Card network logo
+            if let uiImage = UIImage(named: card.cardNetwork.logoName) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 50, height: 32)
+            } else {
+                Image(systemName: "creditcard.fill")
+                    .font(.system(size: 32))
+                    .foregroundColor(.ppGreen)
+                    .frame(width: 50, height: 32)
+            }
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(card.displayName)
+                    .font(.custom("Montserrat", size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.black)
+                
+                if let issuer = card.cardIssuer {
+                    Text(issuer)
+                        .font(.custom("Montserrat", size: 12))
+                        .foregroundColor(.gray)
+                }
+                
+                Text(card.cardNetwork.displayName)
+                    .font(.custom("Montserrat", size: 11))
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.gray.opacity(0.5))
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+    }
+}
+
+// MARK: - Add Card View
+struct AddCardView: View {
     @EnvironmentObject var app: AppState
-    @Binding var showManual: Bool
-    @State private var cardNumber: String = ""
-    @State private var network: String = ""
-    @State private var rewards: String = ""
-
+    @Binding var isPresented: Bool
+    
+    @State private var selectedNetwork: CardNetwork = .visa
+    @State private var cardType: String = ""
+    @State private var cardIssuer: String = ""
+    @State private var cardName: String = ""
+    @State private var isSubmitting = false
+    
     var body: some View {
         Form {
-            Section(header: Text("Card Info").font(.custom("Montserrat", size: 14))) {
-                TextField("Card number", text: $cardNumber)
-                    .keyboardType(.numberPad)
+            Section(header: Text("Card Network").font(.custom("Montserrat", size: 14))) {
+                Picker("Network", selection: $selectedNetwork) {
+                    ForEach(CardNetwork.allCases, id: \.self) { network in
+                        Text(network.displayName).tag(network)
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
+            
+            Section(header: Text("Card Details").font(.custom("Montserrat", size: 14))) {
+                TextField("Card Name (e.g., Chase Sapphire Preferred)", text: $cardName)
                     .font(.custom("Montserrat", size: 16))
-                TextField("Card type (e.g. Visa)", text: $network)
+                
+                TextField("Issuer (e.g., Chase)", text: $cardIssuer)
                     .font(.custom("Montserrat", size: 16))
-                TextField("Rewards summary", text: $rewards)
+                
+                TextField("Type (e.g., Signature, Platinum)", text: $cardType)
                     .font(.custom("Montserrat", size: 16))
             }
+            
             Section {
-                Button("Add Card") {
-                    let digits = cardNumber.filter { $0.isNumber }
-                    guard digits.count >= 4 else { return }
-                    let last4 = String(digits.suffix(4))
-                    let name = network.isEmpty ? "Manual Card ••••\(last4)" : "\(network) ••••\(last4)"
-                    let card = Card(name: name, network: network.isEmpty ? "Unknown" : network, last4: last4, rewardSummary: rewards)
-                    app.cards.append(card)
-                    showManual = false
+                Button(action: {
+                    Task {
+                        await submitCard()
+                    }
+                }) {
+                    if isSubmitting {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Text("Adding...")
+                                .font(.custom("Montserrat", size: 16))
+                            Spacer()
+                        }
+                    } else {
+                        Text("Add Card")
+                            .font(.custom("Montserrat", size: 16))
+                            .frame(maxWidth: .infinity)
+                    }
                 }
-                .font(.custom("Montserrat", size: 16))
-                .disabled(cardNumber.filter { $0.isNumber }.count < 4)
+                .disabled(isSubmitting || cardName.isEmpty)
                 
                 Button("Cancel") {
-                    showManual = false
+                    isPresented = false
                 }
                 .font(.custom("Montserrat", size: 16))
                 .tint(.red)
             }
         }
-        .navigationTitle("Add Card Manually")
+        .navigationTitle("Add Card")
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private func submitCard() async {
+        isSubmitting = true
+        
+        let success = await app.addCard(
+            network: selectedNetwork,
+            type: cardType.isEmpty ? nil : cardType,
+            issuer: cardIssuer.isEmpty ? nil : cardIssuer,
+            name: cardName.isEmpty ? nil : cardName
+        )
+        
+        isSubmitting = false
+        
+        if success {
+            isPresented = false
+        }
+    }
+}
+
+// MARK: - Edit Card View
+struct EditCardView: View {
+    @EnvironmentObject var app: AppState
+    let card: Card
+    @Binding var isPresented: Bool
+    
+    @State private var cardType: String
+    @State private var cardIssuer: String
+    @State private var cardName: String
+    @State private var isSubmitting = false
+    
+    init(card: Card, isPresented: Binding<Bool>) {
+        self.card = card
+        self._isPresented = isPresented
+        self._cardType = State(initialValue: card.cardType ?? "")
+        self._cardIssuer = State(initialValue: card.cardIssuer ?? "")
+        self._cardName = State(initialValue: card.cardName ?? "")
+    }
+    
+    var body: some View {
+        Form {
+            Section(header: Text("Card Network").font(.custom("Montserrat", size: 14))) {
+                HStack {
+                    Text(card.cardNetwork.displayName)
+                        .font(.custom("Montserrat", size: 16))
+                    Spacer()
+                    Text("Cannot be changed")
+                        .font(.custom("Montserrat", size: 12))
+                        .foregroundColor(.gray)
+                }
+            }
+            
+            Section(header: Text("Card Details").font(.custom("Montserrat", size: 14))) {
+                TextField("Card Name", text: $cardName)
+                    .font(.custom("Montserrat", size: 16))
+                
+                TextField("Issuer", text: $cardIssuer)
+                    .font(.custom("Montserrat", size: 16))
+                
+                TextField("Type", text: $cardType)
+                    .font(.custom("Montserrat", size: 16))
+            }
+            
+            Section {
+                Button(action: {
+                    Task {
+                        await updateCard()
+                    }
+                }) {
+                    if isSubmitting {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Text("Updating...")
+                                .font(.custom("Montserrat", size: 16))
+                            Spacer()
+                        }
+                    } else {
+                        Text("Update Card")
+                            .font(.custom("Montserrat", size: 16))
+                            .frame(maxWidth: .infinity)
+                    }
+                }
+                .disabled(isSubmitting)
+                
+                Button("Cancel") {
+                    isPresented = false
+                }
+                .font(.custom("Montserrat", size: 16))
+                .tint(.red)
+            }
+        }
+        .navigationTitle("Edit Card")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private func updateCard() async {
+        isSubmitting = true
+        
+        let success = await app.updateCard(
+            card,
+            type: cardType.isEmpty ? nil : cardType,
+            issuer: cardIssuer.isEmpty ? nil : cardIssuer,
+            name: cardName.isEmpty ? nil : cardName
+        )
+        
+        isSubmitting = false
+        
+        if success {
+            isPresented = false
+        }
     }
 }
 

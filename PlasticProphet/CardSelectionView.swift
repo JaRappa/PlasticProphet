@@ -5,14 +5,14 @@ import SwiftUI
 
 // Static catalog used for onboarding selection
 private let popularCardCatalog: [Card] = [
-    Card(name: "Chase Sapphire Preferred", network: "Visa", last4: "0000", rewardSummary: "2x Dining / 2x Travel"),
-    Card(name: "Chase Freedom Flex", network: "Mastercard", last4: "0000", rewardSummary: "5% Rotating Categories"),
-    Card(name: "Amex Gold", network: "Amex", last4: "0000", rewardSummary: "4x Dining / 4x Grocery"),
-    Card(name: "Amex Platinum", network: "Amex", last4: "0000", rewardSummary: "5x Flights / 5x Hotels"),
-    Card(name: "Citi Custom Cash", network: "Mastercard", last4: "0000", rewardSummary: "5% Top Category"),
-    Card(name: "Citi Premier", network: "Mastercard", last4: "0000", rewardSummary: "3x Dining / 3x Gas / 3x Grocery"),
-    Card(name: "Capital One SavorOne", network: "Mastercard", last4: "0000", rewardSummary: "3% Dining / 3% Grocery / 3% Entertainment"),
-    Card(name: "Wells Fargo Active Cash", network: "Visa", last4: "0000", rewardSummary: "2% Everywhere"),
+    Card(id: 1001, userId: 0, cardType: "Preferred", cardNetwork: .visa, cardIssuer: "Chase", cardName: "Chase Sapphire Preferred", addedAt: Date()),
+    Card(id: 1002, userId: 0, cardType: "Flex", cardNetwork: .mastercard, cardIssuer: "Chase", cardName: "Chase Freedom Flex", addedAt: Date()),
+    Card(id: 1003, userId: 0, cardType: "Gold", cardNetwork: .amex, cardIssuer: "American Express", cardName: "Amex Gold", addedAt: Date()),
+    Card(id: 1004, userId: 0, cardType: "Platinum", cardNetwork: .amex, cardIssuer: "American Express", cardName: "Amex Platinum", addedAt: Date()),
+    Card(id: 1005, userId: 0, cardType: "Custom Cash", cardNetwork: .mastercard, cardIssuer: "Citi", cardName: "Citi Custom Cash", addedAt: Date()),
+    Card(id: 1006, userId: 0, cardType: "Premier", cardNetwork: .mastercard, cardIssuer: "Citi", cardName: "Citi Premier", addedAt: Date()),
+    Card(id: 1007, userId: 0, cardType: "SavorOne", cardNetwork: .mastercard, cardIssuer: "Capital One", cardName: "Capital One SavorOne", addedAt: Date()),
+    Card(id: 1008, userId: 0, cardType: "Active Cash", cardNetwork: .visa, cardIssuer: "Wells Fargo", cardName: "Wells Fargo Active Cash", addedAt: Date()),
 ]
 
 struct CardSelectionView: View {

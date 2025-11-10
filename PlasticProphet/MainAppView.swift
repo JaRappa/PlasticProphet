@@ -141,7 +141,9 @@ struct HomeView: View {
                                     color: Color.ppGreen
                                 ) {
                                     withAnimation { showFABMenu = false }
-                                    showCardSelection = true
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        showCardSelection = true
+                                    }
                                 }
                                 .transition(.scale.combined(with: .opacity))
                                 
@@ -151,7 +153,9 @@ struct HomeView: View {
                                     color: Color.ppGreen
                                 ) {
                                     withAnimation { showFABMenu = false }
-                                    app.showingScanner = true
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        app.showingScanner = true
+                                    }
                                 }
                                 .transition(.scale.combined(with: .opacity))
                                 
@@ -161,7 +165,9 @@ struct HomeView: View {
                                     color: Color.ppGreen
                                 ) {
                                     withAnimation { showFABMenu = false }
-                                    showManualEntry = true
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        showManualEntry = true
+                                    }
                                 }
                                 .transition(.scale.combined(with: .opacity))
                             }
@@ -286,8 +292,32 @@ struct HomeManualAddView: View {
                             let digits = cardNumber.filter { $0.isNumber }
                             guard digits.count >= 4 else { return }
                             let last4 = String(digits.suffix(4))
-                            let name = network.isEmpty ? "Manual Card ••••\(last4)" : "\(network) ••••\(last4)"
-                            let card = Card(name: name, network: network.isEmpty ? "Unknown" : network, last4: last4, rewardSummary: rewards)
+                            let cardName = network.isEmpty ? "Manual Card ••••\(last4)" : "\(network) ••••\(last4)"
+                            
+                            // Determine card network from input
+                            let cardNetwork: CardNetwork
+                            let networkLower = network.lowercased()
+                            if networkLower.contains("visa") {
+                                cardNetwork = .visa
+                            } else if networkLower.contains("master") {
+                                cardNetwork = .mastercard
+                            } else if networkLower.contains("amex") || networkLower.contains("american") {
+                                cardNetwork = .amex
+                            } else if networkLower.contains("discover") {
+                                cardNetwork = .discover
+                            } else {
+                                cardNetwork = .other
+                            }
+                            
+                            let card = Card(
+                                id: Int.random(in: 10000...99999),
+                                userId: 0,
+                                cardType: "Manual",
+                                cardNetwork: cardNetwork,
+                                cardIssuer: network.isEmpty ? "Unknown" : network,
+                                cardName: cardName,
+                                addedAt: Date()
+                            )
                             app.cards.append(card)
                             dismiss()
                         }
@@ -393,40 +423,10 @@ struct ScannerView: View {
                     .frame(maxWidth: 240)
                     .padding()
                 
-                Button("Suggest Card Types") {
-                    if !scannedDigits.isEmpty {
-                        app.addMockCard(network: "BIN" + String(scannedDigits.prefix(2)))
-                    }
-                    dismiss()
-                }
-                .font(.custom("Montserrat", size: 18))
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(16)
-                .background(
-                    RoundedRectangle(cornerRadius: 25)
-                        .fill(Color.ppGreen)
-                )
-                .padding(.horizontal, 40)
-                
                 Spacer()
                 
                 // Bottom buttons
                 HStack(spacing: 16) {
-                    Button("Close") {
-                        dismiss()
-                    }
-                    .font(.custom("Montserrat", size: 16))
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(14)
-                    .background(
-                        RoundedRectangle(cornerRadius: 25)
-                            .fill(Color.ppGreen)
-                    )
-                    
                     Button("Cancel") {
                         dismiss()
                     }
@@ -439,6 +439,24 @@ struct ScannerView: View {
                         RoundedRectangle(cornerRadius: 25)
                             .fill(Color.red)
                     )
+                    
+                    Button("Confirm") {
+                        if !scannedDigits.isEmpty {
+                            app.addMockCard(network: "BIN" + String(scannedDigits.prefix(2)))
+                        }
+                        dismiss()
+                    }
+                    .font(.custom("Montserrat", size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(Color.ppGreen)
+                    )
+                    .disabled(scannedDigits.isEmpty)
+                    .opacity(scannedDigits.isEmpty ? 0.5 : 1.0)
                 }
                 .padding(.horizontal, 40)
                 .padding(.bottom, 40)
