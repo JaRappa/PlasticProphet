@@ -55,17 +55,22 @@ final class AppState: ObservableObject {
     
     func confirmSignUp(email: String, code: String) async {
         do {
+            // First confirm the signup
             try await authService.confirmSignUp(email: email, code: code)
             print("✅ Email confirmed - you can now sign in")
+            
+            // Note: We can't auto sign-in because we don't have the password here
+            // User will need to sign in manually on the next screen
+            
         } catch {
             print("❌ Confirmation failed: \(error.localizedDescription)")
         }
     }
     
-    func signIn(email: String, password: String) async {
+    func signIn() async {
         do {
-            print("🔵 Starting sign in for: \(email)")
-            try await authService.signIn(email: email, password: password)
+            print("🔵 Starting secure OAuth 2.0 sign in")
+            try await authService.signIn()
             print("✅ Sign in successful!")
             
             // Fetch user info from Cognito
@@ -73,7 +78,7 @@ final class AppState: ObservableObject {
             
             await MainActor.run {
                 self.isAuthenticated = true
-                self.userEmail = attributes["email"] ?? email
+                self.userEmail = attributes["email"] ?? self.authService.currentUsername ?? ""
                 self.userFirstName = attributes["given_name"] ?? "User"
                 self.userLastName = attributes["family_name"] ?? ""
             }

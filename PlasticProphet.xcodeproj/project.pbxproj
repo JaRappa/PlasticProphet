@@ -32,9 +32,22 @@
 		F4B1A2C3D4E5B00000000002 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = data; name = "Montserrat-SemiBold.ttf"; path = "Fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		88DC0A5F2EC197B500A15C98 /* Exceptions for "PlasticProphet" folder in "PlasticProphet" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 891F5F132E941BA700A880E5 /* PlasticProphet */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		891F5F162E941BA700A880E5 /* PlasticProphet */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				88DC0A5F2EC197B500A15C98 /* Exceptions for "PlasticProphet" folder in "PlasticProphet" target */,
+			);
 			path = PlasticProphet;
 			sourceTree = "<group>";
 		};
@@ -415,6 +428,7 @@
 				DEVELOPMENT_TEAM = FUXMLN75LR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PlasticProphet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -445,6 +459,7 @@
 				DEVELOPMENT_TEAM = FUXMLN75LR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PlasticProphet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

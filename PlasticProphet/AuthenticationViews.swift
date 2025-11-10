@@ -70,15 +70,11 @@ struct AuthLandingView: View {
 }
 
 // MARK: - Sign In View
-// MARK: - Sign In View
 struct SignInView: View {
     @EnvironmentObject var app: AppState
     @Environment(\.dismiss) private var dismiss
-    @State private var email: String = ""
-    @State private var password: String = ""
-    @State private var showPassword: Bool = false
-    @State private var showForgotPassword = false
-    @FocusState private var focusedField: SignInField?
+    @State private var isLoading = false
+    @State private var errorMessage = ""
     
     enum SignInField {
         case email, password
@@ -88,7 +84,7 @@ struct SignInView: View {
         ZStack {
             Color.white.ignoresSafeArea()
             
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .center, spacing: 24) {
                 // Card icon
                 Image(systemName: "creditcard.fill")
                     .font(.system(size: 50))
@@ -96,96 +92,64 @@ struct SignInView: View {
                     .rotationEffect(.degrees(15))
                     .padding(.top, 20)
                 
-                Text("Sign In")
+                Text("Secure Sign In")
                     .font(.custom("Montserrat", size: 32))
                     .fontWeight(.bold)
                     .foregroundColor(.black)
                 
-                VStack(alignment: .leading, spacing: 16) {
-                    // Email
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Email Address")
-                            .font(.custom("Montserrat", size: 14))
-                            .fontWeight(.medium)
-                            .foregroundColor(.black)
-                        
-                        TextField("Email Address", text: $email)
-                            .font(.custom("Montserrat", size: 16))
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(focusedField == .email ? Color.ppGreen : Color.clear, lineWidth: 2)
-                            )
-                            .keyboardType(.emailAddress)
-                            .textInputAutocapitalization(.never)
-                            .focused($focusedField, equals: .email)
-                    }
+                // Info text
+                VStack(spacing: 12) {
+                    Text("Sign in securely using Cognito")
+                        .font(.custom("Montserrat", size: 16))
+                        .foregroundColor(.black)
+                        .multilineTextAlignment(.center)
                     
-                    // Password
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Password")
-                            .font(.custom("Montserrat", size: 14))
-                            .fontWeight(.medium)
-                            .foregroundColor(.black)
-                        
-                        HStack {
-                            if showPassword {
-                                TextField("Password", text: $password)
-                                    .font(.custom("Montserrat", size: 16))
-                                    .focused($focusedField, equals: .password)
-                            } else {
-                                SecureField("Password", text: $password)
-                                    .font(.custom("Montserrat", size: 16))
-                                    .focused($focusedField, equals: .password)
-                            }
-                            
-                            Button(action: { showPassword.toggle() }) {
-                                Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
-                                    .foregroundColor(.gray)
-                            }
-                            .padding(.trailing, 8)
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
-                        )
-                    }
-                    
-                    // Forgot Password
-                    Button(action: { showForgotPassword = true }) {
-                        Text("Forgot Password?")
-                            .font(.custom("Montserrat", size: 14))
-                            .foregroundColor(.gray)
-                    }
+                    Text("Your credentials are never shared with this app")
+                        .font(.custom("Montserrat", size: 14))
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
                 }
+                .padding(.horizontal, 32)
                 .padding(.top, 20)
+                
+                // Error message
+                if !errorMessage.isEmpty {
+                    Text(errorMessage)
+                        .font(.custom("Montserrat", size: 12))
+                        .foregroundColor(.red)
+                        .padding(.horizontal, 32)
+                        .padding(12)
+                        .background(Color.red.opacity(0.1))
+                        .cornerRadius(8)
+                }
                 
                 Spacer()
                 
-                // Sign In Button
+                // Sign In Button (opens Cognito Hosted UI)
                 Button(action: signIn) {
-                    Text("Sign In")
-                        .font(.custom("Montserrat", size: 20))
-                        .fontWeight(.black)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.ppGreen)
-                        )
-                        .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
+                    HStack {
+                        if isLoading {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        }
+                        Text("Continue to Sign In")
+                            .font(.custom("Montserrat", size: 20))
+                            .fontWeight(.black)
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.ppGreen)
+                    )
+                    .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
                 }
-                .disabled(email.isEmpty || password.isEmpty)
-                .opacity(email.isEmpty || password.isEmpty ? 0.5 : 1.0)
+                .disabled(isLoading)
+                .opacity(isLoading ? 0.7 : 1.0)
+                .padding(.horizontal, 32)
                 .padding(.bottom, 40)
             }
-            .padding(.horizontal, 32)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -197,14 +161,28 @@ struct SignInView: View {
                 }
             }
         }
-        .navigationDestination(isPresented: $showForgotPassword) {
-            ForgotPasswordView()
-        }
     }
     
     private func signIn() {
+        errorMessage = ""
+        isLoading = true
+        
         Task {
-            await app.signIn(email: email, password: password)
+            do {
+                try await app.signIn()
+                await MainActor.run {
+                    isLoading = false
+                    if app.isAuthenticated {
+                        print("✅ Successfully authenticated")
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    isLoading = false
+                    errorMessage = "Sign in failed: \(error.localizedDescription)"
+                    print("❌ Sign in error: \(error)")
+                }
+            }
         }
     }
 }
@@ -439,9 +417,9 @@ struct SignUpView: View {
         Task {
             await app.signUp(
                 email: email,
-                    password: password,
-                    firstName: firstName,
-                    lastName: lastName
+                password: password,
+                firstName: firstName,
+                lastName: lastName
             )
             
             await MainActor.run {
