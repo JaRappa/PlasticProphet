@@ -30,7 +30,7 @@ struct MainAppView: View {
         .sheet(isPresented: $app.showingScanner) { ScannerView() }
     }
 }
-
+// HomeView
 struct HomeView: View {
     @EnvironmentObject var app: AppState
     @State private var showFABMenu = false
