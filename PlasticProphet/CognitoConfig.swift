@@ -18,13 +18,18 @@ struct CognitoConfig {
     /// Example: us-east-1, us-west-2, eu-west-1
     static let region = "us-east-1"
     
+    /// Cognito Domain Prefix - This is configured in AWS Cognito Console
+    /// Your domain: https://us-east-1v2s48yy0h.auth.us-east-1.amazoncognito.com
+    static let domainPrefix = "us-east-1v2s48yy0h"
+    
     // MARK: - Validation
     
     /// Check if credentials are properly configured
     static var isConfigured: Bool {
         return !userPoolId.contains("YOUR_") &&
                !appClientId.contains("YOUR_") &&
-               !region.contains("YOUR_")
+               !region.contains("YOUR_") &&
+               !domainPrefix.contains("YOUR_")
     }
     
     /// Print configuration status for debugging
@@ -33,6 +38,7 @@ struct CognitoConfig {
         print("User Pool ID: \(userPoolId)")
         print("App Client ID: \(appClientId)")
         print("Region: \(region)")
+        print("Domain Prefix: \(domainPrefix)")
         print("Configured: \(isConfigured ? "✅ YES" : "❌ NO")")
         print("================================")
     }
