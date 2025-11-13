@@ -38,24 +38,42 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
     
     // MARK: - PKCE Helper Methods
     
-    /// Generate a random code verifier for PKCE
+    /// Generate a random code verifier for PKCE - must be URL-safe base64
     private func generateCodeVerifier() -> String {
         var buffer = [UInt8](repeating: 0, count: 32)
         _ = SecRandomCopyBytes(kSecRandomDefault, buffer.count, &buffer)
-        return Data(buffer).base64EncodedString()
+        
+        // Convert to base64 and make it URL-safe
+        let base64 = Data(buffer).base64EncodedString()
+        let urlSafe = base64
             .replacingOccurrences(of: "+", with: "-")
             .replacingOccurrences(of: "/", with: "_")
             .replacingOccurrences(of: "=", with: "")
+        
+        print("🔐 Generated Code Verifier (length: \(urlSafe.count)): \(urlSafe)")
+        return urlSafe
     }
     
     /// Generate code challenge from verifier using SHA256
     private func generateCodeChallenge(from verifier: String) -> String {
-        guard let data = verifier.data(using: .utf8) else { return "" }
+        guard let data = verifier.data(using: .utf8) else { 
+            print("❌ Failed to convert verifier to data")
+            return "" 
+        }
+        
+        // Generate SHA256 hash
         let digest = SHA256.hash(data: data)
-        return Data(digest).base64EncodedString()
+        let hashData = Data(digest)
+        
+        // Convert to base64 and make it URL-safe
+        let base64 = hashData.base64EncodedString()
+        let urlSafe = base64
             .replacingOccurrences(of: "+", with: "-")
             .replacingOccurrences(of: "/", with: "_")
             .replacingOccurrences(of: "=", with: "")
+        
+        print("🔐 Generated Code Challenge (length: \(urlSafe.count)): \(urlSafe)")
+        return urlSafe
     }
     
     // MARK: - Sign Up
@@ -129,11 +147,14 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
         print("🔵 Starting secure OAuth 2.0 sign in")
         
         // Generate PKCE values
-        codeVerifier = generateCodeVerifier()
-        guard let verifier = codeVerifier else {
-            throw CognitoError.invalidURL
-        }
-        codeChallenge = generateCodeChallenge(from: verifier)
+        let verifier = generateCodeVerifier()
+        let challenge = generateCodeChallenge(from: verifier)
+        
+        print("🔐 Generated Code Verifier: \(verifier)")
+        print("🔐 Generated Code Challenge: \(challenge)")
+        
+        // Store verifier securely for later use
+        UserDefaults.standard.set(verifier, forKey: "pkce_code_verifier")
         
         // Build authorization URL
         var components = URLComponents(string: "\(hostedUIURL)/oauth2/authorize")!
@@ -142,7 +163,7 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "redirect_uri", value: "plasticprophet://auth-callback"),
             URLQueryItem(name: "scope", value: "openid email profile"),
-            URLQueryItem(name: "code_challenge", value: codeChallenge),
+            URLQueryItem(name: "code_challenge", value: challenge),
             URLQueryItem(name: "code_challenge_method", value: "S256")
         ]
         
@@ -215,6 +236,7 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
         }
         
         print("🔵 Exchanging authorization code for tokens...")
+        print("🔑 Authorization Code: \(code)")
         
         // Exchange authorization code for tokens
         try await exchangeCodeForTokens(code: code)
@@ -223,9 +245,14 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
     // MARK: - Exchange Code for Tokens (PKCE)
     
     private func exchangeCodeForTokens(code: String) async throws {
-        guard let verifier = codeVerifier else {
-            throw CognitoError.invalidURL
+        // Retrieve the stored code verifier
+        guard let verifier = UserDefaults.standard.string(forKey: "pkce_code_verifier") else {
+            print("❌ No code verifier found - PKCE verification will fail")
+            throw CognitoError.authenticationFailed("Missing code verifier")
         }
+        
+        print("🔐 Retrieved Code Verifier: \(verifier)")
+        print("🔐 Code Verifier Length: \(verifier.count)")
         
         let tokenURL = "\(hostedUIURL)/oauth2/token"
         
@@ -233,8 +260,23 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
-        let body = "grant_type=authorization_code&client_id=\(CognitoConfig.appClientId)&code=\(code)&redirect_uri=plasticprophet://auth-callback&code_verifier=\(verifier)"
-        request.httpBody = body.data(using: .utf8)
+        // Properly URL encode the parameters to handle special characters
+        let bodyParams = [
+            "grant_type": "authorization_code",
+            "client_id": CognitoConfig.appClientId,
+            "code": code,
+            "redirect_uri": "plasticprophet://auth-callback",
+            "code_verifier": verifier
+        ]
+        
+        let bodyString = bodyParams
+            .map { "\($0.key)=\($0.value.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? $0.value)" }
+            .joined(separator: "&")
+        
+        request.httpBody = bodyString.data(using: .utf8)
+        
+        print("🌐 Token request to: \(tokenURL)")
+        print("📝 Token request body: \(bodyString)")
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
@@ -244,16 +286,22 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
         
         print("📥 Token exchange response: \(httpResponse.statusCode)")
         
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        let responseString = String(data: data, encoding: .utf8) ?? "Unable to decode response"
+        print("📄 Response body: \(responseString)")
         
-        if httpResponse.statusCode >= 400 {
-            let errorMsg = json?["error"] as? String ?? "Token exchange failed"
-            print("❌ Token exchange error: \(errorMsg)")
-            throw CognitoError.authenticationFailed(errorMsg)
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            if httpResponse.statusCode >= 400 {
+                print("❌ Server error response: \(responseString)")
+                throw CognitoError.serverError(httpResponse.statusCode)
+            }
+            throw CognitoError.invalidResponse
         }
         
-        guard let json = json else {
-            throw CognitoError.invalidResponse
+        if httpResponse.statusCode >= 400 {
+            let errorMsg = json["error"] as? String ?? "Token exchange failed"
+            let errorDesc = json["error_description"] as? String ?? "No description"
+            print("❌ Token exchange error: \(errorMsg) - \(errorDesc)")
+            throw CognitoError.authenticationFailed("\(errorMsg): \(errorDesc)")
         }
         
         // Extract user info from ID token
@@ -268,9 +316,15 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
             self.codeVerifier = nil
             self.codeChallenge = nil
             self.saveTokensToKeychain()
+            
+            // Clean up the stored verifier
+            UserDefaults.standard.removeObject(forKey: "pkce_code_verifier")
         }
         
         print("✅ Secure sign in successful!")
+        print("🔑 Access Token: \((self.accessToken ?? "").prefix(20))...")
+        print("🆔 ID Token: \((self.idToken ?? "").prefix(20))...")
+        print("🔄 Refresh Token: \((self.refreshToken ?? "").prefix(20))...")
     }
     
     // MARK: - Extract Username from ID Token

@@ -1,5 +1,5 @@
 // CognitoVerificationView.swift
-// Handles AWS Cognito email verification with auto sign-in
+// Handles AWS Cognito email verification - after verification, user signs in via Hosted UI
 
 import SwiftUI
 
@@ -15,6 +15,7 @@ struct CognitoVerificationView: View {
     @State private var errorMessage = ""
     @State private var successMessage = ""
     @State private var isResending = false
+    @State private var navigateToSignIn = false
     
     var body: some View {
         NavigationStack {
@@ -142,6 +143,9 @@ struct CognitoVerificationView: View {
             .onAppear {
                 focusedField = 0
             }
+            .navigationDestination(isPresented: $navigateToSignIn) {
+                SignInView()
+            }
         }
     }
     
@@ -168,7 +172,7 @@ struct CognitoVerificationView: View {
         }
     }
     
-    // MARK: - Verification with Auto Sign-In
+    // MARK: - Verification
     
     private func verifyCode() {
         errorMessage = ""
@@ -181,17 +185,17 @@ struct CognitoVerificationView: View {
         
         Task {
             do {
-                // Step 1: Confirm the signup
+                // Confirm the signup
                 try await app.authService.confirmSignUp(email: email, code: verificationCode)
                 print("✅ Email confirmed!")
                 
                 await MainActor.run {
                     isLoading = false
-                    successMessage = "Email verified! You can now sign in securely."
+                    successMessage = "Email verified! Please sign in to continue."
                     
-                    // Close the verification view - user needs to sign in via OAuth 2.0
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        dismiss()
+                    // Navigate to sign in after a brief delay to show success message
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        navigateToSignIn = true
                     }
                 }
             } catch {
@@ -221,9 +225,7 @@ struct CognitoVerificationView: View {
         successMessage = ""
         isResending = true
         
-        print("🔵 Resending verification code to: '\(email)'")  // Check what email looks like
-        print("🔵 Email length: \(email.count)")
-        print("🔵 Email isEmpty: \(email.isEmpty)")
+        print("🔵 Resending verification code to: '\(email)'")
         
         Task {
             do {
@@ -256,13 +258,3 @@ struct CognitoVerificationView: View {
     CognitoVerificationView(email: "test@example.com")
         .environmentObject(AppState())
 }
-
-
-
-
-
-
-
-
-
-
