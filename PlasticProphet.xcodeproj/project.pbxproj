@@ -61,6 +61,11 @@
 			path = PlasticProphetUITests;
 			sourceTree = "<group>";
 		};
+		89853CBD2EC685E3008C6F03 /* LamdaFunctiones */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LamdaFunctiones;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +105,7 @@
 		891F5F0B2E941BA700A880E5 = {
 			isa = PBXGroup;
 			children = (
+				89853CBD2EC685E3008C6F03 /* LamdaFunctiones */,
 				88E0BD372EBEDA7C0035A9BC /* PlasticProphet.xctestplan */,
 				891F5F162E941BA700A880E5 /* PlasticProphet */,
 				891F5F242E941BA800A880E5 /* PlasticProphetTests */,
@@ -136,6 +142,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				891F5F162E941BA700A880E5 /* PlasticProphet */,
+				89853CBD2EC685E3008C6F03 /* LamdaFunctiones */,
 			);
 			name = PlasticProphet;
 			packageProductDependencies = (
