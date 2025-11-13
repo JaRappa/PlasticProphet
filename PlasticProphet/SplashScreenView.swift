@@ -14,7 +14,7 @@ struct SplashScreenView: View {
         } else {
             ZStack {
                 // Background color - white to match your design
-                Color.white
+                Color.adaptiveBackground
                     .ignoresSafeArea()
                 
                 VStack(spacing: 20) {

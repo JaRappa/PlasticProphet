@@ -20,7 +20,7 @@ struct CognitoVerificationView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.white.ignoresSafeArea()
+                Color.adaptiveBackground.ignoresSafeArea()
                 
                 VStack(alignment: .center, spacing: 24) {
                     // Email icon
@@ -32,13 +32,13 @@ struct CognitoVerificationView: View {
                     Text("Verify Your Email")
                         .font(.custom("Montserrat", size: 28))
                         .fontWeight(.bold)
-                        .foregroundColor(.black)
+                        .foregroundColor(.adaptiveText)
                     
                     // Email display
                     VStack(spacing: 4) {
                         Text("We sent a verification code to")
                             .font(.custom("Montserrat", size: 16))
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveText)
                         Text(email)
                             .font(.custom("Montserrat", size: 16))
                             .fontWeight(.bold)
@@ -135,7 +135,7 @@ struct CognitoVerificationView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { dismiss() }) {
                         Image(systemName: "arrow.left")
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveText)
                             .font(.system(size: 20))
                     }
                 }

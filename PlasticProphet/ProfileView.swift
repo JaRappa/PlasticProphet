@@ -28,23 +28,23 @@ struct ProfileView: View {
                             // Avatar Circle
                             ZStack {
                                 Circle()
-                                    .fill(Color.white)
+                                    .fill(Color.ppGreen)
                                     .frame(width: 60, height: 60)
                                 
                                 Image(systemName: "person.fill")
                                     .font(.system(size: 40))
-                                    .foregroundColor(Color.ppGreen)
+                                    .foregroundColor(.black)
                             }
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("\(app.userFirstName) \(app.userLastName)")
                                     .font(.custom("Montserrat", size: 22))
                                     .fontWeight(.bold)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.adaptiveText)
                                 
                                 Text(app.userEmail)
                                     .font(.custom("Montserrat", size: 14))
-                                    .foregroundColor(.white.opacity(0.9))
+                                    .foregroundColor(.adaptiveSecondaryText)
                             }
                             
                             Spacer()
@@ -52,7 +52,7 @@ struct ProfileView: View {
                         .padding(20)
                         .background(
                             RoundedRectangle(cornerRadius: 16)
-                                .fill(Color.ppGreen)
+                                .fill(Color.adaptiveCardBackground)
                         )
                     }
                     .padding(.horizontal)
@@ -117,9 +117,9 @@ struct ProfileView: View {
                                 // TODO: Navigate to 2FA setup
                             }
                         }
-                        .background(Color.white)
+                        .background(Color.adaptiveCardBackground)
                         .cornerRadius(12)
-                        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+                        .shadow(color: Color.adaptiveShadow, radius: 8, x: 0, y: 2)
                         .padding(.horizontal)
                     }
                     
@@ -170,9 +170,9 @@ struct ProfileView: View {
                                 showSettings = true
                             }
                         }
-                        .background(Color.white)
+                        .background(Color.adaptiveCardBackground)
                         .cornerRadius(12)
-                        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+                        .shadow(color: Color.adaptiveShadow, radius: 8, x: 0, y: 2)
                         .padding(.horizontal)
                     }
                     
@@ -190,7 +190,7 @@ struct ProfileView: View {
                         .padding(16)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.ppGreen, lineWidth: 2)
+                                .fill(Color(.systemGray5))
                         )
                     }
                     .padding(.horizontal)
@@ -255,11 +255,11 @@ struct ProfileMenuItem: View {
                     Text(title)
                         .font(.custom("Montserrat", size: 16))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black)
+                        .foregroundColor(.adaptiveText)
                     
                     Text(subtitle)
                         .font(.custom("Montserrat", size: 12))
-                        .foregroundColor(.gray)
+                        .foregroundColor(.adaptiveSecondaryText)
                 }
                 
                 Spacer()
@@ -309,11 +309,11 @@ struct ProfileMenuToggle: View {
                 Text(title)
                     .font(.custom("Montserrat", size: 16))
                     .fontWeight(.semibold)
-                    .foregroundColor(.black)
+                    .foregroundColor(.adaptiveText)
                 
                 Text(subtitle)
                     .font(.custom("Montserrat", size: 12))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.adaptiveSecondaryText)
             }
             
             Spacer()
@@ -399,10 +399,7 @@ struct AboutAppView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                Image("App Logo Black")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 120, height: 120)
+                AdaptiveLogo(width: 120, height: 120)
                 
                 Text("PlasticProphet")
                     .font(.custom("Montserrat", size: 28))

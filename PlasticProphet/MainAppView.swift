@@ -42,7 +42,7 @@ struct HomeView: View {
                     Text("Home")
                         .font(.custom("Montserrat", size: 32))
                         .fontWeight(.bold)
-                        .foregroundColor(.black)
+                        .foregroundColor(.adaptiveText)
                         .tracking(-1.5)
                         .padding(.horizontal)
                         .padding(.top, 8)
@@ -141,8 +141,8 @@ struct FABMenuItem: View {
             .padding(.vertical, 10)
             .background(
                 Capsule()
-                    .fill(Color.white)
-                    .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 4)
+                    .fill(Color.adaptiveCardBackground)
+                    .shadow(color: Color.adaptiveShadow.opacity(0.15), radius: 10, x: 0, y: 4)
             )
         }
     }
@@ -171,7 +171,7 @@ struct HomeManualAddView: View {
                     Spacer()
                 }
                 .padding()
-                .background(Color.white)
+                .background(Color.adaptiveCardBackground)
                 
                 Form {
                     Section(header: Text("Card Info").font(.custom("Montserrat", size: 14))) {
@@ -229,7 +229,7 @@ struct HomeManualAddView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 20)
-                .background(Color.white)
+                .background(Color.adaptiveCardBackground)
             }
         }
     }
@@ -267,9 +267,9 @@ struct RecommendationCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(Color.white)
+        .background(Color.adaptiveCardBackground)
         .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+        .shadow(color: Color.adaptiveShadow.opacity(0.08), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -280,7 +280,7 @@ struct ScannerView: View {
     
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
+            Color.adaptiveBackground.ignoresSafeArea()
             
             VStack(spacing: 24) {
                 Spacer()

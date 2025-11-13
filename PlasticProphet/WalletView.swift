@@ -18,7 +18,7 @@ struct WalletView: View {
                         Text("Wallet")
                             .font(.custom("Montserrat", size: 32))
                             .fontWeight(.bold)
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveText)
                             .tracking(-1.5)
                         
                         Text("Your Cards")
@@ -56,9 +56,9 @@ struct WalletView: View {
                                 )
                         }
                         .padding()
-                        .background(Color.white)
+                        .background(Color.adaptiveCardBackground)
                         .cornerRadius(12)
-                        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+                        .shadow(color: Color.adaptiveShadow.opacity(0.05), radius: 8, x: 0, y: 2)
                         .padding(.horizontal)
                     } else {
                         // Cards List
@@ -80,7 +80,7 @@ struct WalletView: View {
                                         Text(card.name)
                                             .font(.custom("Montserrat", size: 16))
                                             .fontWeight(.semibold)
-                                            .foregroundColor(.black)
+                                            .foregroundColor(.adaptiveText)
                                         
                                         Text(card.rewardSummary)
                                             .font(.custom("Montserrat", size: 14))
@@ -95,9 +95,9 @@ struct WalletView: View {
                                         .foregroundColor(.gray)
                                 }
                                 .padding()
-                                .background(Color.white)
+                                .background(Color.adaptiveCardBackground)
                                 .cornerRadius(12)
-                                .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+                                .shadow(color: Color.adaptiveShadow.opacity(0.05), radius: 4, x: 0, y: 2)
                             }
                         }
                         .padding(.horizontal)
@@ -110,7 +110,7 @@ struct WalletView: View {
             
             // Backdrop when menu is open
             if showFABMenu {
-                Color.black.opacity(0.3)
+                Color.adaptiveShadow.opacity(0.3)
                     .ignoresSafeArea()
                     .onTapGesture {
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {

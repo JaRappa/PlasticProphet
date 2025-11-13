@@ -20,23 +20,20 @@ struct OnboardingFlowView: View {
             case .intro:
                 // Enhanced intro splash
                 ZStack {
-                    Color.white
+                    Color.adaptiveBackground
                     VStack(spacing: 40) {
                         VStack(spacing: 12) {
                             Text("Welcome to")
                                 .font(.custom("Montserrat", size: 38))
                                 .fontWeight(.black)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                                 .multilineTextAlignment(.center)
                                 .tracking(-1.5)
                                 .shadow(color: Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.25), radius: 2, x: 0, y: 4)
                                 .minimumScaleFactor(0.5)
                                 .lineLimit(1)
 
-                            Image("App Logo Black")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 280, height: 280)
+                            AdaptiveLogo(width: 280, height: 280)
                         }
 
                         Button(action: { withAnimation { step = .tos } }) {
@@ -71,7 +68,7 @@ struct OnboardingFlowView: View {
                     Text("Terms of Service")
                         .font(.custom("Montserrat", size: 28))
                         .fontWeight(.bold)
-                        .foregroundColor(.black)
+                        .foregroundColor(.adaptiveText)
                         .tracking(-1.5)
                         .padding(.top, 20)
                         .padding(.bottom, 16)
@@ -81,7 +78,7 @@ struct OnboardingFlowView: View {
                             Text("Terms and Conditions")
                                 .font(.custom("Montserrat", size: 18))
                                 .fontWeight(.semibold)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                             
                             Text("By using PlasticProphet you agree to our terms and conditions. This is a placeholder Terms of Service. Replace with your real legal text.")
                                 .font(.custom("Montserrat", size: 14))
@@ -91,7 +88,7 @@ struct OnboardingFlowView: View {
                             Text("1. Acceptance of Terms")
                                 .font(.custom("Montserrat", size: 16))
                                 .fontWeight(.semibold)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                                 .padding(.top, 8)
                             
                             Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.")
@@ -101,7 +98,7 @@ struct OnboardingFlowView: View {
                             Text("2. User Responsibilities")
                                 .font(.custom("Montserrat", size: 16))
                                 .fontWeight(.semibold)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                                 .padding(.top, 8)
                             
                             Text("Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.")
@@ -111,7 +108,7 @@ struct OnboardingFlowView: View {
                             Text("3. Privacy Policy")
                                 .font(.custom("Montserrat", size: 16))
                                 .fontWeight(.semibold)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                                 .padding(.top, 8)
                             
                             Text("Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.")
@@ -121,7 +118,7 @@ struct OnboardingFlowView: View {
                             Text("4. Limitation of Liability")
                                 .font(.custom("Montserrat", size: 16))
                                 .fontWeight(.semibold)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                                 .padding(.top, 8)
                             
                             Text("At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.")
@@ -169,7 +166,7 @@ struct OnboardingFlowView: View {
                         Text("Permissions")
                             .font(.custom("Montserrat", size: 28))
                             .fontWeight(.bold)
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveText)
                             .tracking(-1.5)
                         
                         Text("To provide you with the best experience, PlasticProphet needs access to your camera and location.")
@@ -189,7 +186,7 @@ struct OnboardingFlowView: View {
                                 Text("Camera Access")
                                     .font(.custom("Montserrat", size: 18))
                                     .fontWeight(.semibold)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.adaptiveText)
                                 Spacer()
                             }
                             Text("Scan your credit cards quickly for instant card entry and recognition.")
@@ -216,7 +213,7 @@ struct OnboardingFlowView: View {
                                 Text("Location Access")
                                     .font(.custom("Montserrat", size: 18))
                                     .fontWeight(.semibold)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.adaptiveText)
                                 Spacer()
                             }
                             Text("Receive personalized recommendations based on nearby merchants and locations.")
@@ -264,7 +261,7 @@ struct OnboardingFlowView: View {
                     Text("Add Your Cards")
                         .font(.custom("Montserrat", size: 28))
                         .fontWeight(.bold)
-                        .foregroundColor(.black)
+                        .foregroundColor(.adaptiveText)
                         .tracking(-1.5)
                     
                     Text("Search or scan to add your cards. Popular cards are shown below; tap a card tile to select it.")
@@ -395,7 +392,7 @@ struct OnboardingFlowView: View {
                             Text("All Set!")
                                 .font(.custom("Montserrat", size: 32))
                                 .fontWeight(.bold)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                                 .tracking(-1.5)
                             Image(systemName: "checkmark.seal.fill")
                                 .font(.title)

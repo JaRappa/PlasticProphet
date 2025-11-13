@@ -12,16 +12,13 @@ struct AuthLandingView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.white.ignoresSafeArea()
+                Color.adaptiveBackground.ignoresSafeArea()
                 
                 VStack(spacing: 40) {
                     Spacer()
                     
                     // Logo
-                    Image("App Logo Black")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 300, height: 300)
+                    AdaptiveLogo(width: 300, height: 300)
                     
                     Spacer()
                     
@@ -82,7 +79,7 @@ struct SignInView: View {
     
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
+            Color.adaptiveBackground.ignoresSafeArea()
             
             VStack(alignment: .center, spacing: 24) {
                 // Card icon
@@ -95,13 +92,13 @@ struct SignInView: View {
                 Text("Secure Sign In")
                     .font(.custom("Montserrat", size: 32))
                     .fontWeight(.bold)
-                    .foregroundColor(.black)
+                    .foregroundColor(.adaptiveText)
                 
                 // Info text
                 VStack(spacing: 12) {
                     Text("Sign in securely using Cognito")
                         .font(.custom("Montserrat", size: 16))
-                        .foregroundColor(.black)
+                        .foregroundColor(.adaptiveText)
                         .multilineTextAlignment(.center)
                     
                     Text("Your credentials are never shared with this app")
@@ -188,7 +185,7 @@ struct SignInView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: { dismiss() }) {
                     Image(systemName: "arrow.left")
-                        .foregroundColor(.black)
+                        .foregroundColor(.adaptiveText)
                         .font(.system(size: 20))
                 }
             }
@@ -251,7 +248,7 @@ struct SignUpView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.white.ignoresSafeArea()
+                Color.adaptiveBackground.ignoresSafeArea()
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
@@ -265,14 +262,14 @@ struct SignUpView: View {
                         Text("Create Your Account")
                             .font(.custom("Montserrat", size: 32))
                             .fontWeight(.bold)
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveText)
                         
                         // First Name
                         VStack(alignment: .leading, spacing: 8) {
                             Text("First Name")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.medium)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                             
                             TextField("First Name", text: $firstName)
                                 .font(.custom("Montserrat", size: 16))
@@ -291,7 +288,7 @@ struct SignUpView: View {
                             Text("Last Name")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.medium)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                             
                             TextField("Last Name", text: $lastName)
                                 .font(.custom("Montserrat", size: 16))
@@ -310,7 +307,7 @@ struct SignUpView: View {
                             Text("Email Address")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.medium)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                             
                             TextField("Email Address", text: $email)
                                 .font(.custom("Montserrat", size: 16))
@@ -331,7 +328,7 @@ struct SignUpView: View {
                             Text("Password")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.medium)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                             
                             HStack {
                                 if showPassword {
@@ -379,7 +376,7 @@ struct SignUpView: View {
                             Text("Confirm Password")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.medium)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                             
                             HStack {
                                 if showConfirmPassword {
@@ -433,7 +430,7 @@ struct SignUpView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { dismiss() }) {
                         Image(systemName: "arrow.left")
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveText)
                             .font(.system(size: 20))
                     }
                 }
@@ -474,8 +471,8 @@ struct SignUpView: View {
     }
 }
         
-        // MARK: - Forgot Password View
         struct ForgotPasswordView: View {
+            @EnvironmentObject var app: AppState
             @Environment(\.dismiss) private var dismiss
             @State private var email: String = ""
             @State private var showVerification = false
@@ -483,7 +480,7 @@ struct SignUpView: View {
             
             var body: some View {
                 ZStack {
-                    Color.white.ignoresSafeArea()
+                    Color.adaptiveBackground.ignoresSafeArea()
                     
                     VStack(alignment: .leading, spacing: 24) {
                         // Card icon
@@ -496,14 +493,14 @@ struct SignUpView: View {
                         Text("Forgot Password")
                             .font(.custom("Montserrat", size: 32))
                             .fontWeight(.bold)
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveText)
                         
                         // Email
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Email Address")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.medium)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                             
                             TextField("Email Address", text: $email)
                                 .font(.custom("Montserrat", size: 16))
@@ -547,7 +544,7 @@ struct SignUpView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: { dismiss() }) {
                             Image(systemName: "arrow.left")
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                                 .font(.system(size: 20))
                         }
                     }
@@ -568,7 +565,7 @@ struct SignUpView: View {
             
             var body: some View {
                 ZStack {
-                    Color.white.ignoresSafeArea()
+                    Color.adaptiveBackground.ignoresSafeArea()
                     
                     VStack(alignment: .center, spacing: 24) {
                         // Card icon
@@ -582,18 +579,18 @@ struct SignUpView: View {
                         VStack(spacing: 4) {
                             Text("We sent a two-step authentication")
                                 .font(.custom("Montserrat", size: 16))
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                             HStack(spacing: 4) {
                                 Text("code to")
                                     .font(.custom("Montserrat", size: 16))
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.adaptiveText)
                                 Text(email)
                                     .font(.custom("Montserrat", size: 16))
                                     .fontWeight(.bold)
                                     .foregroundColor(Color.ppGreen)
                                 Text(".")
                                     .font(.custom("Montserrat", size: 16))
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.adaptiveText)
                             }
                         }
                         .multilineTextAlignment(.center)
@@ -657,7 +654,7 @@ struct SignUpView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: { dismiss() }) {
                             Image(systemName: "arrow.left")
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                                 .font(.system(size: 20))
                         }
                     }
@@ -703,7 +700,7 @@ struct SignUpView: View {
             
             var body: some View {
                 ZStack {
-                    Color.white.ignoresSafeArea()
+                    Color.adaptiveBackground.ignoresSafeArea()
                     
                     VStack(alignment: .leading, spacing: 24) {
                         // Card icon
@@ -718,7 +715,7 @@ struct SignUpView: View {
                             Text("Password")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.semibold)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Your password must include at least:")
@@ -770,7 +767,7 @@ struct SignUpView: View {
                             Text("Confirm Password")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.medium)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                             
                             HStack {
                                 if showConfirmPassword {
@@ -824,7 +821,7 @@ struct SignUpView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: { dismiss() }) {
                             Image(systemName: "arrow.left")
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                                 .font(.system(size: 20))
                         }
                     }
