@@ -11,68 +11,102 @@ struct WalletView: View {
 
     var body: some View {
         ZStack {
-            VStack(alignment: .leading, spacing: 18) {
-                Text("Wallet")
-                    .font(.custom("Montserrat", size: 32))
-                    .fontWeight(.bold)
-                    .foregroundColor(.black)
-                    .padding(.top, 20)
-                    .tracking(-1.5)
-                Text("Your Cards")
-                    .font(.custom("Montserrat", size: 20))
-                    .fontWeight(.semibold)
-                    .foregroundColor(.ppGreen)
-                    .tracking(-0.5)
-
-                if app.cards.isEmpty {
-                    // empty state with dotted card
+            ScrollView {
+                VStack(spacing: 24) {
+                    // Header Section
                     VStack(alignment: .leading, spacing: 8) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
-                            .frame(height: 100)
-                            .overlay(
-                                Text("Please Add Card...")
-                                    .font(.custom("Montserrat", size: 14))
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.gray.opacity(0.5))
-                                    .padding(.top, 12)
-                                    .padding(.leading, 12), alignment: .topLeading
-                            )
+                        Text("Wallet")
+                            .font(.custom("Montserrat", size: 32))
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                            .tracking(-1.5)
+                        
+                        Text("Your Cards")
+                            .font(.custom("Montserrat", size: 20))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.ppGreen)
+                            .tracking(-0.5)
                     }
-                    .padding(.horizontal, 16)
-
-                    Spacer()
-                } else {
-                    // show a simple list of cards
-                    ScrollView {
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                    
+                    // Cards Section
+                    if app.cards.isEmpty {
+                        // Empty State Card
+                        VStack(alignment: .leading, spacing: 12) {
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
+                                .frame(height: 120)
+                                .overlay(
+                                    VStack(spacing: 8) {
+                                        Image(systemName: "creditcard")
+                                            .font(.system(size: 32))
+                                            .foregroundColor(.gray.opacity(0.5))
+                                        
+                                        Text("No cards added yet")
+                                            .font(.custom("Montserrat", size: 16))
+                                            .fontWeight(.medium)
+                                            .foregroundColor(.gray.opacity(0.7))
+                                        
+                                        Text("Tap the + button to add your first card")
+                                            .font(.custom("Montserrat", size: 14))
+                                            .foregroundColor(.gray.opacity(0.5))
+                                    }
+                                )
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+                        .padding(.horizontal)
+                    } else {
+                        // Cards List
                         VStack(spacing: 12) {
                             ForEach(app.cards) { card in
-                                HStack {
-                                    VStack(alignment: .leading) {
+                                HStack(spacing: 16) {
+                                    // Card Network Icon
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.ppGreen.opacity(0.1))
+                                            .frame(width: 44, height: 44)
+                                        
+                                        Image(systemName: "creditcard")
+                                            .font(.system(size: 20))
+                                            .foregroundColor(.ppGreen)
+                                    }
+                                    
+                                    VStack(alignment: .leading, spacing: 4) {
                                         Text(card.name)
                                             .font(.custom("Montserrat", size: 16))
                                             .fontWeight(.semibold)
+                                            .foregroundColor(.black)
+                                        
                                         Text(card.rewardSummary)
-                                            .font(.custom("Montserrat", size: 12))
+                                            .font(.custom("Montserrat", size: 14))
                                             .foregroundColor(.secondary)
                                     }
+                                    
                                     Spacer()
+                                    
                                     Text("••••\(card.last4)")
                                         .font(.custom("Montserrat", size: 14))
                                         .fontWeight(.medium)
+                                        .foregroundColor(.gray)
                                 }
                                 .padding()
                                 .background(Color.white)
-                                .cornerRadius(10)
-                                .shadow(radius: 1)
-                                .padding(.horizontal)
+                                .cornerRadius(12)
+                                .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
                             }
                         }
-                        .padding(.top)
+                        .padding(.horizontal)
                     }
+                    
+                    Spacer(minLength: 100)
                 }
             }
-            .padding(16)
+            .background(Color(.systemGroupedBackground))
             
             // Backdrop when menu is open
             if showFABMenu {
@@ -165,9 +199,9 @@ struct WalletView: View {
         .sheet(isPresented: $showCardSelection) {
             CardSelectionView()
                 .environmentObject(app)
-            }
         }
     }
+}
 
 struct ManualAddView: View {
     @EnvironmentObject var app: AppState
