@@ -151,6 +151,8 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
         }
         
         print("🌐 Opening Cognito Hosted UI: \(authURL)")
+        print("📱 Callback URL: plasticprophet://auth-callback")
+        print("🔑 Client ID: \(CognitoConfig.appClientId)")
         
         return try await withCheckedThrowingContinuation { continuation in
             // Use ASWebAuthenticationSession for secure OAuth flow
@@ -160,6 +162,19 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
             ) { [weak self] callbackURL, error in
                 Task {
                     do {
+                        if let error = error {
+                            print("❌ ASWebAuthenticationSession error: \(error.localizedDescription)")
+                            continuation.resume(throwing: error)
+                            return
+                        }
+                        
+                        guard let callbackURL = callbackURL else {
+                            print("❌ No callback URL received")
+                            continuation.resume(throwing: CognitoError.invalidURL)
+                            return
+                        }
+                        
+                        print("✅ Received callback: \(callbackURL)")
                         try await self?.handleAuthCallback(callbackURL: callbackURL, error: error)
                         continuation.resume()
                     } catch {
@@ -281,6 +296,54 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
         return email
     }
     
+    // MARK: - Extract All User Info from ID Token
+    
+    func extractUserInfoFromIDToken() async throws -> [String: String] {
+        guard let idToken = self.idToken else {
+            throw CognitoError.notAuthenticated
+        }
+        
+        print("🔍 Extracting user info from ID token...")
+        
+        let parts = idToken.split(separator: ".")
+        guard parts.count == 3 else {
+            throw CognitoError.invalidResponse
+        }
+        
+        var base64String = String(parts[1])
+        // Add padding if needed
+        while base64String.count % 4 != 0 {
+            base64String.append("=")
+        }
+        
+        guard let data = Data(base64Encoded: base64String),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw CognitoError.invalidResponse
+        }
+        
+        // Extract common user attributes from ID token
+        var attributes: [String: String] = [:]
+        
+        if let email = json["email"] as? String {
+            attributes["email"] = email
+        }
+        
+        if let givenName = json["given_name"] as? String {
+            attributes["given_name"] = givenName
+        }
+        
+        if let familyName = json["family_name"] as? String {
+            attributes["family_name"] = familyName
+        }
+        
+        if let name = json["name"] as? String {
+            attributes["name"] = name
+        }
+        
+        print("✅ Extracted user attributes: \(attributes)")
+        return attributes
+    }
+    
     // MARK: - Sign Out
     
     func signOut() async {
@@ -295,10 +358,11 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
         print("✅ Signed out")
     }
     
-    // MARK: - Get User Attributes
+    // MARK: - Get User Attributes (requires admin scope)
     
     func getUserAttributes() async throws -> [String: String] {
-        print("🔍 Fetching user attributes...")
+        print("⚠️ getUserAttributes requires aws.cognito.signin.user.admin scope")
+        print("💡 Use extractUserInfoFromIDToken() instead for basic user info")
         
         guard let accessToken = accessToken else {
             throw CognitoError.notAuthenticated

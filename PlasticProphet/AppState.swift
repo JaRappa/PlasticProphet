@@ -73,8 +73,8 @@ final class AppState: ObservableObject {
             try await authService.signIn()
             print("✅ Sign in successful!")
             
-            // Fetch user info from Cognito
-            let attributes = try await authService.getUserAttributes()
+            // Extract user info from ID token (no API call needed)
+            let attributes = try await authService.extractUserInfoFromIDToken()
             
             await MainActor.run {
                 self.isAuthenticated = true

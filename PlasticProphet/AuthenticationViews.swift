@@ -112,6 +112,29 @@ struct SignInView: View {
                 .padding(.horizontal, 32)
                 .padding(.top, 20)
                 
+               /* // Debug info
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Debug Info:")
+                        .font(.custom("Montserrat", size: 14))
+                        .fontWeight(.bold)
+                    
+                    Text("Domain: us-east-1v2s48yy0h")
+                        .font(.custom("Montserrat", size: 12))
+                        .foregroundColor(.gray)
+                    
+                    Text("Client ID: 4odq1p8fovp5vtmjobhdqke2rl")
+                        .font(.custom("Montserrat", size: 12))
+                        .foregroundColor(.gray)
+                    
+                    Text("Callback: plasticprophet://auth-callback")
+                        .font(.custom("Montserrat", size: 12))
+                        .foregroundColor(.gray)
+                }
+                .padding(16)
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(8)
+                .padding(.horizontal, 32)
+                */
                 // Error message
                 if !errorMessage.isEmpty {
                     Text(errorMessage)
@@ -148,6 +171,15 @@ struct SignInView: View {
                 .disabled(isLoading)
                 .opacity(isLoading ? 0.7 : 1.0)
                 .padding(.horizontal, 32)
+                .padding(.bottom, 20)
+                /*
+                // Test Callback URL Button
+                Button(action: testCallbackURL) {
+                    Text("Test Callback URL")
+                        .font(.custom("Montserrat", size: 14))
+                        .foregroundColor(.blue)
+                        .padding(.horizontal, 32)
+                } */
                 .padding(.bottom, 40)
             }
         }
@@ -183,6 +215,17 @@ struct SignInView: View {
                     print("❌ Sign in error: \(error)")
                 }
             }
+        }
+    }
+    
+    private func testCallbackURL() {
+        // Test if the callback URL scheme is properly registered
+        let testURL = URL(string: "plasticprophet://auth-callback?test=1")!
+        if UIApplication.shared.canOpenURL(testURL) {
+            UIApplication.shared.open(testURL)
+            errorMessage = "✅ Callback URL scheme is working!"
+        } else {
+            errorMessage = "❌ Callback URL scheme not registered. Check Info.plist"
         }
     }
 }
@@ -819,4 +862,3 @@ struct SignUpView: View {
                     .environmentObject(AppState())
             }
         }
-    
