@@ -36,6 +36,9 @@ final class AppState: ObservableObject {
         print("🚀🚀🚀 APPSTATE INIT - CONSOLE TEST 🚀🚀🚀")
         CognitoConfig.printStatus()
         
+        // Load persisted onboarding status
+        loadPersistedState()
+        
         // Check if user is already signed in
         checkSession()
     }
@@ -94,6 +97,23 @@ final class AppState: ObservableObject {
         if authService.isAuthenticated {
             self.isAuthenticated = true
             self.userEmail = authService.currentUsername ?? ""
+            
+            // Extract user info from stored ID token
+            Task {
+                do {
+                    let attributes = try await authService.extractUserInfoFromIDToken()
+                    await MainActor.run {
+                        self.userFirstName = attributes["given_name"] ?? "User"
+                        self.userLastName = attributes["family_name"] ?? ""
+                        if let email = attributes["email"] {
+                            self.userEmail = email
+                        }
+                    }
+                    print("✅ Restored user session for: \(self.userEmail)")
+                } catch {
+                    print("⚠️ Could not extract user info from stored token: \(error)")
+                }
+            }
         }
     }
     
@@ -111,6 +131,9 @@ final class AppState: ObservableObject {
             self.userLastName = ""
             self.userEmail = ""
             self.permissions = PermissionsStatus()
+            
+            // Clear persisted state
+            clearPersistedState()
             
             print("✅ Signed out")
         }
@@ -151,6 +174,27 @@ final class AppState: ObservableObject {
     func proceedIfReady() {
         if acceptedTos && permissions.allGranted && !cards.isEmpty {
             onboardingCompleted = true
+            savePersistedState()
         }
+    }
+    
+    // MARK: - Persistence
+    
+    private func savePersistedState() {
+        UserDefaults.standard.set(onboardingCompleted, forKey: "onboarding_completed")
+        UserDefaults.standard.set(acceptedTos, forKey: "accepted_tos")
+        print("💾 Saved onboarding state: completed=\(onboardingCompleted)")
+    }
+    
+    private func loadPersistedState() {
+        onboardingCompleted = UserDefaults.standard.bool(forKey: "onboarding_completed")
+        acceptedTos = UserDefaults.standard.bool(forKey: "accepted_tos")
+        print("📂 Loaded onboarding state: completed=\(onboardingCompleted)")
+    }
+    
+    private func clearPersistedState() {
+        UserDefaults.standard.removeObject(forKey: "onboarding_completed")
+        UserDefaults.standard.removeObject(forKey: "accepted_tos")
+        print("🗑️ Cleared persisted state")
     }
 }
