@@ -39,10 +39,9 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
     // IMPORTANT: Your Cognito domain - format is: https://{domain-prefix}.auth.{region}.amazoncognito.com
     // The domain prefix is typically based on your User Pool ID
     private var hostedUIURL: String {
-        // Format: Remove the underscore and make it lowercase for the domain
-        let poolId = CognitoConfig.userPoolId.replacingOccurrences(of: "_", with: "").lowercased()
-        return "https://\(poolId).auth.\(CognitoConfig.region).amazoncognito.com"
+        return CognitoConfig.hostedUIDomain
     }
+
     
     // PKCE values for current auth attempt
     private var codeVerifier: String?
@@ -307,6 +306,39 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
         return email
     }
     
+    // Extract multiple fields (email, given_name, family_name, sub) from the current ID token
+    func extractUserInfoFromIDToken() async throws -> [String: String] {
+        // Make sure we actually have an ID token
+        guard let token = idToken else {
+            throw CognitoError.notAuthenticated
+        }
+        
+        let parts = token.split(separator: ".")
+        guard parts.count == 3 else {
+            throw CognitoError.invalidResponse
+        }
+        
+        var base64String = String(parts[1])
+        // Add padding if needed
+        while base64String.count % 4 != 0 {
+            base64String.append("=")
+        }
+        
+        guard let data = Data(base64Encoded: base64String),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw CognitoError.invalidResponse
+        }
+        
+        var attributes: [String: String] = [:]
+        if let email = json["email"] as? String { attributes["email"] = email }
+        if let given = json["given_name"] as? String { attributes["given_name"] = given }
+        if let family = json["family_name"] as? String { attributes["family_name"] = family }
+        if let sub = json["sub"] as? String { attributes["sub"] = sub }
+        
+        return attributes
+    }
+
+    
     // MARK: - Sign Out
     
     func signOut() async {
@@ -361,18 +393,18 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
     func getUserProfile() async throws -> UserProfile {
         print("🔍 Fetching user profile from database via API Gateway...")
         
-        guard let accessToken = accessToken else {
+        guard let idToken = idToken else {
             throw CognitoError.notAuthenticated
         }
         
-        let apiURL = "https://syidcdnccc.execute-api.us-east-1.amazonaws.com/prod/profile"
+        let apiURL = CognitoConfig.apiBaseURL + "/profile"
         guard let url = URL(string: apiURL) else {
             throw CognitoError.invalidURL
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(idToken)", forHTTPHeaderField: "Authorization")
         
         let (data, response) = try await URLSession.shared.data(for: request)
         

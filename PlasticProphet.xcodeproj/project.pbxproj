@@ -6,14 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		88F3D9472EC6873300EFAA2B /* requirements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 88F3D9432EC6873300EFAA2B /* requirements.txt */; };
-		88F3D9482EC6873300EFAA2B /* requirements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 88F3D9402EC6873300EFAA2B /* requirements.txt */; };
-		88F3D9492EC6873300EFAA2B /* lambda_function.py in Resources */ = {isa = PBXBuildFile; fileRef = 88F3D9422EC6873300EFAA2B /* lambda_function.py */; };
-		88F3D94A2EC6873300EFAA2B /* lambda_function.py in Resources */ = {isa = PBXBuildFile; fileRef = 88F3D93F2EC6873300EFAA2B /* lambda_function.py */; };
-		88F3D94B2EC6873300EFAA2B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 88F3D9452EC6873300EFAA2B /* README.md */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		891F5F222E941BA800A880E5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -33,11 +25,6 @@
 
 /* Begin PBXFileReference section */
 		88E0BD372EBEDA7C0035A9BC /* PlasticProphet.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PlasticProphet.xctestplan; sourceTree = "<group>"; };
-		88F3D93F2EC6873300EFAA2B /* lambda_function.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = lambda_function.py; sourceTree = "<group>"; };
-		88F3D9402EC6873300EFAA2B /* requirements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
-		88F3D9422EC6873300EFAA2B /* lambda_function.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = lambda_function.py; sourceTree = "<group>"; };
-		88F3D9432EC6873300EFAA2B /* requirements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
-		88F3D9452EC6873300EFAA2B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		891F5F142E941BA700A880E5 /* PlasticProphet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlasticProphet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F212E941BA800A880E5 /* PlasticProphetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F2B2E941BA800A880E5 /* PlasticProphetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,34 +102,6 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-		88F3D9412EC6873300EFAA2B /* GetProfileAPI */ = {
-			isa = PBXGroup;
-			children = (
-				88F3D93F2EC6873300EFAA2B /* lambda_function.py */,
-				88F3D9402EC6873300EFAA2B /* requirements.txt */,
-			);
-			path = GetProfileAPI;
-			sourceTree = "<group>";
-		};
-		88F3D9442EC6873300EFAA2B /* PostConfirmationTrigger */ = {
-			isa = PBXGroup;
-			children = (
-				88F3D9422EC6873300EFAA2B /* lambda_function.py */,
-				88F3D9432EC6873300EFAA2B /* requirements.txt */,
-			);
-			path = PostConfirmationTrigger;
-			sourceTree = "<group>";
-		};
-		88F3D9462EC6873300EFAA2B /* lambda */ = {
-			isa = PBXGroup;
-			children = (
-				88F3D9412EC6873300EFAA2B /* GetProfileAPI */,
-				88F3D9442EC6873300EFAA2B /* PostConfirmationTrigger */,
-				88F3D9452EC6873300EFAA2B /* README.md */,
-			);
-			path = lambda;
-			sourceTree = "<group>";
-		};
 		891F5F0B2E941BA700A880E5 = {
 			isa = PBXGroup;
 			children = (
@@ -153,7 +112,6 @@
 				891F5F2E2E941BA800A880E5 /* PlasticProphetUITests */,
 				891F5F152E941BA700A880E5 /* Products */,
 				88415F672EA9351400E45262 /* Recovered References */,
-				88F3D9462EC6873300EFAA2B /* lambda */,
 			);
 			sourceTree = "<group>";
 		};
@@ -288,11 +246,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88F3D9472EC6873300EFAA2B /* requirements.txt in Resources */,
-				88F3D9482EC6873300EFAA2B /* requirements.txt in Resources */,
-				88F3D9492EC6873300EFAA2B /* lambda_function.py in Resources */,
-				88F3D94A2EC6873300EFAA2B /* lambda_function.py in Resources */,
-				88F3D94B2EC6873300EFAA2B /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
