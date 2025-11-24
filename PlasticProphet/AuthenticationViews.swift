@@ -177,6 +177,25 @@ struct SignInView: View {
                         .foregroundColor(.blue)
                         .padding(.horizontal, 32)
                 } */
+                /* // [DEBUG] Connectivity Test Button - Uncomment if network issues arise
+                Button(action: runHealthCheck) {
+                                    HStack {
+                                        Image(systemName: "antenna.radiowaves.left.and.right")
+                                        Text("Test Backend Connection")
+                                    }
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                    .padding(8)
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(8)
+                                }
+                                .padding(.bottom, 20)
+                             */
+
+                                /*
+                                // Test Callback URL Button (You can delete this old commented out code if you want)
+                                Button(action: testCallbackURL) { ... }
+                                */
                 .padding(.bottom, 40)
             }
         }
@@ -209,6 +228,20 @@ struct SignInView: View {
             }
         }
     }
+    private func runHealthCheck() {
+            Task {
+                do {
+                    print("🚀 Starting Health Check...")
+                    // This creates a temporary instance of APIService just for this test
+                    let status = try await APIService().checkHealth()
+                    print("✅ SUCCESS: Backend says: '\(status)'")
+                    errorMessage = "✅ Connected: \(status)" // Optional: Show on screen
+                } catch {
+                    print("❌ FAILED: Could not reach backend. \(error.localizedDescription)")
+                    errorMessage = "❌ Connection Failed" // Optional: Show on screen
+                }
+            }
+        }
     
     private func testCallbackURL() {
         // Test if the callback URL scheme is properly registered

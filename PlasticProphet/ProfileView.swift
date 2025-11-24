@@ -13,14 +13,25 @@ struct ProfileView: View {
     @State private var showSettings = false
     @State private var showHelpSupport = false
     @State private var showAboutApp = false
-    @State private var faceIDEnabled = false
-    @State private var twoFactorEnabled = false
     @State private var showingSignOutAlert = false
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
+                    
+                    // FIX 1: Custom Header to match Home/Wallet style
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Profile")
+                            .font(.custom("Montserrat", size: 32))
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                            .tracking(-1.5)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    .padding(.top, 20) // Consistent 20pt padding
+                    
                     // User Profile Header
                     VStack(spacing: 16) {
                         // Avatar and Name Section
@@ -28,23 +39,26 @@ struct ProfileView: View {
                             // Avatar Circle
                             ZStack {
                                 Circle()
-                                    .fill(Color.ppGreen)
+                                    .fill(Color.white)
                                     .frame(width: 60, height: 60)
                                 
                                 Image(systemName: "person.fill")
                                     .font(.system(size: 40))
-                                    .foregroundColor(.black)
+                                    .foregroundColor(Color.ppGreen)
                             }
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("\(app.userFirstName) \(app.userLastName)")
                                     .font(.custom("Montserrat", size: 22))
                                     .fontWeight(.bold)
-                                    .foregroundColor(.adaptiveText)
+                                    .foregroundColor(.white)
                                 
+                                // FIX 2: Email text shrinking
                                 Text(app.userEmail)
                                     .font(.custom("Montserrat", size: 14))
-                                    .foregroundColor(.adaptiveSecondaryText)
+                                    .foregroundColor(.white.opacity(0.9))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
                             }
                             
                             Spacer()
@@ -52,13 +66,12 @@ struct ProfileView: View {
                         .padding(20)
                         .background(
                             RoundedRectangle(cornerRadius: 16)
-                                .fill(Color.adaptiveCardBackground)
+                                .fill(Color.ppGreen)
                         )
                     }
                     .padding(.horizontal)
-                    .padding(.top, 20)
                     
-                    // Quick Actions Section
+                    // Quick Actions Section (Account)
                     VStack(spacing: 0) {
                         Text("Account")
                             .font(.custom("Montserrat", size: 18))
@@ -80,46 +93,11 @@ struct ProfileView: View {
                                 showMyAccount = true
                             }
                             
-                            Divider()
-                                .padding(.leading, 60)
-                            
-                            ProfileMenuItem(
-                                icon: "bookmark.circle",
-                                iconColor: Color.ppGreen,
-                                title: "Saved Beneficiary",
-                                subtitle: "Manage your saved account",
-                                showChevron: true
-                            ) {
-                                // TODO: Navigate to saved beneficiary
-                            }
-                            
-                            Divider()
-                                .padding(.leading, 60)
-                            
-                            ProfileMenuToggle(
-                                icon: "faceid",
-                                iconColor: Color.ppGreen,
-                                title: "Face ID / Touch ID",
-                                subtitle: "Manage your device security",
-                                isOn: $faceIDEnabled
-                            )
-                            
-                            Divider()
-                                .padding(.leading, 60)
-                            
-                            ProfileMenuItem(
-                                icon: "shield.checkered",
-                                iconColor: Color.ppGreen,
-                                title: "Two-Factor Authentication",
-                                subtitle: "Further secure your account for safety",
-                                showChevron: true
-                            ) {
-                                // TODO: Navigate to 2FA setup
-                            }
+                            // FIX 3: Removed extra toggles (Face ID, etc.)
                         }
-                        .background(Color.adaptiveCardBackground)
+                        .background(Color.white)
                         .cornerRadius(12)
-                        .shadow(color: Color.adaptiveShadow, radius: 8, x: 0, y: 2)
+                        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
                         .padding(.horizontal)
                     }
                     
@@ -170,9 +148,9 @@ struct ProfileView: View {
                                 showSettings = true
                             }
                         }
-                        .background(Color.adaptiveCardBackground)
+                        .background(Color.white)
                         .cornerRadius(12)
-                        .shadow(color: Color.adaptiveShadow, radius: 8, x: 0, y: 2)
+                        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
                         .padding(.horizontal)
                     }
                     
@@ -190,7 +168,7 @@ struct ProfileView: View {
                         .padding(16)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(Color(.systemGray5))
+                                .stroke(Color.ppGreen, lineWidth: 2)
                         )
                     }
                     .padding(.horizontal)
@@ -198,8 +176,8 @@ struct ProfileView: View {
                 }
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Profile")
-            .navigationBarTitleDisplayMode(.large)
+            // FIX 4: Hide native navigation bar so we don't have double titles
+            .navigationBarHidden(true)
         }
         .sheet(isPresented: $showSettings) {
             NavigationStack {
@@ -255,11 +233,11 @@ struct ProfileMenuItem: View {
                     Text(title)
                         .font(.custom("Montserrat", size: 16))
                         .fontWeight(.semibold)
-                        .foregroundColor(.adaptiveText)
+                        .foregroundColor(.black)
                     
                     Text(subtitle)
                         .font(.custom("Montserrat", size: 12))
-                        .foregroundColor(.adaptiveSecondaryText)
+                        .foregroundColor(.gray)
                 }
                 
                 Spacer()
@@ -280,50 +258,6 @@ struct ProfileMenuItem: View {
             .padding(16)
         }
         .buttonStyle(.plain)
-    }
-}
-
-// MARK: - Profile Menu Toggle
-struct ProfileMenuToggle: View {
-    let icon: String
-    let iconColor: Color
-    let title: String
-    let subtitle: String
-    @Binding var isOn: Bool
-    
-    var body: some View {
-        HStack(spacing: 16) {
-            // Icon
-            ZStack {
-                Circle()
-                    .fill(iconColor.opacity(0.1))
-                    .frame(width: 44, height: 44)
-                
-                Image(systemName: icon)
-                    .font(.system(size: 20))
-                    .foregroundColor(iconColor)
-            }
-            
-            // Text
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.custom("Montserrat", size: 16))
-                    .fontWeight(.semibold)
-                    .foregroundColor(.adaptiveText)
-                
-                Text(subtitle)
-                    .font(.custom("Montserrat", size: 12))
-                    .foregroundColor(.adaptiveSecondaryText)
-            }
-            
-            Spacer()
-            
-            // Toggle
-            Toggle("", isOn: $isOn)
-                .labelsHidden()
-                .tint(Color.ppGreen)
-        }
-        .padding(16)
     }
 }
 
@@ -399,7 +333,10 @@ struct AboutAppView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                AdaptiveLogo(width: 120, height: 120)
+                Image("App Logo Black")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120, height: 120)
                 
                 Text("PlasticProphet")
                     .font(.custom("Montserrat", size: 28))
@@ -433,4 +370,3 @@ struct AboutAppView: View {
     ProfileView()
         .environmentObject(AppState())
 }
-

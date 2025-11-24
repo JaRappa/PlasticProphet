@@ -294,7 +294,8 @@ struct OnboardingFlowView: View {
 
                     HStack(spacing: 12) {
                         Button(action: {
-                            app.onboardingCompleted = true
+                            // FIX: Call the persistent save function
+                            app.completeOnboarding()
                             step = .done
                         }) {
                             Text("Skip for now")
@@ -313,7 +314,7 @@ struct OnboardingFlowView: View {
                         }
 
                         Button(action: {
-                            app.proceedIfReady()
+                            app.proceedIfReady() // This now calls completeOnboarding() internally
                             step = .done
                         }) {
                             Text("Finish")
@@ -404,7 +405,8 @@ struct OnboardingFlowView: View {
                             .foregroundColor(.secondary)
                         
                         Button(action: {
-                            app.onboardingCompleted = true
+                            // FIX: Call the persistent save function
+                            app.completeOnboarding()
                             app.selectedTab = 0
                         }) {
                             Text("Enter App")

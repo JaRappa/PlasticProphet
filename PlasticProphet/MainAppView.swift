@@ -45,7 +45,7 @@ struct HomeView: View {
                         .foregroundColor(.adaptiveText)
                         .tracking(-1.5)
                         .padding(.horizontal)
-                        .padding(.top, 8)
+                        .padding(.top,10) // Matches Wallet/Profile padding
                     
                     Text("Best Deals Near You")
                         .font(.custom("Montserrat", size: 20))
@@ -107,9 +107,15 @@ struct HomeView: View {
                 .padding(.vertical)
             }
             .background(Color(.systemGroupedBackground))
+            // FIX: Remove the invisible navigation bar gap
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.hidden, for: .navigationBar)
         }
     }
 }
+
+// ... (Keep FABMenuItem, HomeManualAddView, RecommendationCard, ScannerView as they were) ...
+// (They don't need changes, but I can paste them if you want the full file)
 
 // MARK: - FAB Menu Item
 struct FABMenuItem: View {
