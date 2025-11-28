@@ -13,21 +13,23 @@ struct SettingsView: View {
             Section("Permissions") {
                 HStack {
                     Label {
-                        Text(app.permissions.cameraAuthorized ? "Camera Granted" : "Camera Missing")
+                        // FIX: Use new boolean properties
+                        Text(app.isCameraAuthorized ? "Camera Granted" : "Camera Missing")
                             .font(.custom("Montserrat", size: 16))
                     } icon: {
-                        Image(systemName: app.permissions.cameraAuthorized ? "checkmark.circle.fill" : "xmark.circle.fill")
-                            .foregroundStyle(app.permissions.cameraAuthorized ? .green : .red)
+                        Image(systemName: app.isCameraAuthorized ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .foregroundStyle(app.isCameraAuthorized ? .green : .red)
                     }
                 }
                 
                 HStack {
                     Label {
-                        Text(app.permissions.locationAuthorized ? "Location Granted" : "Location Missing")
+                        // FIX: Use new boolean properties
+                        Text(app.isLocationAuthorized ? "Location Granted" : "Location Missing")
                             .font(.custom("Montserrat", size: 16))
                     } icon: {
-                        Image(systemName: app.permissions.locationAuthorized ? "checkmark.circle.fill" : "xmark.circle.fill")
-                            .foregroundStyle(app.permissions.locationAuthorized ? .green : .red)
+                        Image(systemName: app.isLocationAuthorized ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .foregroundStyle(app.isLocationAuthorized ? .green : .red)
                     }
                 }
             }
@@ -48,6 +50,10 @@ struct SettingsView: View {
             
             Section("Debug") {
                 Button("Reset Onboarding") {
+                    // This clears the persistent store so you can test onboarding again
+                    if !app.userEmail.isEmpty {
+                        UserDefaults.standard.removeObject(forKey: "onboarded_\(app.userEmail.lowercased())")
+                    }
                     app.onboardingCompleted = false
                     app.acceptedTos = false
                     app.cards.removeAll()

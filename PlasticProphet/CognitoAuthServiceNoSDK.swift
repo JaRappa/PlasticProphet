@@ -141,6 +141,45 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
         print("✅ Confirmation code resent!")
     }
     
+    
+    // MARK: - Forgot Password Flow
+        
+        func forgotPassword(email: String) async throws {
+            print("🔵 Requesting password reset for \(email)")
+            
+            let headers = [
+                "X-Amz-Target": "AWSCognitoIdentityProviderService.ForgotPassword",
+                "Content-Type": "application/x-amz-json-1.1"
+            ]
+            
+            let body: [String: Any] = [
+                "ClientId": CognitoConfig.appClientId,
+                "Username": email
+            ]
+            
+            _ = try await makeRequest(endpoint: "\(cognitoURL)/", headers: headers, body: body)
+            print("✅ Reset code sent to \(email)")
+        }
+        
+        func confirmForgotPassword(email: String, code: String, newPassword: String) async throws {
+            print("🔵 Confirming new password for \(email)")
+            
+            let headers = [
+                "X-Amz-Target": "AWSCognitoIdentityProviderService.ConfirmForgotPassword",
+                "Content-Type": "application/x-amz-json-1.1"
+            ]
+            
+            let body: [String: Any] = [
+                "ClientId": CognitoConfig.appClientId,
+                "Username": email,
+                "ConfirmationCode": code,
+                "Password": newPassword
+            ]
+            
+            _ = try await makeRequest(endpoint: "\(cognitoURL)/", headers: headers, body: body)
+            print("✅ Password successfully changed!")
+        }
+    
     // MARK: - Sign In (OAuth 2.0 + PKCE via Hosted UI)
     
     func signIn() async throws {
@@ -197,6 +236,42 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
         }
     }
     
+    // MARK: - Native Sign In (Silent)
+        func signInNative(username: String, password: String) async throws {
+            print("🔵 Attempting Native Sign In for: \(username)")
+            
+            let headers = [
+                "X-Amz-Target": "AWSCognitoIdentityProviderService.InitiateAuth",
+                "Content-Type": "application/x-amz-json-1.1"
+            ]
+            
+            let body: [String: Any] = [
+                "AuthFlow": "USER_PASSWORD_AUTH",
+                "ClientId": CognitoConfig.appClientId,
+                "AuthParameters": [
+                    "USERNAME": username,
+                    "PASSWORD": password
+                ]
+            ]
+            
+            let response = try await makeRequest(endpoint: "\(cognitoURL)/", headers: headers, body: body)
+            
+            guard let authResult = response["AuthenticationResult"] as? [String: Any] else {
+                throw CognitoError.authenticationFailed("Invalid response from server")
+            }
+            
+            await MainActor.run {
+                self.accessToken = authResult["AccessToken"] as? String
+                self.idToken = authResult["IdToken"] as? String
+                self.refreshToken = authResult["RefreshToken"] as? String
+                self.currentUsername = username
+                self.isAuthenticated = true
+                self.saveTokensToKeychain()
+            }
+            
+            print("✅ Native Sign In Successful")
+        }
+    
     // MARK: - Handle Auth Callback
     
     private func handleAuthCallback(callbackURL: URL?, error: Error?) async throws {
@@ -226,62 +301,75 @@ class CognitoAuthService: NSObject, ObservableObject, ASWebAuthenticationPresent
     // MARK: - Exchange Code for Tokens (PKCE)
     
     private func exchangeCodeForTokens(code: String) async throws {
-        guard let verifier = codeVerifier else {
-            throw CognitoError.invalidURL
+            guard let verifier = codeVerifier else {
+                throw CognitoError.invalidURL
+            }
+            
+            let tokenURL = "\(hostedUIURL)/oauth2/token"
+            var request = URLRequest(url: URL(string: tokenURL)!)
+            request.httpMethod = "POST"
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            
+            // FIX: Helper to safely encode parameters (handles special chars like / + =)
+            func encode(_ string: String) -> String {
+                var allowed = CharacterSet.alphanumerics
+                allowed.insert(charactersIn: "-._~") // Standard allowed chars for URI
+                return string.addingPercentEncoding(withAllowedCharacters: allowed) ?? string
+            }
+            
+            // FIX: Encode all parts of the body
+            let clientID = CognitoConfig.appClientId
+            let redirectURI = "plasticprophet://auth-callback"
+            
+            let body = "grant_type=authorization_code&client_id=\(encode(clientID))&code=\(encode(code))&redirect_uri=\(encode(redirectURI))&code_verifier=\(encode(verifier))"
+            
+            request.httpBody = body.data(using: .utf8)
+            
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw CognitoError.invalidResponse
+            }
+            
+            print("📥 Token exchange response: \(httpResponse.statusCode)")
+            
+            let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+            
+            if httpResponse.statusCode >= 400 {
+                let errorMsg = json?["error"] as? String ?? "Token exchange failed"
+                print("❌ Token exchange error: \(errorMsg)")
+                // Print raw body for debugging if it fails again
+                if let str = String(data: data, encoding: .utf8) { print("Raw Error: \(str)") }
+                throw CognitoError.authenticationFailed(errorMsg)
+            }
+            
+            guard let json = json else {
+                throw CognitoError.invalidResponse
+            }
+            
+            // Extract user info from ID token
+            let username = try extractUsernameFromIDToken(json["id_token"] as? String ?? "")
+            
+            await MainActor.run {
+                self.accessToken = json["access_token"] as? String
+                self.idToken = json["id_token"] as? String
+                self.refreshToken = json["refresh_token"] as? String
+                self.currentUsername = username
+                self.isAuthenticated = true
+                self.codeVerifier = nil
+                self.codeChallenge = nil
+                self.saveTokensToKeychain()
+            }
+            
+            print("✅ Secure sign in successful!")
+            
+            // Fetch profile
+            do {
+                _ = try await getUserProfile()
+            } catch {
+                print("⚠️ Could not fetch profile from database: \(error.localizedDescription)")
+            }
         }
-        
-        let tokenURL = "\(hostedUIURL)/oauth2/token"
-        
-        var request = URLRequest(url: URL(string: tokenURL)!)
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        
-        let body = "grant_type=authorization_code&client_id=\(CognitoConfig.appClientId)&code=\(code)&redirect_uri=plasticprophet://auth-callback&code_verifier=\(verifier)"
-        request.httpBody = body.data(using: .utf8)
-        
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw CognitoError.invalidResponse
-        }
-        
-        print("📥 Token exchange response: \(httpResponse.statusCode)")
-        
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        
-        if httpResponse.statusCode >= 400 {
-            let errorMsg = json?["error"] as? String ?? "Token exchange failed"
-            print("❌ Token exchange error: \(errorMsg)")
-            throw CognitoError.authenticationFailed(errorMsg)
-        }
-        
-        guard let json = json else {
-            throw CognitoError.invalidResponse
-        }
-        
-        // Extract user info from ID token
-        let username = try extractUsernameFromIDToken(json["id_token"] as? String ?? "")
-        
-        await MainActor.run {
-            self.accessToken = json["access_token"] as? String
-            self.idToken = json["id_token"] as? String
-            self.refreshToken = json["refresh_token"] as? String
-            self.currentUsername = username
-            self.isAuthenticated = true
-            self.codeVerifier = nil
-            self.codeChallenge = nil
-            self.saveTokensToKeychain()
-        }
-        
-        print("✅ Secure sign in successful!")
-        
-        // Automatically fetch user profile from database
-        do {
-            _ = try await getUserProfile()
-        } catch {
-            print("⚠️ Could not fetch profile from database: \(error.localizedDescription)")
-        }
-    }
     
     // MARK: - Extract Username from ID Token
     

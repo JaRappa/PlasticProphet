@@ -3,6 +3,7 @@
 
 import Foundation
 import SwiftUI
+import Combine // Required for permission listeners
 
 @MainActor
 final class AppState: ObservableObject {
@@ -15,10 +16,29 @@ final class AppState: ObservableObject {
     // Cognito Auth Service
     @Published var authService = CognitoAuthService()
     
+    // API Service (Added for health checks)
+    let apiService = APIService()
+    
     // MARK: - Onboarding
     @Published var onboardingCompleted: Bool = false
     @Published var acceptedTos: Bool = false
-    @Published var permissions = PermissionsStatus()
+    
+    // [NEW] Real System Permission Manager
+    @Published var permissionManager = PermissionManager()
+    
+    // 2. ADDED: Storage for the permission listener
+    private var cancellables = Set<AnyCancellable>()
+         
+    // Helper to check Camera status
+    var isCameraAuthorized: Bool {
+        permissionManager.cameraStatus == .authorized
+    }
+         
+    // Helper to check Location status
+    var isLocationAuthorized: Bool {
+        permissionManager.locationStatus == .authorizedWhenInUse ||
+        permissionManager.locationStatus == .authorizedAlways
+    }
     
     // MARK: - App Data
     @Published var cards: [Card] = []
@@ -36,6 +56,14 @@ final class AppState: ObservableObject {
         print("🚀🚀🚀 APPSTATE INIT - CONSOLE TEST 🚀🚀🚀")
         CognitoConfig.printStatus()
         
+        // 3. ADDED: The Listener Logic
+        // This ensures the Onboarding View updates INSTANTLY when you click "Allow"
+        permissionManager.objectWillChange
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
+        
         // Load persisted onboarding status
         loadPersistedState()
         
@@ -49,12 +77,12 @@ final class AppState: ObservableObject {
         do {
             print("🔵 Starting sign up for: \(email)")
             try await authService.signUp(email: email, password: password, firstName: firstName, lastName: lastName)
-                    print("✅ Sign up successful - check email for verification code")
-                } catch {
-                    print("❌ Sign up failed: \(error)")
-                    print("❌ Error details: \(error.localizedDescription)")
-                }
-            }
+            print("✅ Sign up successful - check email for verification code")
+        } catch {
+            print("❌ Sign up failed: \(error)")
+            print("❌ Error details: \(error.localizedDescription)")
+        }
+    }
     
     func confirmSignUp(email: String, code: String) async {
         do {
@@ -76,14 +104,17 @@ final class AppState: ObservableObject {
             try await authService.signIn()
             print("✅ Sign in successful!")
             
-            // Extract user info from ID token (no API call needed)
+            // Extract user info
             let attributes = try await authService.extractUserInfoFromIDToken()
             
             await MainActor.run {
                 self.isAuthenticated = true
                 self.userEmail = attributes["email"] ?? self.authService.currentUsername ?? ""
-                self.userFirstName = attributes["given_name"] ?? "User"
+                self.userFirstName = attributes["given_name"] ?? ""
                 self.userLastName = attributes["family_name"] ?? ""
+                
+                print("👤 User identified as: \(self.userEmail)")
+                self.checkPreviousOnboarding()
             }
         } catch {
             print("❌ Sign in failed: \(error)")
@@ -108,6 +139,7 @@ final class AppState: ObservableObject {
                         if let email = attributes["email"] {
                             self.userEmail = email
                         }
+                        self.checkPreviousOnboarding()
                     }
                     print("✅ Restored user session for: \(self.userEmail)")
                 } catch {
@@ -130,7 +162,7 @@ final class AppState: ObservableObject {
             self.userFirstName = ""
             self.userLastName = ""
             self.userEmail = ""
-            self.permissions = PermissionsStatus()
+            // self.permissions = PermissionsStatus() // No longer needed with PermissionManager
             
             // Clear persisted state
             clearPersistedState()
@@ -165,25 +197,51 @@ final class AppState: ObservableObject {
     // MARK: - Permissions
 
     func markPermissions(camera: Bool? = nil, location: Bool? = nil) {
-        if let camera { permissions.cameraAuthorized = camera }
-        if let location { permissions.locationAuthorized = location }
+        // No-op: handled by PermissionManager now, kept for backward compatibility if needed
     }
 
     // MARK: - Onboarding
 
     func proceedIfReady() {
-        if acceptedTos && permissions.allGranted && !cards.isEmpty {
-            onboardingCompleted = true
+        // 4. UPDATED: Ensure we use the real system checks
+        if acceptedTos && !cards.isEmpty && isCameraAuthorized && isLocationAuthorized {
+            self.onboardingCompleted = true
             savePersistedState()
         }
     }
     
     // MARK: - Persistence
     
-    private func savePersistedState() {
+    func savePersistedState() {
         UserDefaults.standard.set(onboardingCompleted, forKey: "onboarding_completed")
         UserDefaults.standard.set(acceptedTos, forKey: "accepted_tos")
         print("💾 Saved onboarding state: completed=\(onboardingCompleted)")
+        if !userEmail.isEmpty {
+            // FIX: Use lowercased() so Case Sensitivity doesn't break it
+            let key = "onboarded_\(userEmail.lowercased())"
+            UserDefaults.standard.set(true, forKey: key)
+            print("💾 Saved onboarding state for \(key)")
+        }
+    }
+    
+    func checkPreviousOnboarding() {
+        print("🔍 checkingPreviousOnboarding invoked...")
+        
+        guard !userEmail.isEmpty else {
+            print("⚠️ Cannot check onboarding: userEmail is empty in AppState")
+            return
+        }
+        
+        let key = "onboarded_\(userEmail.lowercased())"
+        let hasFinished = UserDefaults.standard.bool(forKey: key)
+        
+        print("🔍 Checking UserDefaults for key: [\(key)]")
+        print("🔍 Result: \(hasFinished)")
+        
+        if hasFinished {
+            self.onboardingCompleted = true
+            print("✅ Restored onboarding status: Completed")
+        }
     }
     
     private func loadPersistedState() {

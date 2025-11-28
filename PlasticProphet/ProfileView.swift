@@ -336,11 +336,12 @@ struct AboutAppView: View {
                 Image("App Logo Black")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 120, height: 120)
+                    .frame(width: 220, height: 220)
                 
                 Text("PlasticProphet")
                     .font(.custom("Montserrat", size: 28))
                     .fontWeight(.bold)
+                    .tracking(-1.5)
                 
                 Text("Version 1.0.0")
                     .font(.custom("Montserrat", size: 16))

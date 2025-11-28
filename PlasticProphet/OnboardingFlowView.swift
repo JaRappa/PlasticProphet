@@ -20,7 +20,8 @@ struct OnboardingFlowView: View {
             case .intro:
                 // Enhanced intro splash
                 ZStack {
-                    Color.adaptiveBackground
+                    Color.adaptiveBackground.ignoresSafeArea()
+                    
                     VStack(spacing: 40) {
                         VStack(spacing: 12) {
                             Text("Welcome to")
@@ -91,37 +92,7 @@ struct OnboardingFlowView: View {
                                 .foregroundColor(.adaptiveText)
                                 .padding(.top, 8)
                             
-                            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.")
-                                .font(.custom("Montserrat", size: 14))
-                                .foregroundColor(.secondary)
-                            
-                            Text("2. User Responsibilities")
-                                .font(.custom("Montserrat", size: 16))
-                                .fontWeight(.semibold)
-                                .foregroundColor(.adaptiveText)
-                                .padding(.top, 8)
-                            
-                            Text("Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.")
-                                .font(.custom("Montserrat", size: 14))
-                                .foregroundColor(.secondary)
-                            
-                            Text("3. Privacy Policy")
-                                .font(.custom("Montserrat", size: 16))
-                                .fontWeight(.semibold)
-                                .foregroundColor(.adaptiveText)
-                                .padding(.top, 8)
-                            
-                            Text("Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.")
-                                .font(.custom("Montserrat", size: 14))
-                                .foregroundColor(.secondary)
-                            
-                            Text("4. Limitation of Liability")
-                                .font(.custom("Montserrat", size: 16))
-                                .fontWeight(.semibold)
-                                .foregroundColor(.adaptiveText)
-                                .padding(.top, 8)
-                            
-                            Text("At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.")
+                            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
                                 .font(.custom("Montserrat", size: 14))
                                 .foregroundColor(.secondary)
                         }
@@ -178,55 +149,71 @@ struct OnboardingFlowView: View {
                     .padding(.top, 20)
                     
                     VStack(spacing: 20) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Image(systemName: "camera.fill")
-                                    .foregroundColor(Color(hex: "2ac33c"))
-                                    .font(.title2)
-                                Text("Camera Access")
-                                    .font(.custom("Montserrat", size: 18))
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.adaptiveText)
-                                Spacer()
+                        // CAMERA PERMISSION (UPDATED)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Image(systemName: "camera.fill")
+                                        .foregroundColor(Color(hex: "2ac33c"))
+                                        .font(.title2)
+                                    Text("Camera Access")
+                                        .font(.custom("Montserrat", size: 18))
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.adaptiveText)
+                                }
+                                Text("Scan your credit cards instantly.")
+                                    .font(.custom("Montserrat", size: 14))
+                                    .foregroundColor(.secondary)
                             }
-                            Text("Scan your credit cards quickly for instant card entry and recognition.")
-                                .font(.custom("Montserrat", size: 14))
-                                .foregroundColor(.secondary)
+                            Spacer()
                             
-                            Toggle("Camera Authorized", isOn: Binding(
-                                get: { app.permissions.cameraAuthorized },
-                                set: { app.markPermissions(camera: $0) }
-                            ))
-                            .font(.custom("Montserrat", size: 18))
-                            .fontWeight(.medium)
-                            .tint(Color(hex: "2ac33c"))
+                            // Real Permission Button
+                            if app.isCameraAuthorized {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.title)
+                                    .foregroundColor(Color(hex: "2ac33c"))
+                            } else {
+                                Button("Allow") {
+                                    Task { await app.permissionManager.requestCameraPermission() }
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .tint(Color(hex: "2ac33c"))
+                            }
                         }
                         .padding()
                         .background(Color.gray.opacity(0.05))
                         .cornerRadius(12)
                         
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Image(systemName: "location.fill")
-                                    .foregroundColor(Color(hex: "2ac33c"))
-                                    .font(.title2)
-                                Text("Location Access")
-                                    .font(.custom("Montserrat", size: 18))
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.adaptiveText)
-                                Spacer()
+                        // LOCATION PERMISSION (UPDATED)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Image(systemName: "location.fill")
+                                        .foregroundColor(Color(hex: "2ac33c"))
+                                        .font(.title2)
+                                    Text("Location Access")
+                                        .font(.custom("Montserrat", size: 18))
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.adaptiveText)
+                                }
+                                Text("Find best cards for nearby stores.")
+                                    .font(.custom("Montserrat", size: 14))
+                                    .foregroundColor(.secondary)
                             }
-                            Text("Receive personalized recommendations based on nearby merchants and locations.")
-                                .font(.custom("Montserrat", size: 14))
-                                .foregroundColor(.secondary)
+                            Spacer()
                             
-                            Toggle("Location Authorized", isOn: Binding(
-                                get: { app.permissions.locationAuthorized },
-                                set: { app.markPermissions(location: $0) }
-                            ))
-                            .font(.custom("Montserrat", size: 18))
-                            .fontWeight(.medium)
-                            .tint(Color(hex: "2ac33c"))
+                            // Real Permission Button
+                            if app.isLocationAuthorized {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.title)
+                                    .foregroundColor(Color(hex: "2ac33c"))
+                            } else {
+                                Button("Allow") {
+                                    app.permissionManager.requestLocationPermission()
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .tint(Color(hex: "2ac33c"))
+                            }
                         }
                         .padding()
                         .background(Color.gray.opacity(0.05))
@@ -246,11 +233,12 @@ struct OnboardingFlowView: View {
                             .padding(16)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .fill(app.permissions.allGranted ? Color(hex: "2ac33c") : Color.ppGreen.opacity(0.4))
+                                    .fill(app.isCameraAuthorized && app.isLocationAuthorized ? Color(hex: "2ac33c") : Color.ppGreen.opacity(0.4))
                             )
                             .shadow(color: Color(hex: "0a3a0e").opacity(0.3), radius: 4, x: 0, y: 2)
                     }
-                    .disabled(!app.permissions.allGranted)
+                    // Optional: Remove disabled if you want to let them skip
+                    .disabled(!app.isCameraAuthorized || !app.isLocationAuthorized)
                     .padding(.horizontal)
                     .padding(.bottom, 20)
                 }
@@ -273,7 +261,7 @@ struct OnboardingFlowView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.horizontal)
 
-                    // Card selection component with search + camera button + popular tiles
+                    // Card selection component
                     CardSelectionView(showHeader: false, showDoneButton: false)
                         .environmentObject(app)
 
@@ -294,8 +282,7 @@ struct OnboardingFlowView: View {
 
                     HStack(spacing: 12) {
                         Button(action: {
-                            // FIX: Call the persistent save function
-                            app.completeOnboarding()
+                            app.savePersistedState()
                             step = .done
                         }) {
                             Text("Skip for now")
@@ -314,7 +301,7 @@ struct OnboardingFlowView: View {
                         }
 
                         Button(action: {
-                            app.proceedIfReady() // This now calls completeOnboarding() internally
+                            app.proceedIfReady()
                             step = .done
                         }) {
                             Text("Finish")
@@ -349,16 +336,15 @@ struct OnboardingFlowView: View {
                                 TextField("Rewards summary", text: $manualRewards)
                                     .font(.custom("Montserrat", size: 16))
                             }
-
                             Section {
                                 Button("Add Card") {
                                     let digits = manualCardNumber.filter { $0.isNumber }
-                                    guard digits.count >= 4 else { return }
-                                    let last4 = String(digits.suffix(4))
-                                    let name = manualNetwork.isEmpty ? "Manual Card ••••\(last4)" : "\(manualNetwork) ••••\(last4)"
-                                    let card = Card(name: name, network: manualNetwork.isEmpty ? "Unknown" : manualNetwork, last4: last4, rewardSummary: manualRewards)
-                                    app.cards.append(card)
-
+                                    if digits.count >= 4 {
+                                        let last4 = String(digits.suffix(4))
+                                        let name = manualNetwork.isEmpty ? "Manual Card ••••\(last4)" : "\(manualNetwork) ••••\(last4)"
+                                        let card = Card(name: name, network: manualNetwork.isEmpty ? "Unknown" : manualNetwork, last4: last4, rewardSummary: manualRewards)
+                                        app.cards.append(card)
+                                    }
                                     manualCardNumber = ""
                                     manualNetwork = ""
                                     manualRewards = ""
@@ -366,12 +352,10 @@ struct OnboardingFlowView: View {
                                 }
                                 .font(.custom("Montserrat", size: 16))
                                 .disabled(manualCardNumber.filter { $0.isNumber }.count < 4)
-
-                                Button("Cancel") {
-                                    showManualEntry = false
-                                }
-                                .font(.custom("Montserrat", size: 16))
-                                .tint(.red)
+                                
+                                Button("Cancel") { showManualEntry = false }
+                                    .font(.custom("Montserrat", size: 16))
+                                    .tint(.red)
                             }
                         }
                         .navigationTitle("Add Card Manually")
@@ -384,10 +368,7 @@ struct OnboardingFlowView: View {
                     Spacer()
                     
                     VStack(spacing: 24) {
-                        Image("App Logo Black")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 300, height: 300)
+                        AdaptiveLogo(width: 300, height: 300)
                         
                         HStack(spacing: 8) {
                             Text("All Set!")
@@ -405,8 +386,8 @@ struct OnboardingFlowView: View {
                             .foregroundColor(.secondary)
                         
                         Button(action: {
-                            // FIX: Call the persistent save function
-                            app.completeOnboarding()
+                            app.onboardingCompleted = true
+                            app.savePersistedState()
                             app.selectedTab = 0
                         }) {
                             Text("Enter App")

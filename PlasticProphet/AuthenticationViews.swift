@@ -70,8 +70,13 @@ struct AuthLandingView: View {
 struct SignInView: View {
     @EnvironmentObject var app: AppState
     @Environment(\.dismiss) private var dismiss
+    @State private var email = ""
+    @State private var password = ""
+    // 👇 NEW STATE for toggling visibility
+    @State private var showPassword = false
     @State private var isLoading = false
     @State private var errorMessage = ""
+    @FocusState private var focusedField: SignInField?
     
     enum SignInField {
         case email, password
@@ -109,34 +114,57 @@ struct SignInView: View {
                 .padding(.horizontal, 32)
                 .padding(.top, 20)
                 
-               /* // Debug info
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Debug Info:")
-                        .font(.custom("Montserrat", size: 14))
-                        .fontWeight(.bold)
+                // Form Fields
+                VStack(spacing: 16) {
+                    // Email Input
+                    TextField("Email Address", text: $email)
+                        .font(.custom("Montserrat", size: 16))
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(12)
+                        .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                        .focused($focusedField, equals: .email)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(focusedField == .email ? Color.ppGreen : Color.clear, lineWidth: 2)
+                        )
                     
-                    Text("Domain: us-east-1v2s48yy0h")
-                        .font(.custom("Montserrat", size: 12))
-                        .foregroundColor(.gray)
-                    
-                    Text("Client ID: 4odq1p8fovp5vtmjobhdqke2rl")
-                        .font(.custom("Montserrat", size: 12))
-                        .foregroundColor(.gray)
-                    
-                    Text("Callback: plasticprophet://auth-callback")
-                        .font(.custom("Montserrat", size: 12))
-                        .foregroundColor(.gray)
+                    // 👇 NEW Password Input with Toggle
+                    HStack {
+                        if showPassword {
+                            TextField("Password", text: $password)
+                                .font(.custom("Montserrat", size: 16))
+                                .focused($focusedField, equals: .password)
+                        } else {
+                            SecureField("Password", text: $password)
+                                .font(.custom("Montserrat", size: 16))
+                                .focused($focusedField, equals: .password)
+                        }
+                        
+                        Button(action: { showPassword.toggle() }) {
+                            Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                                .foregroundColor(.gray)
+                                .padding(8) // Increases tap area
+                        }
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
+                    )
                 }
-                .padding(16)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(8)
                 .padding(.horizontal, 32)
-                */
+                .padding(.top, 10)
+                
                 // Error message
                 if !errorMessage.isEmpty {
                     Text(errorMessage)
                         .font(.custom("Montserrat", size: 12))
                         .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
                         .padding(12)
                         .background(Color.red.opacity(0.1))
@@ -145,14 +173,15 @@ struct SignInView: View {
                 
                 Spacer()
                 
-                // Sign In Button (opens Cognito Hosted UI)
-                Button(action: signIn) {
+                // Native Sign In Button
+                Button(action: performNativeSignIn) {
                     HStack {
                         if isLoading {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .padding(.trailing, 8)
                         }
-                        Text("Continue to Sign In")
+                        Text("Sign In")
                             .font(.custom("Montserrat", size: 20))
                             .fontWeight(.black)
                     }
@@ -161,41 +190,21 @@ struct SignInView: View {
                     .padding(16)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.ppGreen)
+                            .fill(email.isEmpty || password.isEmpty ? Color.gray : Color.ppGreen)
                     )
                     .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
                 }
-                .disabled(isLoading)
-                .opacity(isLoading ? 0.7 : 1.0)
+                .disabled(email.isEmpty || password.isEmpty || isLoading)
                 .padding(.horizontal, 32)
-                .padding(.bottom, 20)
-                /*
-                // Test Callback URL Button
-                Button(action: testCallbackURL) {
-                    Text("Test Callback URL")
+                
+                // Forgot Password Link
+                NavigationLink(destination: ForgotPasswordView()) {
+                    Text("Forgot Password?")
                         .font(.custom("Montserrat", size: 14))
-                        .foregroundColor(.blue)
-                        .padding(.horizontal, 32)
-                } */
-                /* // [DEBUG] Connectivity Test Button - Uncomment if network issues arise
-                Button(action: runHealthCheck) {
-                                    HStack {
-                                        Image(systemName: "antenna.radiowaves.left.and.right")
-                                        Text("Test Backend Connection")
-                                    }
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                    .padding(8)
-                                    .background(Color.gray.opacity(0.1))
-                                    .cornerRadius(8)
-                                }
-                                .padding(.bottom, 20)
-                             */
-
-                                /*
-                                // Test Callback URL Button (You can delete this old commented out code if you want)
-                                Button(action: testCallbackURL) { ... }
-                                */
+                        .fontWeight(.semibold)
+                        .foregroundColor(Color.ppGreen)
+                }
+                .padding(.bottom, 20)
                 .padding(.bottom, 40)
             }
         }
@@ -211,37 +220,60 @@ struct SignInView: View {
         }
     }
     
-    private func signIn() {
+    // MARK: - Helper Functions
+    
+    private func performNativeSignIn() {
         errorMessage = ""
         isLoading = true
         
         Task {
-            await app.signIn()
-            
-            await MainActor.run {
-                isLoading = false
-                if app.isAuthenticated {
-                    print("✅ Successfully authenticated")
-                } else {
-                    errorMessage = "Sign in failed. Please try again."
+            do {
+                try await app.authService.signInNative(username: email, password: password)
+                let attributes = try await app.authService.extractUserInfoFromIDToken()
+                
+                await MainActor.run {
+                    app.isAuthenticated = true
+                    app.userEmail = attributes["email"] ?? email
+                    app.userFirstName = attributes["given_name"] ?? ""
+                    app.userLastName = attributes["family_name"] ?? ""
+                    
+                    app.checkPreviousOnboarding()
+                    isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    isLoading = false
+                    print("❌ Error: \(error.localizedDescription)")
+                    
+                    if error.localizedDescription.contains("NotAuthorizedException") {
+                        errorMessage = "Incorrect email or password."
+                    } else if error.localizedDescription.contains("UserNotFoundException") {
+                        errorMessage = "User does not exist."
+                    } else if error.localizedDescription.contains("UserNotConfirmedException") {
+                        errorMessage = "Email not verified."
+                    } else {
+                        errorMessage = "Sign in failed. Please try again."
+                    }
                 }
             }
         }
     }
+    
+    // Kept your debug functions below
     private func runHealthCheck() {
-            Task {
-                do {
-                    print("🚀 Starting Health Check...")
-                    // This creates a temporary instance of APIService just for this test
-                    let status = try await APIService().checkHealth()
-                    print("✅ SUCCESS: Backend says: '\(status)'")
-                    errorMessage = "✅ Connected: \(status)" // Optional: Show on screen
-                } catch {
-                    print("❌ FAILED: Could not reach backend. \(error.localizedDescription)")
-                    errorMessage = "❌ Connection Failed" // Optional: Show on screen
-                }
+        Task {
+            do {
+                print("🚀 Starting Health Check...")
+                // This creates a temporary instance of APIService just for this test
+                let status = try await APIService().checkHealth()
+                print("✅ SUCCESS: Backend says: '\(status)'")
+                errorMessage = "✅ Connected: \(status)" // Optional: Show on screen
+            } catch {
+                print("❌ FAILED: Could not reach backend. \(error.localizedDescription)")
+                errorMessage = "❌ Connection Failed" // Optional: Show on screen
             }
         }
+    }
     
     private func testCallbackURL() {
         // Test if the callback URL scheme is properly registered
@@ -469,7 +501,7 @@ struct SignUpView: View {
                 }
             }
             .sheet(isPresented: $showVerification) {
-                CognitoVerificationView(email: signUpEmail)
+                CognitoVerificationView(email: signUpEmail, password: password)
                     .environmentObject(app)
             }
             .navigationDestination(isPresented: $navigateToSignIn) {
@@ -504,89 +536,109 @@ struct SignUpView: View {
     }
 }
         
-        struct ForgotPasswordView: View {
-            @EnvironmentObject var app: AppState
-            @Environment(\.dismiss) private var dismiss
-            @State private var email: String = ""
-            @State private var showVerification = false
-            @FocusState private var emailFocused: Bool
+// MARK: - Forgot Password View
+struct ForgotPasswordView: View {
+    @EnvironmentObject var app: AppState
+    @Environment(\.dismiss) private var dismiss
+    @State private var email: String = ""
+    @State private var showVerification = false
+    @FocusState private var emailFocused: Bool
+    
+    // --- 1. THE BODY (UI) ---
+    var body: some View {
+        ZStack {
+            Color.adaptiveBackground.ignoresSafeArea()
             
-            var body: some View {
-                ZStack {
-                    Color.adaptiveBackground.ignoresSafeArea()
+            VStack(alignment: .leading, spacing: 24) {
+                // Card icon
+                Image(systemName: "creditcard.fill")
+                    .font(.system(size: 50))
+                    .foregroundColor(Color.ppGreen)
+                    .rotationEffect(.degrees(15))
+                    .padding(.top, 20)
+                
+                Text("Forgot Password")
+                    .font(.custom("Montserrat", size: 32))
+                    .fontWeight(.bold)
+                    .foregroundColor(.adaptiveText)
+                
+                // Email
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Email Address")
+                        .font(.custom("Montserrat", size: 14))
+                        .fontWeight(.medium)
+                        .foregroundColor(.adaptiveText)
                     
-                    VStack(alignment: .leading, spacing: 24) {
-                        // Card icon
-                        Image(systemName: "creditcard.fill")
-                            .font(.system(size: 50))
-                            .foregroundColor(Color.ppGreen)
-                            .rotationEffect(.degrees(15))
-                            .padding(.top, 20)
-                        
-                        Text("Forgot Password")
-                            .font(.custom("Montserrat", size: 32))
-                            .fontWeight(.bold)
-                            .foregroundColor(.adaptiveText)
-                        
-                        // Email
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Email Address")
-                                .font(.custom("Montserrat", size: 14))
-                                .fontWeight(.medium)
-                                .foregroundColor(.adaptiveText)
-                            
-                            TextField("Email Address", text: $email)
-                                .font(.custom("Montserrat", size: 16))
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(emailFocused ? Color.ppGreen : Color.clear, lineWidth: 2)
-                                )
-                                .keyboardType(.emailAddress)
-                                .textInputAutocapitalization(.never)
-                                .focused($emailFocused)
-                        }
-                        .padding(.top, 20)
-                        
-                        Spacer()
-                        
-                        // Enter Button
-                        Button(action: { showVerification = true }) {
-                            Text("Enter")
-                                .font(.custom("Montserrat", size: 20))
-                                .fontWeight(.black)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(16)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color.ppGreen)
-                                )
-                                .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
-                        }
-                        .disabled(email.isEmpty)
-                        .opacity(email.isEmpty ? 0.5 : 1.0)
-                        .padding(.bottom, 40)
-                    }
-                    .padding(.horizontal, 32)
+                    TextField("Email Address", text: $email)
+                        .font(.custom("Montserrat", size: 16))
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(emailFocused ? Color.ppGreen : Color.clear, lineWidth: 2)
+                        )
+                        .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                        .focused($emailFocused)
                 }
-                .navigationBarBackButtonHidden(true)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "arrow.left")
-                                .foregroundColor(.adaptiveText)
-                                .font(.system(size: 20))
-                        }
-                    }
+                .padding(.top, 20)
+                
+                Spacer()
+                
+                // Enter Button
+                Button(action: { requestReset() }) { // <--- 2. Call the function here
+                    Text("Enter")
+                        .font(.custom("Montserrat", size: 20))
+                        .fontWeight(.black)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.ppGreen)
+                        )
+                        .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
                 }
-                .navigationDestination(isPresented: $showVerification) {
-                    VerificationCodeView(email: email)
+                .disabled(email.isEmpty)
+                .opacity(email.isEmpty ? 0.5 : 1.0)
+                .padding(.bottom, 40)
+            }
+            .padding(.horizontal, 32)
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "arrow.left")
+                        .foregroundColor(.adaptiveText)
+                        .font(.system(size: 20))
                 }
             }
         }
+        .navigationDestination(isPresented: $showVerification) {
+            VerificationCodeView(email: email)
+        }
+    } // <--- END OF BODY
+    
+    // --- 3. THE FUNCTION (Outside Body, Inside Struct) ---
+    private func requestReset() {
+        Task {
+            do {
+                // Call the new service function
+                try await app.authService.forgotPassword(email: email)
+                
+                await MainActor.run {
+                    // Navigate to the verification code screen
+                    showVerification = true
+                }
+            } catch {
+                print("❌ Failed to request reset: \(error.localizedDescription)")
+                // Optional: set an errorMessage state variable here to show the user
+            }
+        }
+    }
+}
         
         // MARK: - Verification Code View
         struct VerificationCodeView: View {
@@ -693,7 +745,8 @@ struct SignUpView: View {
                     }
                 }
                 .navigationDestination(isPresented: $showResetPassword) {
-                    ResetPasswordView()
+                    // We pass the email AND the code (joined from the array) to the final screen
+                    ResetPasswordView(email: email, code: code.joined())
                 }
                 .onAppear {
                     focusedField = 0
@@ -705,175 +758,208 @@ struct SignUpView: View {
             }
         }
         
-        // MARK: - Reset Password View
-        struct ResetPasswordView: View {
-            @Environment(\.dismiss) private var dismiss
-            @EnvironmentObject var app: AppState
-            @State private var password: String = ""
-            @State private var confirmPassword: String = ""
-            @State private var showPassword: Bool = false
-            @State private var showConfirmPassword: Bool = false
-            @State private var showSuccess = false
-            @FocusState private var focusedField: ResetField?
+// MARK: - Reset Password View
+struct ResetPasswordView: View {
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var app: AppState
+    
+    // 👇 Added these properties to receive data from the previous screen
+    let email: String
+    let code: String
+    
+    @State private var password: String = ""
+    @State private var confirmPassword: String = ""
+    @State private var showPassword: Bool = false
+    @State private var showConfirmPassword: Bool = false
+    @State private var showSuccess = false
+    @State private var errorMessage = "" // Added for error handling
+    @FocusState private var focusedField: ResetField?
+    
+    enum ResetField {
+        case password, confirmPassword
+    }
+    
+    private var isValidPassword: Bool {
+        password.count >= 8 &&
+        password.range(of: "[A-Z]", options: .regularExpression) != nil &&
+        password.range(of: "[a-z]", options: .regularExpression) != nil &&
+        password.range(of: "[^A-Za-z0-9]", options: .regularExpression) != nil
+    }
+    
+    private var canReset: Bool {
+        isValidPassword && password == confirmPassword
+    }
+    
+    var body: some View {
+        ZStack {
+            Color.adaptiveBackground.ignoresSafeArea()
             
-            enum ResetField {
-                case password, confirmPassword
-            }
-            
-            private var isValidPassword: Bool {
-                password.count >= 8 &&
-                password.range(of: "[A-Z]", options: .regularExpression) != nil &&
-                password.range(of: "[a-z]", options: .regularExpression) != nil &&
-                password.range(of: "[^A-Za-z0-9]", options: .regularExpression) != nil
-            }
-            
-            private var canReset: Bool {
-                isValidPassword && password == confirmPassword
-            }
-            
-            var body: some View {
-                ZStack {
-                    Color.adaptiveBackground.ignoresSafeArea()
+            VStack(alignment: .leading, spacing: 24) {
+                // Card icon
+                Image(systemName: "creditcard.fill")
+                    .font(.system(size: 50))
+                    .foregroundColor(Color.ppGreen)
+                    .rotationEffect(.degrees(15))
+                    .padding(.top, 20)
+                
+                // Password requirements (Keeping your existing UI layout)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Password")
+                        .font(.custom("Montserrat", size: 14))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.adaptiveText)
                     
-                    VStack(alignment: .leading, spacing: 24) {
-                        // Card icon
-                        Image(systemName: "creditcard.fill")
-                            .font(.system(size: 50))
-                            .foregroundColor(Color.ppGreen)
-                            .rotationEffect(.degrees(15))
-                            .padding(.top, 20)
-                        
-                        // Password requirements
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Password")
-                                .font(.custom("Montserrat", size: 14))
-                                .fontWeight(.semibold)
-                                .foregroundColor(.adaptiveText)
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("Your password must include at least:")
-                                    .font(.custom("Montserrat", size: 11))
-                                    .foregroundColor(.secondary)
-                                Text("• 8 characters")
-                                    .font(.custom("Montserrat", size: 11))
-                                    .foregroundColor(.secondary)
-                                Text("• One uppercase and one lowercase characters")
-                                    .font(.custom("Montserrat", size: 11))
-                                    .foregroundColor(.secondary)
-                                Text("• One special character")
-                                    .font(.custom("Montserrat", size: 11))
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        .padding(.top, 20)
-                        
-                        // Password
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                if showPassword {
-                                    TextField("Password", text: $password)
-                                        .font(.custom("Montserrat", size: 16))
-                                        .focused($focusedField, equals: .password)
-                                } else {
-                                    SecureField("Password", text: $password)
-                                        .font(.custom("Montserrat", size: 16))
-                                        .focused($focusedField, equals: .password)
-                                }
-                                
-                                Button(action: { showPassword.toggle() }) {
-                                    Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.trailing, 8)
-                            }
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
-                            )
-                        }
-                        
-                        // Confirm Password
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Confirm Password")
-                                .font(.custom("Montserrat", size: 14))
-                                .fontWeight(.medium)
-                                .foregroundColor(.adaptiveText)
-                            
-                            HStack {
-                                if showConfirmPassword {
-                                    TextField("Confirm Password", text: $confirmPassword)
-                                        .font(.custom("Montserrat", size: 16))
-                                        .focused($focusedField, equals: .confirmPassword)
-                                } else {
-                                    SecureField("Confirm Password", text: $confirmPassword)
-                                        .font(.custom("Montserrat", size: 16))
-                                        .focused($focusedField, equals: .confirmPassword)
-                                }
-                                
-                                Button(action: { showConfirmPassword.toggle() }) {
-                                    Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.trailing, 8)
-                            }
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(focusedField == .confirmPassword ? Color.ppGreen : Color.clear, lineWidth: 2)
-                            )
-                        }
-                        
-                        Spacer()
-                        
-                        // Enter Button
-                        Button(action: resetPassword) {
-                            Text("Enter")
-                                .font(.custom("Montserrat", size: 20))
-                                .fontWeight(.black)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(16)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(canReset ? Color.ppGreen : Color.gray)
-                                )
-                                .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
-                        }
-                        .disabled(!canReset)
-                        .padding(.bottom, 40)
-                    }
-                    .padding(.horizontal, 32)
-                }
-                .navigationBarBackButtonHidden(true)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "arrow.left")
-                                .foregroundColor(.adaptiveText)
-                                .font(.system(size: 20))
-                        }
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Your password must include at least:")
+                            .font(.custom("Montserrat", size: 11))
+                            .foregroundColor(.secondary)
+                        Text("• 8 characters")
+                            .font(.custom("Montserrat", size: 11))
+                            .foregroundColor(.secondary)
+                        Text("• One uppercase and one lowercase characters")
+                            .font(.custom("Montserrat", size: 11))
+                            .foregroundColor(.secondary)
+                        Text("• One special character")
+                            .font(.custom("Montserrat", size: 11))
+                            .foregroundColor(.secondary)
                     }
                 }
-                .alert("Password Reset", isPresented: $showSuccess) {
-                    Button("OK") {
-                        // Pop back to sign in
-                        dismiss()
+                .padding(.top, 20)
+                
+                // Password Input
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        if showPassword {
+                            TextField("Password", text: $password)
+                                .font(.custom("Montserrat", size: 16))
+                                .focused($focusedField, equals: .password)
+                        } else {
+                            SecureField("Password", text: $password)
+                                .font(.custom("Montserrat", size: 16))
+                                .focused($focusedField, equals: .password)
+                        }
+                        
+                        Button(action: { showPassword.toggle() }) {
+                            Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.trailing, 8)
                     }
-                } message: {
-                    Text("Your password has been successfully reset. Please sign in with your new password.")
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
+                    )
                 }
+                
+                // Confirm Password Input
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Confirm Password")
+                        .font(.custom("Montserrat", size: 14))
+                        .fontWeight(.medium)
+                        .foregroundColor(.adaptiveText)
+                    
+                    HStack {
+                        if showConfirmPassword {
+                            TextField("Confirm Password", text: $confirmPassword)
+                                .font(.custom("Montserrat", size: 16))
+                                .focused($focusedField, equals: .confirmPassword)
+                        } else {
+                            SecureField("Confirm Password", text: $confirmPassword)
+                                .font(.custom("Montserrat", size: 16))
+                                .focused($focusedField, equals: .confirmPassword)
+                        }
+                        
+                        Button(action: { showConfirmPassword.toggle() }) {
+                            Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.trailing, 8)
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(focusedField == .confirmPassword ? Color.ppGreen : Color.clear, lineWidth: 2)
+                    )
+                }
+                
+                // Error Message Display
+                if !errorMessage.isEmpty {
+                    Text(errorMessage)
+                        .font(.custom("Montserrat", size: 12))
+                        .foregroundColor(.red)
+                }
+                
+                Spacer()
+                
+                // Submit Button
+                Button(action: { submitNewPassword() }) {
+                    Text("Enter")
+                        .font(.custom("Montserrat", size: 20))
+                        .fontWeight(.black)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(canReset ? Color.ppGreen : Color.gray)
+                        )
+                        .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
+                }
+                .disabled(!canReset)
+                .padding(.bottom, 40)
             }
-            
-            private func resetPassword() {
-                // TODO: Add real password reset
-                showSuccess = true
+            .padding(.horizontal, 32)
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "arrow.left")
+                        .foregroundColor(.adaptiveText)
+                        .font(.system(size: 20))
+                }
             }
         }
+        .alert("Password Reset", isPresented: $showSuccess) {
+            Button("OK") {
+                // Return to Sign In screen
+                // We dismiss all the way back (simplest way is typically handled by root view,
+                // but dismiss() here pops this view off the stack)
+                dismiss() // Pop Reset View
+                // You might need a way to pop multiple views or reset the navigation stack
+                // For now, let's just pop this one.
+            }
+        } message: {
+            Text("Your password has been successfully reset. Please sign in with your new password.")
+        }
+    }
+    
+    // 👇 THE BACKEND CONNECTION
+    private func submitNewPassword() {
+        Task {
+            do {
+                try await app.authService.confirmForgotPassword(
+                    email: email,
+                    code: code,
+                    newPassword: password
+                )
+                
+                await MainActor.run {
+                    showSuccess = true
+                }
+            } catch {
+                await MainActor.run {
+                    errorMessage = "Error: \(error.localizedDescription)"
+                }
+            }
+        }
+    }
+}
         
         // MARK: - Previews
         #Preview("Landing") {

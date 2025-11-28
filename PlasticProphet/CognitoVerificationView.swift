@@ -1,5 +1,5 @@
 // CognitoVerificationView.swift
-// Handles AWS Cognito email verification - after verification, user signs in via Hosted UI
+// Handles AWS Cognito email verification - after verification, user signs in automatically
 
 import SwiftUI
 
@@ -8,6 +8,7 @@ struct CognitoVerificationView: View {
     @Environment(\.dismiss) private var dismiss
     
     let email: String
+    let password: String // 👈 ADDED: To enable auto-login
     
     @State private var code: [String] = ["", "", "", "", "", ""]
     @FocusState private var focusedField: Int?
@@ -15,7 +16,8 @@ struct CognitoVerificationView: View {
     @State private var errorMessage = ""
     @State private var successMessage = ""
     @State private var isResending = false
-    @State private var navigateToSignIn = false
+    
+    // Note: We removed 'navigateToSignIn' because we will auto-login instead
     
     var body: some View {
         NavigationStack {
@@ -71,7 +73,7 @@ struct CognitoVerificationView: View {
                                 .font(.custom("Montserrat", size: 24))
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.center)
-                                .frame(width: 50, height: 60)
+                                .frame(width: 45, height: 55) // Adjusted slightly for fit
                                 .background(Color.gray.opacity(0.1))
                                 .cornerRadius(12)
                                 .overlay(
@@ -86,6 +88,7 @@ struct CognitoVerificationView: View {
                         }
                     }
                     .padding(.top, 32)
+                    .padding(.horizontal)
                     
                     // Resend Code Button
                     Button(action: resendCode) {
@@ -112,7 +115,7 @@ struct CognitoVerificationView: View {
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: .white))
                             }
-                            Text("Verify")
+                            Text("Verify & Continue")
                                 .font(.custom("Montserrat", size: 20))
                                 .fontWeight(.black)
                         }
@@ -143,9 +146,6 @@ struct CognitoVerificationView: View {
             .onAppear {
                 focusedField = 0
             }
-            .navigationDestination(isPresented: $navigateToSignIn) {
-                SignInView()
-            }
         }
     }
     
@@ -172,7 +172,7 @@ struct CognitoVerificationView: View {
         }
     }
     
-    // MARK: - Verification
+    // MARK: - Verification & Auto-Login
     
     private func verifyCode() {
         errorMessage = ""
@@ -180,39 +180,65 @@ struct CognitoVerificationView: View {
         isLoading = true
         
         let verificationCode = code.joined()
-        
         print("🔵 Attempting to verify code: \(verificationCode)")
         
         Task {
             do {
-                // Confirm the signup
+                // 1. Confirm the signup in Cognito
                 try await app.authService.confirmSignUp(email: email, code: verificationCode)
                 print("✅ Email confirmed!")
                 
                 await MainActor.run {
-                    isLoading = false
-                    successMessage = "Email verified! Please sign in to continue."
-                    
-                    // Navigate to sign in after a brief delay to show success message
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        navigateToSignIn = true
-                    }
+                    successMessage = "Verified! Signing you in..."
                 }
+                
+                // 2. Auto-Login (Native)
+                // We use the password passed from the previous screen
+                try await app.authService.signInNative(username: email, password: password)
+                
+                // 3. Update App State
+                // We need to ensure the AppState knows we are logged in so ContentView switches tabs
+                // Extract info like we do in the normal sign in
+                let attributes = try await app.authService.extractUserInfoFromIDToken()
+                
+                await MainActor.run {
+                    app.isAuthenticated = true
+                    app.userEmail = attributes["email"] ?? email
+                    app.userFirstName = attributes["given_name"] ?? ""
+                    app.userLastName = attributes["family_name"] ?? ""
+                    
+                    // Check onboarding (will be false for new user)
+                    app.checkPreviousOnboarding()
+                    
+                    isLoading = false
+                    // Dismiss the sheet -> ContentView will re-render -> Show Onboarding
+                    dismiss()
+                }
+                
             } catch {
                 await MainActor.run {
                     isLoading = false
-                    print("❌ Confirmation failed: \(error.localizedDescription)")
+                    print("❌ Error: \(error.localizedDescription)")
+                    
+                    // 👇 NEW CHECK: If already confirmed, try logging in anyway!
+                    if error.localizedDescription.contains("Current status is CONFIRMED") {
+                        print("⚠️ User already confirmed. Proceeding to auto-login...")
+                        // Retry login
+                        Task {
+                            try? await app.authService.signInNative(username: email, password: password)
+                            await MainActor.run {
+                                app.checkPreviousOnboarding()
+                                dismiss() // Success!
+                            }
+                        }
+                        return
+                    }
                     
                     if error.localizedDescription.contains("CodeMismatchException") {
                         errorMessage = "Invalid code. Please try again."
-                    } else if error.localizedDescription.contains("ExpiredCodeException") {
-                        errorMessage = "Code expired. Please request a new code."
                     } else {
-                        errorMessage = "Invalid code provided, please request a code again."
+                        errorMessage = "Verification success, but auto-login failed. Please sign in manually."
                     }
-                    
-                    code = ["", "", "", "", "", ""]
-                    focusedField = 0
                 }
             }
         }
@@ -225,8 +251,6 @@ struct CognitoVerificationView: View {
         successMessage = ""
         isResending = true
         
-        print("🔵 Resending verification code to: '\(email)'")
-        
         Task {
             do {
                 try await app.authService.resendConfirmationCode(email: email)
@@ -234,20 +258,13 @@ struct CognitoVerificationView: View {
                 await MainActor.run {
                     isResending = false
                     successMessage = "New code sent! Check your email."
-                    print("✅ New verification code sent")
-                    
                     code = ["", "", "", "", "", ""]
                     focusedField = 0
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        successMessage = ""
-                    }
                 }
             } catch {
                 await MainActor.run {
                     isResending = false
                     errorMessage = "Failed to resend code. Please try again."
-                    print("❌ Failed to resend code: \(error.localizedDescription)")
                 }
             }
         }
@@ -255,6 +272,6 @@ struct CognitoVerificationView: View {
 }
 
 #Preview {
-    CognitoVerificationView(email: "test@example.com")
+    CognitoVerificationView(email: "test@example.com", password: "password123")
         .environmentObject(AppState())
 }
