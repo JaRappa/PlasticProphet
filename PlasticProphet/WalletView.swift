@@ -11,8 +11,8 @@ struct WalletView: View {
 
     var body: some View {
         ZStack {
-            // FIX: This layer paints the background behind the Notch (Status Bar)
-            Color(.systemGroupedBackground)
+            // Adaptive Background
+            Color.adaptiveSecondaryBackground
                 .ignoresSafeArea()
             
             // 1. Main Content
@@ -27,7 +27,7 @@ struct WalletView: View {
                             Text("Wallet")
                                 .font(.custom("Montserrat", size: 32))
                                 .fontWeight(.bold)
-                                .foregroundColor(.black)
+                                .foregroundColor(.adaptiveText)
                                 .tracking(-1.5)
                             
                             Text("Your Cards")
@@ -45,35 +45,36 @@ struct WalletView: View {
                             // Empty State Card
                             VStack(alignment: .leading, spacing: 12) {
                                 RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
+                                    .stroke(Color.adaptiveSecondaryText.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
                                     .frame(height: 120)
                                     .overlay(
                                         VStack(spacing: 8) {
                                             Image(systemName: "creditcard")
                                                 .font(.system(size: 32))
-                                                .foregroundColor(.gray.opacity(0.5))
+                                                .foregroundColor(.adaptiveSecondaryText.opacity(0.5))
                                             
                                             Text("No cards added yet")
                                                 .font(.custom("Montserrat", size: 16))
                                                 .fontWeight(.medium)
-                                                .foregroundColor(.gray.opacity(0.7))
+                                                .foregroundColor(.adaptiveSecondaryText.opacity(0.8))
                                             
                                             Text("Tap the + button to add your first card")
                                                 .font(.custom("Montserrat", size: 14))
-                                                .foregroundColor(.gray.opacity(0.5))
+                                                .foregroundColor(.adaptiveSecondaryText.opacity(0.6))
                                         }
                                     )
                             }
                             .padding()
-                            .background(Color.white)
+                            .background(Color.adaptiveCardBackground)
                             .cornerRadius(12)
-                            .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+                            .shadow(color: Color.adaptiveShadow, radius: 8, x: 0, y: 2)
                             .padding(.horizontal)
                         } else {
                             // Cards List
                             VStack(spacing: 12) {
                                 ForEach(app.cards) { card in
                                     HStack(spacing: 16) {
+                                        // Card Network Icon
                                         ZStack {
                                             Circle()
                                                 .fill(Color.ppGreen.opacity(0.1))
@@ -88,7 +89,7 @@ struct WalletView: View {
                                             Text(card.name)
                                                 .font(.custom("Montserrat", size: 16))
                                                 .fontWeight(.semibold)
-                                                .foregroundColor(.black)
+                                                .foregroundColor(.adaptiveText)
                                             
                                             Text(card.rewardSummary)
                                                 .font(.custom("Montserrat", size: 14))
@@ -100,12 +101,12 @@ struct WalletView: View {
                                         Text("••••\(card.last4)")
                                             .font(.custom("Montserrat", size: 14))
                                             .fontWeight(.medium)
-                                            .foregroundColor(.gray)
+                                            .foregroundColor(.adaptiveSecondaryText)
                                     }
                                     .padding()
-                                    .background(Color.white)
+                                    .background(Color.adaptiveCardBackground)
                                     .cornerRadius(12)
-                                    .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+                                    .shadow(color: Color.adaptiveShadow, radius: 4, x: 0, y: 2)
                                 }
                             }
                             .padding(.horizontal)
@@ -114,12 +115,11 @@ struct WalletView: View {
                         Spacer(minLength: 100)
                     }
                 }
-                // Removed .background here because we handled it in ZStack
             }
             
             // 2. Backdrop when menu is open
             if showFABMenu {
-                Color.black.opacity(0.3)
+                Color.adaptiveText.opacity(0.3)
                     .ignoresSafeArea()
                     .onTapGesture {
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
@@ -135,6 +135,7 @@ struct WalletView: View {
                 HStack {
                     Spacer()
                     VStack(alignment: .trailing, spacing: 16) {
+                        // Menu options
                         if showFABMenu {
                             FABMenuItem(
                                 icon: "magnifyingglass",
@@ -167,6 +168,7 @@ struct WalletView: View {
                             .transition(.scale.combined(with: .opacity))
                         }
                         
+                        // Main FAB Button
                         Button(action: {
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                                 showFABMenu.toggle()
@@ -210,6 +212,9 @@ struct WalletView: View {
     }
 }
 
+// MARK: - Helper Views
+
+// Updated Manual Add View to use standard Form (which adapts automatically)
 struct ManualAddView: View {
     @EnvironmentObject var app: AppState
     @Binding var showManual: Bool

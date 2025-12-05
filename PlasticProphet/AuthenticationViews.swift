@@ -640,124 +640,127 @@ struct ForgotPasswordView: View {
     }
 }
         
-        // MARK: - Verification Code View
-        struct VerificationCodeView: View {
-            @Environment(\.dismiss) private var dismiss
-            let email: String
-            @State private var code: [String] = ["", "", "", ""]
-            @FocusState private var focusedField: Int?
-            @State private var showResetPassword = false
+// MARK: - Verification Code View (For Forgot Password)
+struct VerificationCodeView: View {
+    @Environment(\.dismiss) private var dismiss
+    let email: String
+    
+    // 👇 CHANGED: 6 Digits
+    @State private var code: [String] = ["", "", "", "", "", ""]
+    @FocusState private var focusedField: Int?
+    @State private var showResetPassword = false
+    
+    var body: some View {
+        ZStack {
+            Color.adaptiveBackground.ignoresSafeArea()
             
-            var body: some View {
-                ZStack {
-                    Color.adaptiveBackground.ignoresSafeArea()
-                    
-                    VStack(alignment: .center, spacing: 24) {
-                        // Card icon
-                        Image(systemName: "creditcard.fill")
-                            .font(.system(size: 50))
+            VStack(alignment: .center, spacing: 24) {
+                // Card icon
+                Image(systemName: "creditcard.fill")
+                    .font(.system(size: 50))
+                    .foregroundColor(Color.ppGreen)
+                    .rotationEffect(.degrees(15))
+                    .padding(.top, 20)
+                
+                // Info Text
+                VStack(spacing: 4) {
+                    Text("We sent a two-step authentication")
+                        .font(.custom("Montserrat", size: 16))
+                        .foregroundColor(.adaptiveText)
+                    HStack(spacing: 4) {
+                        Text("code to")
+                            .font(.custom("Montserrat", size: 16))
+                            .foregroundColor(.adaptiveText)
+                        Text(email)
+                            .font(.custom("Montserrat", size: 16))
+                            .fontWeight(.bold)
                             .foregroundColor(Color.ppGreen)
-                            .rotationEffect(.degrees(15))
-                            .padding(.top, 20)
-                        
-                        // Fixed text without concatenation
-                        VStack(spacing: 4) {
-                            Text("We sent a two-step authentication")
-                                .font(.custom("Montserrat", size: 16))
-                                .foregroundColor(.adaptiveText)
-                            HStack(spacing: 4) {
-                                Text("code to")
-                                    .font(.custom("Montserrat", size: 16))
-                                    .foregroundColor(.adaptiveText)
-                                Text(email)
-                                    .font(.custom("Montserrat", size: 16))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(Color.ppGreen)
-                                Text(".")
-                                    .font(.custom("Montserrat", size: 16))
-                                    .foregroundColor(.adaptiveText)
-                            }
-                        }
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 32)
-                        .padding(.top, 40)
-                        
-                        // Code input boxes
-                        HStack(spacing: 16) {
-                            ForEach(0..<4, id: \.self) { index in
-                                TextField("", text: $code[index])
-                                    .font(.custom("Montserrat", size: 24))
-                                    .fontWeight(.bold)
-                                    .multilineTextAlignment(.center)
-                                    .frame(width: 60, height: 60)
-                                    .background(Color.gray.opacity(0.1))
-                                    .cornerRadius(12)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(focusedField == index ? Color.ppGreen : Color.clear, lineWidth: 2)
-                                    )
-                                    .keyboardType(.numberPad)
-                                    .focused($focusedField, equals: index)
-                                    .onChange(of: code[index]) { _, newValue in
-                                        if newValue.count == 1 && index < 3 {
-                                            focusedField = index + 1
-                                        } else if newValue.isEmpty && index > 0 {
-                                            focusedField = index - 1
-                                        }
-                                        // Limit to 1 character
-                                        if newValue.count > 1 {
-                                            code[index] = String(newValue.prefix(1))
-                                        }
-                                    }
-                            }
-                        }
-                        .padding(.top, 32)
-                        
-                        Spacer()
-                        
-                        // Enter Button
-                        Button(action: { showResetPassword = true }) {
-                            Text("Enter")
-                                .font(.custom("Montserrat", size: 20))
-                                .fontWeight(.black)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(16)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(isCodeComplete ? Color.ppGreen : Color.gray)
-                                )
-                                .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
-                        }
-                        .disabled(!isCodeComplete)
-                        .padding(.horizontal, 32)
-                        .padding(.bottom, 40)
+                        Text(".")
+                            .font(.custom("Montserrat", size: 16))
+                            .foregroundColor(.adaptiveText)
                     }
                 }
-                .navigationBarBackButtonHidden(true)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "arrow.left")
-                                .foregroundColor(.adaptiveText)
-                                .font(.system(size: 20))
-                        }
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+                .padding(.top, 40)
+                
+                // Code input boxes (Updated for 6 Digits)
+                HStack(spacing: 12) {
+                    // 👇 CHANGED: Loop 0..<6
+                    ForEach(0..<6, id: \.self) { index in
+                        TextField("", text: $code[index])
+                            .font(.custom("Montserrat", size: 24))
+                            .fontWeight(.bold)
+                            .multilineTextAlignment(.center)
+                            .frame(width: 45, height: 55) // Adjusted width to fit 6 boxes
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(focusedField == index ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
+                            .keyboardType(.numberPad)
+                            .focused($focusedField, equals: index)
+                            .onChange(of: code[index]) { _, newValue in
+                                // 👇 CHANGED: Focus logic for 6 items
+                                if newValue.count == 1 && index < 5 {
+                                    focusedField = index + 1
+                                } else if newValue.isEmpty && index > 0 {
+                                    focusedField = index - 1
+                                }
+                                // Limit to 1 character
+                                if newValue.count > 1 {
+                                    code[index] = String(newValue.prefix(1))
+                                }
+                            }
                     }
                 }
-                .navigationDestination(isPresented: $showResetPassword) {
-                    // We pass the email AND the code (joined from the array) to the final screen
-                    ResetPasswordView(email: email, code: code.joined())
+                .padding(.top, 32)
+                
+                Spacer()
+                
+                // Enter Button
+                Button(action: { showResetPassword = true }) {
+                    Text("Enter")
+                        .font(.custom("Montserrat", size: 20))
+                        .fontWeight(.black)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(isCodeComplete ? Color.ppGreen : Color.gray)
+                        )
+                        .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
                 }
-                .onAppear {
-                    focusedField = 0
-                }
-            }
-            
-            private var isCodeComplete: Bool {
-                code.allSatisfy { !$0.isEmpty }
+                .disabled(!isCodeComplete)
+                .padding(.horizontal, 32)
+                .padding(.bottom, 40)
             }
         }
-        
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "arrow.left")
+                        .foregroundColor(.adaptiveText)
+                        .font(.system(size: 20))
+                }
+            }
+        }
+        .navigationDestination(isPresented: $showResetPassword) {
+            // Pass the joined code string to the next view
+            ResetPasswordView(email: email, code: code.joined())
+        }
+        .onAppear {
+            focusedField = 0
+        }
+    }
+    
+    private var isCodeComplete: Bool {
+        code.allSatisfy { !$0.isEmpty }
+    }
+}
 // MARK: - Reset Password View
 struct ResetPasswordView: View {
     @Environment(\.dismiss) private var dismiss
@@ -943,14 +946,35 @@ struct ResetPasswordView: View {
     private func submitNewPassword() {
         Task {
             do {
+                // 1. Confirm the password change
                 try await app.authService.confirmForgotPassword(
                     email: email,
                     code: code,
                     newPassword: password
                 )
                 
+                print("✅ Password successfully changed!")
+                
+                // 2. NEW: Auto-Login with the new password
+                try await app.authService.signInNative(username: email, password: password)
+                
+                // 3. Update App State (Get Profile Data)
+                let attributes = try await app.authService.extractUserInfoFromIDToken()
+                
                 await MainActor.run {
-                    showSuccess = true
+                    app.isAuthenticated = true
+                    app.userEmail = attributes["email"] ?? email
+                    app.userFirstName = attributes["given_name"] ?? ""
+                    app.userLastName = attributes["family_name"] ?? ""
+                    
+                    app.checkPreviousOnboarding()
+                    
+                    // 4. Dismiss EVERYTHING (Go to Home)
+                    // Since we are deep in a navigation stack, we need a way to reset to root.
+                    // The simplest way in SwiftUI if we are already authenticated
+                    // is that ContentView will re-render and swap the root view.
+                    // So we just need to dismiss the current sheet/stack.
+                    dismiss()
                 }
             } catch {
                 await MainActor.run {
@@ -959,24 +983,23 @@ struct ResetPasswordView: View {
             }
         }
     }
-}
-        
-        // MARK: - Previews
-        #Preview("Landing") {
-            AuthLandingView()
+    // MARK: - Previews
+    #Preview("Landing") {
+        AuthLandingView()
+            .environmentObject(AppState())
+    }
+    
+    #Preview("Sign In") {
+        NavigationStack {
+            SignInView()
                 .environmentObject(AppState())
         }
-        
-        #Preview("Sign In") {
-            NavigationStack {
-                SignInView()
-                    .environmentObject(AppState())
-            }
+    }
+    
+    #Preview("Sign Up") {
+        NavigationStack {
+            SignUpView()
+                .environmentObject(AppState())
         }
-        
-        #Preview("Sign Up") {
-            NavigationStack {
-                SignUpView()
-                    .environmentObject(AppState())
-            }
-        }
+    }
+}

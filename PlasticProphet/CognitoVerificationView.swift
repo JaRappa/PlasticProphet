@@ -82,6 +82,7 @@ struct CognitoVerificationView: View {
                                 )
                                 .keyboardType(.numberPad)
                                 .focused($focusedField, equals: index)
+                                .foregroundColor(.adaptiveText)
                                 .onChange(of: code[index]) { _, newValue in
                                     handleCodeInput(index: index, newValue: newValue)
                                 }

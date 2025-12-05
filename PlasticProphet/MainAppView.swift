@@ -76,8 +76,12 @@ struct HomeView: View {
                                             .foregroundColor(.gray.opacity(0.7))
                                     }
                                 )
-                                .padding(.horizontal)
                         }
+                        .padding()
+                        .background(Color.adaptiveCardBackground)
+                        .cornerRadius(12)
+                        .shadow(color: Color.adaptiveShadow, radius: 8, x: 0, y: 2)
+                        .padding(.horizontal)
                     }
                     
                     Button("Simulate Geofence Recommendation") {
@@ -106,7 +110,7 @@ struct HomeView: View {
                 }
                 .padding(.vertical)
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Color.adaptiveSecondaryBackground)
             // FIX: Remove the invisible navigation bar gap
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .navigationBar)
@@ -130,7 +134,7 @@ struct FABMenuItem: View {
                 Text(title)
                     .font(.custom("Montserrat", size: 15))
                     .fontWeight(.semibold)
-                    .foregroundColor(.ppGreen)
+                    .foregroundColor(.adaptiveText)
                 
                 ZStack {
                     Circle()
@@ -148,7 +152,7 @@ struct FABMenuItem: View {
             .background(
                 Capsule()
                     .fill(Color.adaptiveCardBackground)
-                    .shadow(color: Color.adaptiveShadow.opacity(0.15), radius: 10, x: 0, y: 4)
+                    .shadow(color: Color.adaptiveShadow, radius: 10, x: 0, y: 4)
             )
         }
     }

@@ -20,23 +20,21 @@ struct ProfileView: View {
             ScrollView {
                 VStack(spacing: 24) {
                     
-                    // FIX 1: Custom Header to match Home/Wallet style
+                    // Header
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Profile")
                             .font(.custom("Montserrat", size: 32))
                             .fontWeight(.bold)
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveText) // FIX: Dark Mode Text
                             .tracking(-1.5)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
-                    .padding(.top, 20) // Consistent 20pt padding
+                    .padding(.top, 20)
                     
-                    // User Profile Header
+                    // User Profile Header (Green Card - Keeps white text as background is always green)
                     VStack(spacing: 16) {
-                        // Avatar and Name Section
                         HStack(spacing: 16) {
-                            // Avatar Circle
                             ZStack {
                                 Circle()
                                     .fill(Color.white)
@@ -53,7 +51,6 @@ struct ProfileView: View {
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                 
-                                // FIX 2: Email text shrinking
                                 Text(app.userEmail)
                                     .font(.custom("Montserrat", size: 14))
                                     .foregroundColor(.white.opacity(0.9))
@@ -76,7 +73,7 @@ struct ProfileView: View {
                         Text("Account")
                             .font(.custom("Montserrat", size: 18))
                             .fontWeight(.bold)
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveText) // FIX: Dark Mode Text
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal)
                             .padding(.bottom, 12)
@@ -92,12 +89,10 @@ struct ProfileView: View {
                             ) {
                                 showMyAccount = true
                             }
-                            
-                            // FIX 3: Removed extra toggles (Face ID, etc.)
                         }
-                        .background(Color.white)
+                        .background(Color.adaptiveCardBackground) // FIX: Dark Mode Background
                         .cornerRadius(12)
-                        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+                        .shadow(color: Color.adaptiveShadow, radius: 8, x: 0, y: 2) // FIX: Adaptive Shadow
                         .padding(.horizontal)
                     }
                     
@@ -106,7 +101,7 @@ struct ProfileView: View {
                         Text("More")
                             .font(.custom("Montserrat", size: 18))
                             .fontWeight(.bold)
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveText) // FIX: Dark Mode Text
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal)
                             .padding(.bottom, 12)
@@ -148,9 +143,9 @@ struct ProfileView: View {
                                 showSettings = true
                             }
                         }
-                        .background(Color.white)
+                        .background(Color.adaptiveCardBackground) // FIX: Dark Mode Background
                         .cornerRadius(12)
-                        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+                        .shadow(color: Color.adaptiveShadow, radius: 8, x: 0, y: 2) // FIX: Adaptive Shadow
                         .padding(.horizontal)
                     }
                     
@@ -175,8 +170,7 @@ struct ProfileView: View {
                     .padding(.bottom, 32)
                 }
             }
-            .background(Color(.systemGroupedBackground))
-            // FIX 4: Hide native navigation bar so we don't have double titles
+            .background(Color.adaptiveSecondaryBackground) // FIX: Main Background
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $showSettings) {
@@ -233,11 +227,11 @@ struct ProfileMenuItem: View {
                     Text(title)
                         .font(.custom("Montserrat", size: 16))
                         .fontWeight(.semibold)
-                        .foregroundColor(.black)
+                        .foregroundColor(.adaptiveText) // FIX: Dark Mode Text
                     
                     Text(subtitle)
                         .font(.custom("Montserrat", size: 12))
-                        .foregroundColor(.gray)
+                        .foregroundColor(.adaptiveSecondaryText) // FIX: Dark Mode Secondary Text
                 }
                 
                 Spacer()
@@ -252,7 +246,7 @@ struct ProfileMenuItem: View {
                 if showChevron {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.gray)
+                        .foregroundColor(.adaptiveSecondaryText) // FIX: Dark Mode Chevron
                 }
             }
             .padding(16)
@@ -261,7 +255,7 @@ struct ProfileMenuItem: View {
     }
 }
 
-// MARK: - Placeholder Views
+// MARK: - Placeholder Views (Updated for Dark Mode)
 struct MyAccountView: View {
     @Environment(\.dismiss) private var dismiss
     
@@ -275,19 +269,23 @@ struct MyAccountView: View {
                 Text("My Account")
                     .font(.custom("Montserrat", size: 24))
                     .fontWeight(.bold)
+                    .foregroundColor(.adaptiveText) // FIX
                 
                 Text("Edit profile functionality coming soon!")
                     .font(.custom("Montserrat", size: 14))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.adaptiveSecondaryText) // FIX
                     .multilineTextAlignment(.center)
             }
             .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.adaptiveBackground) // FIX
             .navigationTitle("My Account")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
                         .font(.custom("Montserrat", size: 16))
+                        .foregroundColor(Color.ppGreen)
                 }
             }
         }
@@ -307,20 +305,24 @@ struct HelpSupportView: View {
                 Text("Help & Support")
                     .font(.custom("Montserrat", size: 24))
                     .fontWeight(.bold)
+                    .foregroundColor(.adaptiveText) // FIX
                 
                 Text("Need help? Contact us at support@plasticprophet.com")
                     .font(.custom("Montserrat", size: 14))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.adaptiveSecondaryText) // FIX
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
             }
             .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.adaptiveBackground) // FIX
             .navigationTitle("Help & Support")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
                         .font(.custom("Montserrat", size: 16))
+                        .foregroundColor(Color.ppGreen)
                 }
             }
         }
@@ -333,34 +335,35 @@ struct AboutAppView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                Image("App Logo Black")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 220, height: 220)
+                // FIX: Use Adaptive Logo
+                AdaptiveLogo(width: 120, height: 120)
                 
                 Text("PlasticProphet")
                     .font(.custom("Montserrat", size: 28))
                     .fontWeight(.bold)
-                    .tracking(-1.5)
+                    .foregroundColor(.adaptiveText) // FIX
                 
                 Text("Version 1.0.0")
                     .font(.custom("Montserrat", size: 16))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.adaptiveSecondaryText) // FIX
                 
                 Text("Your smart companion for maximizing credit card rewards")
                     .font(.custom("Montserrat", size: 14))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.adaptiveSecondaryText) // FIX
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
                     .padding(.top, 8)
             }
             .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.adaptiveBackground) // FIX
             .navigationTitle("About App")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
                         .font(.custom("Montserrat", size: 16))
+                        .foregroundColor(Color.ppGreen)
                 }
             }
         }
