@@ -13,7 +13,7 @@
 
   *Maximize your credit card rewards with intelligent, location-aware recommendations*
 
-  [🌐 Website](https://plasticprophet.com) • [📱 App Store](#) • [📖 Documentation](#-documentation)
+  [🌐 Website](https://plasticprophet.com) • [📱 App Store](#) • [📖 Documentation](https://plasticprophet.com/guide.html)
 
 </div>
 
