@@ -9,7 +9,7 @@
   [![Swift](https://img.shields.io/badge/Swift-5.9+-orange?style=for-the-badge&logo=swift&logoColor=white)](https://swift.org/)
   [![SwiftUI](https://img.shields.io/badge/SwiftUI-5.0-blue?style=for-the-badge&logo=swift)](https://developer.apple.com/xcode/swiftui/)
   [![AWS](https://img.shields.io/badge/AWS-Cognito%20|%20Lambda%20|%20RDS-orange?style=for-the-badge&logo=amazonaws)](https://aws.amazon.com/)
-  [![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)]
+  ![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)
 
   *Maximize your credit card rewards with intelligent, location-aware recommendations*
 
