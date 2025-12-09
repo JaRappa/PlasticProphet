@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>User Guide — Plastic Prophet</title>
+
+  <script>
+    // Apply a stored theme override (if present) immediately to avoid flash.
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if(t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      }catch(e){}
+    })();
+  </script>
+
+  <link rel="icon" href="images/tpplogo.png" />
+
+  <style>
+    /* Light theme by default */
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --ink:#0b1220;
+      --muted:#556070;
+      --accent:#2ac33c;
+      --max:980px;
+      --radius:14px;
+      --border:#e6eef8;
+      --logo-bg:#ffffff;
+      --hero-bg:linear-gradient(180deg,#f6faf8,#eef7ef);
+    }
+
+    /* Respect system dark mode */
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0b0d12; --card:#11141b; --ink:#e9eef6; --muted:#a7b1c2; --accent:#2ac33c; --max:980px; --radius:14px; --border:#223049; --logo-bg:#1a232f; --hero-bg:#0e131b;
+      }
+    }
+
+    /* Allow an explicit override via document attribute (set by JS) */
+    [data-theme="dark"]{
+      --bg:#0b0d12; --card:#11141b; --ink:#e9eef6; --muted:#a7b1c2; --border:#223049; --logo-bg:#1a232f; --hero-bg:#1a232f;
+    }
+    [data-theme="light"]{
+      --bg:#f6f8fb; --card:#ffffff; --ink:#0b1220; --muted:#556070; --border:#e6eef8; --logo-bg:#ffffff; --hero-bg:linear-gradient(180deg,#f6faf8,#eef7ef);
+    }
+
+    *{box-sizing:border-box;}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,Inter,Helvetica,sans-serif;}
+    a{color:var(--accent);text-decoration:none;}
+    a:hover{text-decoration:underline;}
+    img{max-width:100%;height:auto;}
+    .wrap{max-width:var(--max);margin:0 auto;padding:24px;}
+    header{display:flex;align-items:center;justify-content:space-between;padding:12px 0;margin-bottom:24px;}
+    .brand{display:flex;align-items:center;gap:12px;}
+    .logo{width:40px;height:40px;border-radius:10px;background:var(--logo-bg) url('images/tpplogo.png') center/contain no-repeat;border:1px solid var(--border);}
+    h1{font-size:clamp(2rem,4vw,2.7rem);margin:.6em 0 .4em;}
+    h2{font-size:clamp(1.5rem,3vw,2rem);margin:2em 0 .8em;color:var(--ink);border-bottom:2px solid var(--border);padding-bottom:8px;}
+    h3{font-size:1.4rem;margin:1.5em 0 .6em;color:var(--ink);}
+    h4{font-size:1.1rem;margin:1.2em 0 .5em;color:var(--muted);}
+    .lead{color:var(--muted);margin:0 0 32px;font-size:1.1rem;}
+    .card{background:var(--card);padding:24px;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:24px;}
+    .muted{color:var(--muted);}
+    .note{background:var(--hero-bg);padding:16px;border-radius:8px;border-left:4px solid var(--accent);margin:16px 0;font-size:.95rem;}
+    .note strong{color:var(--accent);}
+    .step-list{list-style:none;padding:0;counter-reset:step-counter;}
+    .step-list li{counter-increment:step-counter;margin-bottom:20px;padding-left:48px;position:relative;}
+    .step-list li::before{content:counter(step-counter);position:absolute;left:0;top:0;width:32px;height:32px;background:var(--accent);color:#071b12;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:.9rem;}
+    .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin:24px 0;}
+    .feature-item{background:var(--card);padding:20px;border-radius:12px;border:1px solid var(--border);}
+    .feature-item h4{margin-top:0;display:flex;align-items:center;gap:8px;}
+    .icon{font-size:1.3rem;}
+    code{background:var(--hero-bg);padding:2px 6px;border-radius:4px;font-size:.9em;font-family:monospace;}
+    .toc{background:var(--card);padding:20px;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:32px;}
+    .toc h3{margin-top:0;}
+    .toc ul{margin:0;padding-left:24px;}
+    .toc li{margin:8px 0;}
+    footer{padding:32px 0;color:var(--muted);text-align:center;font-size:.85rem;margin-top:48px;border-top:1px solid var(--border);}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <strong>Plastic Prophet</strong>
+    </div>
+    <a href="index.html">← Back to Home</a>
+  </header>
+
+  <article>
+    <h1>📱 Plastic Prophet User Guide</h1>
+    <p class="lead">
+      A comprehensive walkthrough to help you get the most out of Plastic Prophet. Learn how to set up your account, manage your cards, and maximize your credit card rewards.
+    </p>
+
+    <div class="note">
+      <strong>Note:</strong> This guide is a template for the upcoming features. Some steps may be simplified or adjusted as development continues. Screenshots and detailed flows will be added before launch.
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="toc">
+      <h3>📋 Table of Contents</h3>
+      <ul>
+        <li><a href="#create-account">Getting Started: Create an Account</a></li>
+        <li><a href="#onboarding">First Time Setup & Onboarding</a></li>
+        <li><a href="#add-card">Adding Your Cards</a></li>
+        <li><a href="#remove-card">Removing a Card</a></li>
+        <li><a href="#ios-permissions">Setting Up iOS Permissions</a></li>
+        <li><a href="#recommendations">Using Card Recommendations</a></li>
+        <li><a href="#profile">Managing Your Profile</a></li>
+        <li><a href="#settings">App Settings</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+      </ul>
+    </div>
+
+    <!-- Getting Started Section -->
+    <section id="create-account">
+      <h2>🚀 Getting Started: Create an Account</h2>
+      
+      <div class="card">
+        <p>Plastic Prophet uses secure OAuth 2.0 authentication powered by AWS Cognito to keep your account safe. You'll never need to remember another password!</p>
+        
+        <ol class="step-list">
+          <li>
+            <strong>Download the App</strong><br>
+            <span class="muted">Get Plastic Prophet from the iOS App Store (requires iOS 17 or later).</span>
+          </li>
+          <li>
+            <strong>Open the App</strong><br>
+            <span class="muted">Launch Plastic Prophet. You'll see the welcome screen with the Plastic Prophet logo.</span>
+          </li>
+          <li>
+            <strong>Tap "Sign In" or "Get Started"</strong><br>
+            <span class="muted">The app will open a secure browser window (Safari) for authentication.</span>
+          </li>
+          <li>
+            <strong>Create Your Account</strong><br>
+            <span class="muted">In the Cognito Hosted UI, tap "Sign Up" and enter:</span>
+            <ul>
+              <li>Your email address</li>
+              <li>Choose a secure password (min. 8 characters)</li>
+              <li>Optional: First and last name</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Verify Your Email</strong><br>
+            <span class="muted">Check your inbox for a verification code and enter it when prompted.</span>
+          </li>
+          <li>
+            <strong>Complete Sign In</strong><br>
+            <span class="muted">After verification, sign in with your email and password. The app will automatically authenticate you.</span>
+          </li>
+        </ol>
+
+        <div class="note">
+          <strong>Privacy First:</strong> Your authentication is handled entirely by AWS Cognito. Plastic Prophet never sees or stores your password. All communication is encrypted end-to-end.
+        </div>
+      </div>
+    </section>
+
+    <!-- Onboarding Section -->
+    <section id="onboarding">
+      <h2>🎯 First Time Setup & Onboarding</h2>
+      
+      <div class="card">
+        <p>After your first sign-in, you'll go through a quick onboarding process to set up your account.</p>
+        
+        <h3>Welcome Screen</h3>
+        <p>You'll be greeted with a welcome message and the Plastic Prophet logo. Tap <strong>"Let's Get Started!"</strong> to continue.</p>
+
+        <h3>Terms of Service</h3>
+        <ol class="step-list">
+          <li>
+            <strong>Read the Terms</strong><br>
+            <span class="muted">Review the Terms of Service by scrolling through the document.</span>
+          </li>
+          <li>
+            <strong>Accept the Terms</strong><br>
+            <span class="muted">Toggle the "I accept Terms of Service" switch to agree.</span>
+          </li>
+          <li>
+            <strong>Continue</strong><br>
+            <span class="muted">Tap "Continue" to proceed to permissions setup.</span>
+          </li>
+        </ol>
+
+        <h3>Permissions Setup</h3>
+        <p>Next, you'll be asked to grant permissions for key app features (see the <a href="#ios-permissions">iOS Permissions section</a> for details).</p>
+
+        <h3>Add Your First Cards</h3>
+        <p>The onboarding flow will guide you to add your credit cards. You can add them now or skip and add them later from the Wallet view.</p>
+      </div>
+    </section>
+
+    <!-- Add Card Section -->
+    <section id="add-card">
+      <h2>💳 Adding Your Cards</h2>
+      
+      <div class="card">
+        <p>Plastic Prophet makes it easy to add your credit cards. You have three options:</p>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <h4><span class="icon">🔍</span> Search</h4>
+            <p class="muted">Browse and search from a catalog of popular credit cards. Perfect if you know the card name.</p>
+          </div>
+          <div class="feature-item">
+            <h4><span class="icon">📷</span> Camera Scan</h4>
+            <p class="muted">Scan your physical card with your camera to quickly capture card details (requires camera permission).</p>
+          </div>
+          <div class="feature-item">
+            <h4><span class="icon">✍️</span> Manual Entry</h4>
+            <p class="muted">Manually enter card details if your card isn't in the catalog or you prefer not to scan.</p>
+          </div>
+        </div>
+
+        <h3>Method 1: Search for Your Card</h3>
+        <ol class="step-list">
+          <li>
+            <strong>Open the Wallet</strong><br>
+            <span class="muted">From the main app screen, tap the "Wallet" tab at the bottom.</span>
+          </li>
+          <li>
+            <strong>Tap the + Button</strong><br>
+            <span class="muted">In the bottom-right corner, tap the green floating action button (FAB) with the + icon.</span>
+          </li>
+          <li>
+            <strong>Select "Search Cards"</strong><br>
+            <span class="muted">From the menu, tap "Search Cards".</span>
+          </li>
+          <li>
+            <strong>Search and Select</strong><br>
+            <span class="muted">Use the search bar to find your card by name or issuer. Tap on the card tile to select it.</span>
+          </li>
+          <li>
+            <strong>Tap "Done"</strong><br>
+            <span class="muted">Your selected card(s) will be added to your wallet.</span>
+          </li>
+        </ol>
+
+        <h3>Method 2: Scan with Camera</h3>
+        <ol class="step-list">
+          <li>
+            <strong>Open Card Search</strong><br>
+            <span class="muted">Follow steps 1-3 above to open the card search view.</span>
+          </li>
+          <li>
+            <strong>Tap the Camera Icon</strong><br>
+            <span class="muted">Next to the search bar, tap the camera icon.</span>
+          </li>
+          <li>
+            <strong>Grant Camera Permission</strong><br>
+            <span class="muted">If prompted, allow Plastic Prophet to access your camera (see <a href="#ios-permissions">iOS Permissions</a>).</span>
+          </li>
+          <li>
+            <strong>Scan Your Card</strong><br>
+            <span class="muted">Position your credit card in the camera frame. The app will automatically detect card details.</span>
+          </li>
+          <li>
+            <strong>Confirm Details</strong><br>
+            <span class="muted">Review the captured information and confirm to add the card.</span>
+          </li>
+        </ol>
+
+        <h3>Method 3: Manual Entry</h3>
+        <ol class="step-list">
+          <li>
+            <strong>Open the FAB Menu</strong><br>
+            <span class="muted">From the Wallet view, tap the + button.</span>
+          </li>
+          <li>
+            <strong>Select "Enter Manually"</strong><br>
+            <span class="muted">Tap "Enter Manually" from the menu.</span>
+          </li>
+          <li>
+            <strong>Fill in Card Details</strong><br>
+            <span class="muted">Enter the following information:</span>
+            <ul>
+              <li>Card name or nickname</li>
+              <li>Card network (Visa, Mastercard, Amex, Discover)</li>
+              <li>Last 4 digits (for identification only)</li>
+              <li>Reward summary (optional, e.g., "3% on dining")</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Save the Card</strong><br>
+            <span class="muted">Tap "Save" to add the card to your wallet.</span>
+          </li>
+        </ol>
+
+        <div class="note">
+          <strong>Privacy & Security:</strong> Plastic Prophet does not store full card numbers, CVV codes, or any sensitive financial data. We only store card names, networks, and reward structures to provide recommendations. You're always in control of your data.
+        </div>
+      </div>
+    </section>
+
+    <!-- Remove Card Section -->
+    <section id="remove-card">
+      <h2>🗑️ Removing a Card</h2>
+      
+      <div class="card">
+        <p>If you no longer use a card or want to update your wallet, you can easily remove cards.</p>
+        
+        <ol class="step-list">
+          <li>
+            <strong>Open Your Wallet</strong><br>
+            <span class="muted">Navigate to the Wallet tab from the main navigation.</span>
+          </li>
+          <li>
+            <strong>Find the Card</strong><br>
+            <span class="muted">Scroll through your card list and locate the card you want to remove.</span>
+          </li>
+          <li>
+            <strong>Swipe to Delete</strong><br>
+            <span class="muted">Swipe left on the card entry to reveal the delete button.</span>
+          </li>
+          <li>
+            <strong>Confirm Removal</strong><br>
+            <span class="muted">Tap "Delete" or the trash icon. You may be asked to confirm this action.</span>
+          </li>
+        </ol>
+
+        <div class="note">
+          <strong>Note:</strong> Removing a card from Plastic Prophet only removes it from your app profile—it does not affect your actual credit card account or close the card with your issuer.
+        </div>
+      </div>
+    </section>
+
+    <!-- iOS Permissions Section -->
+    <section id="ios-permissions">
+      <h2>🔐 Setting Up iOS Permissions</h2>
+      
+      <div class="card">
+        <p>Plastic Prophet requires certain iOS permissions to provide the best experience. Here's what we need and why:</p>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <h4><span class="icon">📷</span> Camera Access</h4>
+            <p class="muted"><strong>Why:</strong> To scan your credit cards for quick setup.</p>
+            <p class="muted"><strong>Required:</strong> Only if you want to use card scanning feature.</p>
+          </div>
+          <div class="feature-item">
+            <h4><span class="icon">📍</span> Location Access</h4>
+            <p class="muted"><strong>Why:</strong> To detect nearby merchants and provide location-based card recommendations.</p>
+            <p class="muted"><strong>Required:</strong> Yes, for core recommendation features.</p>
+          </div>
+        </div>
+
+        <h3>Granting Permissions During Onboarding</h3>
+        <ol class="step-list">
+          <li>
+            <strong>Permission Request Screen</strong><br>
+            <span class="muted">During onboarding, you'll see the Permissions screen explaining what's needed.</span>
+          </li>
+          <li>
+            <strong>Grant Camera Permission</strong><br>
+            <span class="muted">Tap "Grant Camera Access". iOS will show a system popup—tap "Allow" or "OK".</span>
+          </li>
+          <li>
+            <strong>Grant Location Permission</strong><br>
+            <span class="muted">Tap "Grant Location Access". iOS will show a system popup—tap "Allow While Using App" (recommended).</span>
+          </li>
+          <li>
+            <strong>Continue Setup</strong><br>
+            <span class="muted">After granting permissions, tap "Continue" to proceed.</span>
+          </li>
+        </ol>
+
+        <h3>Changing Permissions Later</h3>
+        <p>If you skip permissions during setup or want to change them later:</p>
+        
+        <ol class="step-list">
+          <li>
+            <strong>Open iOS Settings</strong><br>
+            <span class="muted">Exit Plastic Prophet and open the Settings app on your iPhone.</span>
+          </li>
+          <li>
+            <strong>Scroll to Plastic Prophet</strong><br>
+            <span class="muted">Scroll down in Settings until you find "Plastic Prophet" in the app list.</span>
+          </li>
+          <li>
+            <strong>Tap Plastic Prophet</strong><br>
+            <span class="muted">You'll see a settings page specific to the app.</span>
+          </li>
+          <li>
+            <strong>Toggle Permissions</strong><br>
+            <span class="muted">You'll see switches for:</span>
+            <ul>
+              <li><strong>Location:</strong> Choose "Never", "Ask Next Time", "While Using the App", or "Always"</li>
+              <li><strong>Camera:</strong> Toggle on or off</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Return to App</strong><br>
+            <span class="muted">Go back to Plastic Prophet. Your permission changes will take effect immediately.</span>
+          </li>
+        </ol>
+
+        <h3>Checking Permission Status in App</h3>
+        <p>You can verify your current permissions within Plastic Prophet:</p>
+        <ul>
+          <li>Navigate to <strong>Settings</strong> from the main tab bar</li>
+          <li>Look at the <strong>Permissions</strong> section</li>
+          <li>You'll see green checkmarks for granted permissions and red X marks for denied permissions</li>
+          <li>Tap "Open Settings" if available to quickly jump to iOS Settings</li>
+        </ul>
+
+        <div class="note">
+          <strong>Privacy:</strong> Plastic Prophet only uses location data to identify nearby merchants for recommendations. We never track your location continuously or store your location history. Camera access is only used when you actively scan a card.
+        </div>
+      </div>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section id="recommendations">
+      <h2>🎯 Using Card Recommendations</h2>
+      
+      <div class="card">
+        <p>The core feature of Plastic Prophet is smart card recommendations based on your location and spending patterns.</p>
+
+        <h3>How Recommendations Work</h3>
+        <p>Plastic Prophet analyzes:</p>
+        <ul>
+          <li>Your current location</li>
+          <li>Nearby merchant categories (e.g., restaurant, gas station, grocery store)</li>
+          <li>Your credit card rewards structures</li>
+          <li>Historical spending patterns (future feature)</li>
+        </ul>
+
+        <h3>Getting a Recommendation</h3>
+        <ol class="step-list">
+          <li>
+            <strong>Ensure Location is Enabled</strong><br>
+            <span class="muted">Make sure you've granted location permission (see <a href="#ios-permissions">iOS Permissions</a>).</span>
+          </li>
+          <li>
+            <strong>Open the App</strong><br>
+            <span class="muted">When you're near a merchant or store, open Plastic Prophet.</span>
+          </li>
+          <li>
+            <strong>View Recommendation</strong><br>
+            <span class="muted">The main screen will show the best card to use at your current location, along with the reward you'll earn.</span>
+          </li>
+          <li>
+            <strong>Use Your Card</strong><br>
+            <span class="muted">Follow the recommendation to maximize your rewards!</span>
+          </li>
+        </ol>
+
+        <h3>Understanding Recommendations</h3>
+        <p>Each recommendation shows:</p>
+        <ul>
+          <li><strong>Card Name:</strong> Which card to use</li>
+          <li><strong>Reward Rate:</strong> How many points or cash back you'll earn</li>
+          <li><strong>Category:</strong> The merchant category detected (e.g., "Dining", "Gas", "Grocery")</li>
+          <li><strong>Why This Card:</strong> Brief explanation of the recommendation</li>
+        </ul>
+
+        <div class="note">
+          <strong>Coming Soon:</strong> Advanced features like spending analytics, monthly reward summaries, and personalized optimization tips are in development.
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile">
+      <h2>👤 Managing Your Profile</h2>
+      
+      <div class="card">
+        <p>Your profile contains your account information and preferences.</p>
+
+        <h3>Viewing Your Profile</h3>
+        <ol class="step-list">
+          <li>
+            <strong>Tap the Profile Tab</strong><br>
+            <span class="muted">From the main navigation, tap the "Profile" icon.</span>
+          </li>
+          <li>
+            <strong>View Your Information</strong><br>
+            <span class="muted">You'll see your email, name, and account creation date.</span>
+          </li>
+        </ol>
+
+        <h3>Editing Your Profile</h3>
+        <p>To update your profile information:</p>
+        <ul>
+          <li>Your email address is managed through AWS Cognito</li>
+          <li>To change your password, sign out and use "Forgot Password" on the login screen</li>
+          <li>Name and other details can be updated directly in the Profile view</li>
+        </ul>
+
+        <h3>Account Actions</h3>
+        <ul>
+          <li><strong>Sign Out:</strong> Tap "Sign Out" to log out of your account</li>
+          <li><strong>Delete Account:</strong> Available in Settings (see <a href="#settings">App Settings</a>)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section id="settings">
+      <h2>⚙️ App Settings</h2>
+      
+      <div class="card">
+        <p>Customize your Plastic Prophet experience through the Settings screen.</p>
+
+        <h3>Accessing Settings</h3>
+        <ol class="step-list">
+          <li>
+            <strong>Open Settings</strong><br>
+            <span class="muted">From the main navigation, tap the "Settings" or gear icon.</span>
+          </li>
+          <li>
+            <strong>Browse Options</strong><br>
+            <span class="muted">You'll see several configuration sections.</span>
+          </li>
+        </ol>
+
+        <h3>Settings Options</h3>
+        
+        <h4>Permissions</h4>
+        <ul>
+          <li>View current status of Camera and Location permissions</li>
+          <li>Quick link to iOS Settings to modify permissions</li>
+        </ul>
+
+        <h4>Notifications</h4>
+        <ul>
+          <li>Toggle local notifications on/off</li>
+          <li>Future: Configure notification preferences for deals and recommendations</li>
+        </ul>
+
+        <h4>Account</h4>
+        <ul>
+          <li><strong>Delete Account:</strong> Permanently delete your Plastic Prophet account and all associated data</li>
+          <li>This action cannot be undone</li>
+        </ul>
+
+        <h4>Debug (For Testing)</h4>
+        <ul>
+          <li><strong>Reset Onboarding:</strong> Clear your onboarding progress to test the first-time setup flow again</li>
+          <li>This removes all cards and resets app state</li>
+        </ul>
+
+        <div class="note">
+          <strong>Data Privacy:</strong> All your data is stored securely and encrypted. When you delete your account, all data is permanently removed from our servers.
+        </div>
+      </div>
+    </section>
+
+    <!-- Troubleshooting Section -->
+    <section id="troubleshooting">
+      <h2>🔧 Troubleshooting</h2>
+      
+      <div class="card">
+        <h3>Common Issues & Solutions</h3>
+
+        <h4>I Can't Sign In</h4>
+        <ul>
+          <li>Verify your email address has been confirmed (check your inbox for verification email)</li>
+          <li>Make sure you're using the correct email and password</li>
+          <li>Try the "Forgot Password" flow to reset your password</li>
+          <li>Check your internet connection—authentication requires an active connection</li>
+        </ul>
+
+        <h4>Camera Scanning Isn't Working</h4>
+        <ul>
+          <li>Verify camera permission is granted (see <a href="#ios-permissions">iOS Permissions</a>)</li>
+          <li>Make sure your card is well-lit and in focus</li>
+          <li>Try manual entry if scanning continues to fail</li>
+        </ul>
+
+        <h4>No Recommendations Showing</h4>
+        <ul>
+          <li>Ensure location permission is granted (app needs "While Using App" access minimum)</li>
+          <li>Make sure you've added at least one card to your wallet</li>
+          <li>Try moving to a different location or waiting a few moments for location to update</li>
+          <li>Check your internet connection—recommendations require API access</li>
+        </ul>
+
+        <h4>App Crashes or Freezes</h4>
+        <ul>
+          <li>Make sure you're running the latest version of the app from the App Store</li>
+          <li>Restart your iPhone</li>
+          <li>Try reinstalling the app (your cloud data will be preserved)</li>
+        </ul>
+
+        <h4>My Cards Aren't Syncing</h4>
+        <ul>
+          <li>Check your internet connection</li>
+          <li>Sign out and sign back in to refresh your data</li>
+          <li>Your cards are stored in your account profile, not locally</li>
+        </ul>
+
+        <h3>Still Need Help?</h3>
+        <p>If you're experiencing an issue not covered here:</p>
+        <ul>
+          <li>Check our <a href="privacy.html">Privacy Policy</a> for data-related questions</li>
+          <li>Visit our website at <a href="https://plasticprophet.com">plasticprophet.com</a></li>
+          <li>Contact support: <a href="mailto:support@plasticprophet.com">support@plasticprophet.com</a></li>
+        </ul>
+
+        <div class="note">
+          <strong>Beta Notice:</strong> Plastic Prophet is in active development. Some features may change or improve over time. We appreciate your patience and feedback!
+        </div>
+      </div>
+    </section>
+
+  </article>
+
+  <footer>
+    © <span id="year"></span> Plastic Prophet — <a href="index.html">Home</a> • <a href="privacy.html">Privacy</a> • <a href="guide.html">User Guide</a>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
