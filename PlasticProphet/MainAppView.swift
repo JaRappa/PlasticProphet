@@ -33,93 +33,180 @@ struct MainAppView: View {
 
 struct HomeView: View {
     @EnvironmentObject var app: AppState
+    @State private var showFABMenu = false
+    @State private var showManualEntry = false
+    @State private var showCardSelection = false
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    // Title
-                    Text("Home")
-                        .font(.custom("Montserrat", size: 32))
-                        .fontWeight(.bold)
-                        .foregroundColor(.adaptiveText)
-                        .tracking(-1.5)
-                        .padding(.horizontal)
-                        .padding(.top,10) // Matches Wallet/Profile padding
-                    
-                    Text("Best Deals Near You")
-                        .font(.custom("Montserrat", size: 20))
-                        .fontWeight(.semibold)
-                        .foregroundColor(Color.ppGreen)
-                        .padding(.horizontal)
-                    
-                    if let rec = app.latestRecommendation {
-                        RecommendationCard(rec: rec)
+            ZStack {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        // Title
+                        Text("Home")
+                            .font(.custom("Montserrat", size: 32))
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                            .tracking(-1.5)
                             .padding(.horizontal)
-                    } else {
-                        // Empty state
-                        VStack(spacing: 16) {
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
-                                .frame(height: 160)
-                                .overlay(
-                                    VStack(spacing: 8) {
-                                        Image(systemName: "location.circle")
-                                            .font(.system(size: 40))
-                                            .foregroundColor(.ppGreen.opacity(0.5))
-                                        Text("No recommendations yet")
-                                            .font(.custom("Montserrat", size: 16))
-                                            .fontWeight(.medium)
-                                            .foregroundColor(.gray)
-                                        Text("Add cards and enable location")
-                                            .font(.custom("Montserrat", size: 12))
-                                            .foregroundColor(.gray.opacity(0.7))
-                                    }
-                                )
+                            .padding(.top, 8)
+                        
+                        Text("Best Deals Near You")
+                            .font(.custom("Montserrat", size: 20))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.ppGreen)
+                            .padding(.horizontal)
+                        
+                        if let rec = app.latestRecommendation {
+                            RecommendationCard(rec: rec)
+                                .padding(.horizontal)
+                        } else {
+                            // Empty state
+                            VStack(spacing: 16) {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
+                                    .frame(height: 160)
+                                    .overlay(
+                                        VStack(spacing: 8) {
+                                            Image(systemName: "location.circle")
+                                                .font(.system(size: 40))
+                                                .foregroundColor(.ppGreen.opacity(0.5))
+                                            Text("No recommendations yet")
+                                                .font(.custom("Montserrat", size: 16))
+                                                .fontWeight(.medium)
+                                                .foregroundColor(.gray)
+                                            Text("Add cards and enable location")
+                                                .font(.custom("Montserrat", size: 12))
+                                                .foregroundColor(.gray.opacity(0.7))
+                                        }
+                                    )
+                                    .padding(.horizontal)
+                            }
                         }
-                        .padding()
-                        .background(Color.adaptiveCardBackground)
-                        .cornerRadius(12)
-                        .shadow(color: Color.adaptiveShadow, radius: 8, x: 0, y: 2)
+                        
+                        Button("Simulate Geofence Recommendation") {
+                            app.fetchRecommendation(for: "Coffee Shop")
+                        }
+                        .font(.custom("Montserrat", size: 16))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(14)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(app.cards.isEmpty ? Color.ppGreen.opacity(0.3) : Color.ppGreen)
+                        )
+                        .disabled(app.cards.isEmpty)
                         .padding(.horizontal)
+                        
+                        if app.cards.isEmpty {
+                            Text("Add at least one card to get recommendations.")
+                                .font(.custom("Montserrat", size: 12))
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal)
+                        }
+                        
+                        // Extra padding for FAB
+                        Color.clear.frame(height: 80)
                     }
-                    
-                    Button("Simulate Geofence Recommendation") {
-                        app.fetchRecommendation(for: "Coffee Shop")
-                    }
-                    .font(.custom("Montserrat", size: 16))
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(14)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(app.cards.isEmpty ? Color.ppGreen.opacity(0.3) : Color.ppGreen)
-                    )
-                    .disabled(app.cards.isEmpty)
-                    .padding(.horizontal)
-                    
-                    if app.cards.isEmpty {
-                        Text("Add at least one card to get recommendations.")
-                            .font(.custom("Montserrat", size: 12))
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal)
+                    .padding(.vertical)
+                }
+                .background(Color(.systemGroupedBackground))
+                
+                // Backdrop when menu is open - behind everything
+                if showFABMenu {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                showFABMenu = false
+                            }
+                        }
+                        .transition(.opacity)
+                }
+                
+                // FAB Menu - on top
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 16) {
+                            // Menu options
+                            if showFABMenu {
+                                FABMenuItem(
+                                    icon: "magnifyingglass",
+                                    title: "Search Cards",
+                                    color: Color.ppGreen
+                                ) {
+                                    withAnimation { showFABMenu = false }
+                                    showCardSelection = true
+                                }
+                                .transition(.scale.combined(with: .opacity))
+                                
+                                FABMenuItem(
+                                    icon: "camera.fill",
+                                    title: "Scan Card",
+                                    color: Color.ppGreen
+                                ) {
+                                    withAnimation { showFABMenu = false }
+                                    app.showingScanner = true
+                                }
+                                .transition(.scale.combined(with: .opacity))
+                                
+                                FABMenuItem(
+                                    icon: "pencil",
+                                    title: "Manual Entry",
+                                    color: Color.ppGreen
+                                ) {
+                                    withAnimation { showFABMenu = false }
+                                    showManualEntry = true
+                                }
+                                .transition(.scale.combined(with: .opacity))
+                            }
+                            
+                            // Main FAB Button
+                            Button(action: {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                    showFABMenu.toggle()
+                                }
+                            }) {
+                                ZStack {
+                                    Circle()
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [Color.ppGreen, Color.ppGreen.opacity(0.8)],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .frame(width: 60, height: 60)
+                                        .shadow(color: Color.ppShadow.opacity(0.4), radius: 12, x: 0, y: 6)
+                                    
+                                    Image(systemName: showFABMenu ? "xmark" : "plus")
+                                        .font(.system(size: 24, weight: .semibold))
+                                        .foregroundColor(.white)
+                                        .rotationEffect(.degrees(showFABMenu ? 90 : 0))
+                                }
+                            }
+                        }
+                        .padding(.trailing, 20)
+                        .padding(.bottom, 100)
                     }
                 }
-                .padding(.vertical)
             }
-            .background(Color.adaptiveSecondaryBackground)
-            // FIX: Remove the invisible navigation bar gap
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar(.hidden, for: .navigationBar)
+        }
+        .sheet(isPresented: $showManualEntry) {
+            HomeManualAddView(showManual: $showManualEntry)
+                .environmentObject(app)
+        }
+        .sheet(isPresented: $showCardSelection) {
+            CardSelectionView()
+                .environmentObject(app)
         }
     }
 }
-
-// ... (Keep FABMenuItem, HomeManualAddView, RecommendationCard, ScannerView as they were) ...
-// (They don't need changes, but I can paste them if you want the full file)
 
 // MARK: - FAB Menu Item
 struct FABMenuItem: View {
@@ -134,7 +221,7 @@ struct FABMenuItem: View {
                 Text(title)
                     .font(.custom("Montserrat", size: 15))
                     .fontWeight(.semibold)
-                    .foregroundColor(.adaptiveText)
+                    .foregroundColor(.ppGreen)
                 
                 ZStack {
                     Circle()
@@ -151,8 +238,8 @@ struct FABMenuItem: View {
             .padding(.vertical, 10)
             .background(
                 Capsule()
-                    .fill(Color.adaptiveCardBackground)
-                    .shadow(color: Color.adaptiveShadow, radius: 10, x: 0, y: 4)
+                    .fill(Color.white)
+                    .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 4)
             )
         }
     }
@@ -181,7 +268,7 @@ struct HomeManualAddView: View {
                     Spacer()
                 }
                 .padding()
-                .background(Color.adaptiveCardBackground)
+                .background(Color.white)
                 
                 Form {
                     Section(header: Text("Card Info").font(.custom("Montserrat", size: 14))) {
@@ -239,7 +326,7 @@ struct HomeManualAddView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 20)
-                .background(Color.adaptiveCardBackground)
+                .background(Color.white)
             }
         }
     }
@@ -277,9 +364,9 @@ struct RecommendationCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(Color.adaptiveCardBackground)
+        .background(Color.white)
         .cornerRadius(16)
-        .shadow(color: Color.adaptiveShadow.opacity(0.08), radius: 8, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
     }
 }
 
@@ -290,7 +377,7 @@ struct ScannerView: View {
     
     var body: some View {
         ZStack {
-            Color.adaptiveBackground.ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             
             VStack(spacing: 24) {
                 Spacer()

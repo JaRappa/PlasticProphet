@@ -1,258 +1,274 @@
-// AppState.swift
-// Global observable application state with authentication
+//
+//  AppState.swift
+//  PlasticProphet
+//
 
 import Foundation
 import SwiftUI
-import Combine // Required for permission listeners
 
 @MainActor
 final class AppState: ObservableObject {
+    
     // MARK: - Authentication
+    
     @Published var isAuthenticated: Bool = false
     @Published var userFirstName: String = ""
     @Published var userLastName: String = ""
     @Published var userEmail: String = ""
     
-    // Cognito Auth Service
+    // Cognito Authentication service
     @Published var authService = CognitoAuthService()
     
-    // API Service (Added for health checks)
-    let apiService = APIService()
+    // MARK: - Onboarding & Permissions
     
-    // MARK: - Onboarding
     @Published var onboardingCompleted: Bool = false
     @Published var acceptedTos: Bool = false
+    @Published var permissions = PermissionsStatus()
     
-    // [NEW] Real System Permission Manager
-    @Published var permissionManager = PermissionManager()
+    // MARK: - Location
     
-    // 2. ADDED: Storage for the permission listener
-    private var cancellables = Set<AnyCancellable>()
-         
-    // Helper to check Camera status
-    var isCameraAuthorized: Bool {
-        permissionManager.cameraStatus == .authorized
-    }
-         
-    // Helper to check Location status
-    var isLocationAuthorized: Bool {
-        permissionManager.locationStatus == .authorizedWhenInUse ||
-        permissionManager.locationStatus == .authorizedAlways
-    }
+    @Published var locationService = LocationService()
     
     // MARK: - App Data
+    
     @Published var cards: [Card] = []
     @Published var latestRecommendation: Recommendation? = nil
+    
+    // Backend service for merchant data
+    let merchantNetworkService = MerchantNetworkService()
+    @Published var lastNormalizedMerchant: NormalizedMerchantResponse? = nil
+    
     @Published var showingScanner: Bool = false
     @Published var showingSettings: Bool = false
     
     // 0 = Wallet, 1 = Home, 2 = Profile
     @Published var selectedTab: Int = 0
     
-    // MARK: - Initialization
+    // MARK: - Init
     
     init() {
-        // Check Cognito configuration on startup
-        print("🚀🚀🚀 APPSTATE INIT - CONSOLE TEST 🚀🚀🚀")
-        CognitoConfig.printStatus()
-        
-        // 3. ADDED: The Listener Logic
-        // This ensures the Onboarding View updates INSTANTLY when you click "Allow"
-        permissionManager.objectWillChange
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-            .store(in: &cancellables)
-        
-        // Load persisted onboarding status
-        loadPersistedState()
-        
-        // Check if user is already signed in
-        checkSession()
+        // Connect geofence events → fetch normalized merchant data from backend
+        locationService.onMerchantRegionEntered = { [weak self] merchantName in
+            guard let self else { return }
+            print("🔥 AppState received geofence enter for: \(merchantName)")
+            self.fetchNormalizedMerchantData(merchantName: merchantName)
+        }
     }
     
-    // MARK: - Authentication Methods
+    // MARK: - Cognito Wrappers (no throws, match how views call them)
     
     func signUp(email: String, password: String, firstName: String, lastName: String) async {
         do {
-            print("🔵 Starting sign up for: \(email)")
-            try await authService.signUp(email: email, password: password, firstName: firstName, lastName: lastName)
-            print("✅ Sign up successful - check email for verification code")
+            try await authService.signUp(
+                email: email,
+                password: password,
+                firstName: firstName,
+                lastName: lastName
+            )
+            
+            await MainActor.run {
+                self.userFirstName = firstName
+                self.userLastName = lastName
+                self.userEmail = email
+            }
         } catch {
-            print("❌ Sign up failed: \(error)")
-            print("❌ Error details: \(error.localizedDescription)")
+            print("❌ Sign up error: \(error)")
         }
     }
     
     func confirmSignUp(email: String, code: String) async {
         do {
-            // First confirm the signup
             try await authService.confirmSignUp(email: email, code: code)
-            print("✅ Email confirmed - you can now sign in")
-            
-            // Note: We can't auto sign-in because we don't have the password here
-            // User will need to sign in manually on the next screen
-            
         } catch {
-            print("❌ Confirmation failed: \(error.localizedDescription)")
+            print("❌ Confirm sign-up error: \(error)")
         }
     }
     
-    func signIn() async {
+    func resendCode(email: String) async {
         do {
-            print("🔵 Starting secure OAuth 2.0 sign in")
-            try await authService.signIn()
-            print("✅ Sign in successful!")
-            
-            // Extract user info
-            let attributes = try await authService.extractUserInfoFromIDToken()
+            try await authService.resendSignUpCode(email: email)
+        } catch {
+            print("❌ Resend code error: \(error)")
+        }
+    }
+    
+    func signIn(email: String, password: String) async {
+        do {
+            try await authService.signIn(email: email, password: password)
             
             await MainActor.run {
-                self.isAuthenticated = true
-                self.userEmail = attributes["email"] ?? self.authService.currentUsername ?? ""
-                self.userFirstName = attributes["given_name"] ?? ""
-                self.userLastName = attributes["family_name"] ?? ""
-                
-                print("👤 User identified as: \(self.userEmail)")
-                self.checkPreviousOnboarding()
+                self.isAuthenticated = self.authService.isAuthenticated
+                self.userEmail = email
             }
         } catch {
-            print("❌ Sign in failed: \(error)")
-            print("❌ Error details: \(error.localizedDescription)")
+            print("❌ Sign in error: \(error)")
         }
     }
     
-    func checkSession() {
-        authService.checkSession()
+    /// Note: this is *not* async so `ProfileView` can call `app.signOut()` directly.
+    func signOut() {
+        Task {
+            await authService.signOut()
+            await MainActor.run {
+                self.isAuthenticated = false
+                self.onboardingCompleted = false
+                self.userFirstName = ""
+                self.userLastName = ""
+                self.userEmail = ""
+            }
+        }
+    }
+    
+    // MARK: - Permissions
+    
+    func markPermissions(camera: Bool? = nil, location: Bool? = nil) {
+        if let camera { permissions.cameraAuthorized = camera }
+        if let location { permissions.locationAuthorized = location }
+    }
+    
+    // MARK: - Mock / Test Data Helpers
+    
+    /// Adds a sample card to the user's wallet for testing / onboarding.
+    func addMockCard(network: String) {
+        let mockCard = Card(
+            name: "\(network) Test Card",
+            network: network,
+            last4: String(Int.random(in: 1000...9999)),
+            rewardSummary: "2% Everywhere"
+        )
         
-        if authService.isAuthenticated {
-            self.isAuthenticated = true
-            self.userEmail = authService.currentUsername ?? ""
-            
-            // Extract user info from stored ID token
-            Task {
-                do {
-                    let attributes = try await authService.extractUserInfoFromIDToken()
-                    await MainActor.run {
-                        self.userFirstName = attributes["given_name"] ?? "User"
-                        self.userLastName = attributes["family_name"] ?? ""
-                        if let email = attributes["email"] {
-                            self.userEmail = email
-                        }
-                        self.checkPreviousOnboarding()
-                    }
-                    print("✅ Restored user session for: \(self.userEmail)")
-                } catch {
-                    print("⚠️ Could not extract user info from stored token: \(error)")
+        cards.append(mockCard)
+    }
+    
+    // MARK: - Recommendations
+    
+    /// Fetch normalized merchant data from backend and create recommendation
+    func fetchNormalizedMerchantData(merchantName: String) {
+        Task {
+            do {
+                // Use email as userId (or you could use an actual numeric ID)
+                let userId = userEmail.isEmpty ? "guest_user" : userEmail.replacingOccurrences(of: "@", with: "_").replacingOccurrences(of: ".", with: "_")
+                let generationId = UUID().uuidString
+                
+                let normalizedData = try await merchantNetworkService.fetchNormalizedMerchant(
+                    merchantName: merchantName,
+                    userId: userId,
+                    generationId: generationId
+                )
+                
+                await MainActor.run {
+                    self.lastNormalizedMerchant = normalizedData
+                    print("✅ Received normalized merchant: \(normalizedData.generalizedName ?? "Unknown")")
+                    print("   MCC: \(normalizedData.mcc ?? "N/A")")
+                    print("   MCC Label: \(normalizedData.mccLabel ?? "N/A")")
+                    
+                    // Now create a recommendation based on the normalized data
+                    self.createRecommendationFromNormalizedData(normalizedData: normalizedData)
+                }
+            } catch {
+                await MainActor.run {
+                    print("❌ Failed to fetch normalized merchant: \(error.localizedDescription)")
+                    // Fallback to the old mock recommendation system
+                    self.fetchRecommendation(for: merchantName)
                 }
             }
         }
     }
     
-    func signOut() {
-        Task {
-            await authService.signOut()
-            
-            // Clear all user data
-            self.isAuthenticated = false
-            self.onboardingCompleted = false
-            self.acceptedTos = false
-            self.cards.removeAll()
-            self.latestRecommendation = nil
-            self.userFirstName = ""
-            self.userLastName = ""
-            self.userEmail = ""
-            // self.permissions = PermissionsStatus() // No longer needed with PermissionManager
-            
-            // Clear persisted state
-            clearPersistedState()
-            
-            print("✅ Signed out")
+    /// Create a recommendation based on backend-normalized merchant data
+    private func createRecommendationFromNormalizedData(normalizedData: NormalizedMerchantResponse) {
+        let chosenCard: Card
+        if let firstCard = cards.first {
+            chosenCard = firstCard
+        } else {
+            chosenCard = Card(
+                name: "Wells Fargo Active Cash",
+                network: "Visa",
+                last4: "1234",
+                rewardSummary: "2% Everywhere"
+            )
         }
-    }
-    
-    // MARK: - Recommendation Methods
-
-    func fetchRecommendation(for merchant: String? = nil) {
-        guard let first = cards.first else {
-            latestRecommendation = nil
-            return
+        
+        let merchantDisplayName = normalizedData.generalizedName ?? normalizedData.merchantName
+        let categoryKey = normalizedData.categoryKey ?? "GENERAL"
+        let mccLabel = normalizedData.mccLabel ?? "Unknown Category"
+        
+        let rationale: String
+        let rewardText: String
+        
+        // Use the MCC category to provide smarter recommendations
+        switch categoryKey.uppercased() {
+        case let cat where cat.contains("FOOD") || cat.contains("RESTAURANT"):
+            rationale = "Higher cashback on food and dining."
+            rewardText = "3% back at restaurants and food merchants"
+        case let cat where cat.contains("GROCERY"):
+            rationale = "Great rewards on groceries."
+            rewardText = "4% back at grocery stores"
+        case let cat where cat.contains("GAS"):
+            rationale = "Bonus rewards on fuel purchases."
+            rewardText = "5% back at gas stations"
+        case let cat where cat.contains("TRAVEL"):
+            rationale = "Excellent rewards on travel purchases."
+            rewardText = "3% back on travel"
+        default:
+            rationale = "Solid rewards at \(mccLabel)."
+            rewardText = "1.5% back on this purchase"
         }
+        
         latestRecommendation = Recommendation(
-            card: first,
-            merchantName: merchant ?? "Nearby Merchant",
-            rationale: "Higher cashback on dining",
-            rewardText: first.rewardSummary
+            card: chosenCard,
+            merchantName: merchantDisplayName,
+            rationale: rationale,
+            rewardText: rewardText
         )
     }
-
-    // MARK: - Card Management
-
-    func addMockCard(network: String) {
-        let suffix = String(Int.random(in: 1000...9999))
-        let card = Card(name: "Rewards \(network) \(suffix)", network: network, last4: suffix, rewardSummary: "5% Dining / 3% Grocery")
-        cards.append(card)
+    
+    /// Build a fake recommendation locally (Phase 1)
+    func fetchRecommendation(for merchant: String) {
+        // Pick an existing card if the user has added any; otherwise use a default.
+        let chosenCard: Card
+        if let firstCard = cards.first {
+            chosenCard = firstCard
+        } else {
+            chosenCard = Card(
+                name: "Wells Fargo Active Cash",
+                network: "Visa",
+                last4: "1234",
+                rewardSummary: "2% Everywhere"
+            )
+        }
+        
+        let lower = merchant.lowercased()
+        let rationale: String
+        let rewardText: String
+        
+        if lower.contains("coffee") {
+            rationale = "Higher cashback at coffee shops."
+            rewardText = "3% back at coffee merchants"
+        } else if lower.contains("grocery") {
+            rationale = "Great rewards on groceries."
+            rewardText = "4% back at grocery stores"
+        } else if lower.contains("gas") {
+            rationale = "Bonus rewards on fuel purchases."
+            rewardText = "5% back at gas stations"
+        } else {
+            rationale = "Solid flat-rate cashback for this purchase."
+            rewardText = chosenCard.rewardSummary
+        }
+        
+        latestRecommendation = Recommendation(
+            card: chosenCard,
+            merchantName: merchant,
+            rationale: rationale,
+            rewardText: rewardText
+        )
     }
-
-    // MARK: - Permissions
-
-    func markPermissions(camera: Bool? = nil, location: Bool? = nil) {
-        // No-op: handled by PermissionManager now, kept for backward compatibility if needed
-    }
-
+    
     // MARK: - Onboarding
-
+    
     func proceedIfReady() {
-        // 4. UPDATED: Ensure we use the real system checks
-        if acceptedTos && !cards.isEmpty && isCameraAuthorized && isLocationAuthorized {
-            self.onboardingCompleted = true
-            savePersistedState()
+        if acceptedTos && permissions.allGranted && !cards.isEmpty {
+            onboardingCompleted = true
         }
-    }
-    
-    // MARK: - Persistence
-    
-    func savePersistedState() {
-        UserDefaults.standard.set(onboardingCompleted, forKey: "onboarding_completed")
-        UserDefaults.standard.set(acceptedTos, forKey: "accepted_tos")
-        print("💾 Saved onboarding state: completed=\(onboardingCompleted)")
-        if !userEmail.isEmpty {
-            // FIX: Use lowercased() so Case Sensitivity doesn't break it
-            let key = "onboarded_\(userEmail.lowercased())"
-            UserDefaults.standard.set(true, forKey: key)
-            print("💾 Saved onboarding state for \(key)")
-        }
-    }
-    
-    func checkPreviousOnboarding() {
-        print("🔍 checkingPreviousOnboarding invoked...")
-        
-        guard !userEmail.isEmpty else {
-            print("⚠️ Cannot check onboarding: userEmail is empty in AppState")
-            return
-        }
-        
-        let key = "onboarded_\(userEmail.lowercased())"
-        let hasFinished = UserDefaults.standard.bool(forKey: key)
-        
-        print("🔍 Checking UserDefaults for key: [\(key)]")
-        print("🔍 Result: \(hasFinished)")
-        
-        if hasFinished {
-            self.onboardingCompleted = true
-            print("✅ Restored onboarding status: Completed")
-        }
-    }
-    
-    private func loadPersistedState() {
-        onboardingCompleted = UserDefaults.standard.bool(forKey: "onboarding_completed")
-        acceptedTos = UserDefaults.standard.bool(forKey: "accepted_tos")
-        print("📂 Loaded onboarding state: completed=\(onboardingCompleted)")
-    }
-    
-    private func clearPersistedState() {
-        UserDefaults.standard.removeObject(forKey: "onboarding_completed")
-        UserDefaults.standard.removeObject(forKey: "accepted_tos")
-        print("🗑️ Cleared persisted state")
     }
 }
