@@ -43,7 +43,7 @@ def get_mcc_info_by_code(mcc):
     Returns:
         dict or None: MCC record if found, None otherwise
     """
-    if not mcc:
+    if mcc is None:
         return None
     
     for record in mcc_data:

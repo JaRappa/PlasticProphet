@@ -33,7 +33,7 @@ def lambda_handler(event, context):
         longitude = body.get('longitude')
         
         # Validate required fields
-        if not all([user_id is not None, generation_id, merchant_name, latitude, longitude]):
+        if not all([user_id is not None, generation_id is not None, merchant_name is not None, latitude is not None, longitude is not None]):
             return {
                 'statusCode': 400,
                 'body': json.dumps({
@@ -66,7 +66,7 @@ def lambda_handler(event, context):
         print(f"✅ Matched to MCC: {mcc}, Category: {category_key}")
         
         # Step 3: Generate merchant_hash (only thing we generate)
-        merchant_hash = hashlib.md5(generalized_name.encode()).hexdigest()
+        merchant_hash = hashlib.sha256(generalized_name.encode()).hexdigest()
         
         # Step 4: Write to RDS rolling_merchant table
         write_to_rolling_merchant(
