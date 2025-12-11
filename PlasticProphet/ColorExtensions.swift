@@ -39,38 +39,4 @@ extension Color {
     static let mastercardRed = Color(hex: "eb001b").opacity(0.7)
     static let amexBlue = Color(hex: "016fd0").opacity(0.8)
     static let discoverOrange = Color(hex: "e55c20").opacity(0.8)
-    
-    // MARK: - Dark Mode Adaptive Colors
-    
-    /// Adaptive background color - white in light mode, black in dark mode
-    static let adaptiveBackground = Color(UIColor.systemBackground)
-    
-    /// Adaptive secondary background - light gray in light mode, dark gray in dark mode
-    static let adaptiveSecondaryBackground = Color(UIColor.secondarySystemBackground)
-    
-    /// Adaptive text color - black in light mode, white in dark mode
-    static let adaptiveText = Color(UIColor.label)
-    
-    /// Adaptive secondary text color - gray in both modes with appropriate contrast
-    static let adaptiveSecondaryText = Color(UIColor.secondaryLabel)
-    
-    /// Adaptive card background with subtle shadow-friendly color
-    static let adaptiveCardBackground = Color(UIColor.secondarySystemGroupedBackground)
-    
-    /// Adaptive shadow color that works in both light and dark modes
-    static let adaptiveShadow = Color(UIColor.label.withAlphaComponent(0.1))
-}
-
-// MARK: - Adaptive Logo Helper
-struct AdaptiveLogo: View {
-    @Environment(\.colorScheme) var colorScheme
-    var width: CGFloat = 280
-    var height: CGFloat = 280
-    
-    var body: some View {
-        Image(colorScheme == .dark ? "App Logo White" : "App Logo Black")
-            .resizable()
-            .scaledToFit()
-            .frame(width: width, height: height)
-    }
 }

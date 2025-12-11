@@ -2,20 +2,22 @@
 //  PlasticProphetApp.swift
 //  PlasticProphet
 //
-//  Created by Jake on 10/6/25.
-//
 
 import SwiftUI
 
 @main
 struct PlasticProphetApp: App {
+    // Single shared global app state
+    @StateObject private var appState = AppState()
+
     init() {
         FontRegistration.registerFonts()
     }
+
     var body: some Scene {
         WindowGroup {
-            SplashScreenView()  // ✅ Changed from ContentView() to SplashScreenView()
-                .environmentObject(AppState())
+            ContentView()
+                .environmentObject(appState)
         }
     }
 }
