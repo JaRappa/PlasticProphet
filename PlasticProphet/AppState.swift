@@ -43,11 +43,11 @@ final class AppState: ObservableObject {
     // MARK: - Init
     
     init() {
-        // Connect geofence events → fake recommendations
+        // Connect geofence events → fetch normalized merchant data from backend
         locationService.onMerchantRegionEntered = { [weak self] merchantName in
             guard let self else { return }
             print("🔥 AppState received geofence enter for: \(merchantName)")
-            self.fetchRecommendation(for: merchantName)
+            self.fetchNormalizedMerchantData(merchantName: merchantName)
         }
     }
     
@@ -137,6 +137,87 @@ final class AppState: ObservableObject {
     }
     
     // MARK: - Recommendations
+    
+    /// Fetch normalized merchant data from backend and create recommendation
+    func fetchNormalizedMerchantData(merchantName: String) {
+        Task {
+            do {
+                // Use email as userId (or you could use an actual numeric ID)
+                let userId = userEmail.isEmpty ? "guest_user" : userEmail.replacingOccurrences(of: "@", with: "_").replacingOccurrences(of: ".", with: "_")
+                let generationId = UUID().uuidString
+                
+                let normalizedData = try await merchantNetworkService.fetchNormalizedMerchant(
+                    merchantName: merchantName,
+                    userId: userId,
+                    generationId: generationId
+                )
+                
+                await MainActor.run {
+                    self.lastNormalizedMerchant = normalizedData
+                    print("✅ Received normalized merchant: \(normalizedData.generalizedName ?? "Unknown")")
+                    print("   MCC: \(normalizedData.mcc ?? "N/A")")
+                    print("   MCC Label: \(normalizedData.mccLabel ?? "N/A")")
+                    
+                    // Now create a recommendation based on the normalized data
+                    self.createRecommendationFromNormalizedData(normalizedData: normalizedData)
+                }
+            } catch {
+                await MainActor.run {
+                    print("❌ Failed to fetch normalized merchant: \(error.localizedDescription)")
+                    // Fallback to the old mock recommendation system
+                    self.fetchRecommendation(for: merchantName)
+                }
+            }
+        }
+    }
+    
+    /// Create a recommendation based on backend-normalized merchant data
+    private func createRecommendationFromNormalizedData(normalizedData: NormalizedMerchantResponse) {
+        let chosenCard: Card
+        if let firstCard = cards.first {
+            chosenCard = firstCard
+        } else {
+            chosenCard = Card(
+                name: "Wells Fargo Active Cash",
+                network: "Visa",
+                last4: "1234",
+                rewardSummary: "2% Everywhere"
+            )
+        }
+        
+        let merchantDisplayName = normalizedData.generalizedName ?? normalizedData.merchantName
+        let categoryKey = normalizedData.categoryKey ?? "GENERAL"
+        let mccLabel = normalizedData.mccLabel ?? "Unknown Category"
+        
+        let rationale: String
+        let rewardText: String
+        
+        // Use the MCC category to provide smarter recommendations
+        switch categoryKey.uppercased() {
+        case let cat where cat.contains("FOOD") || cat.contains("RESTAURANT"):
+            rationale = "Higher cashback on food and dining."
+            rewardText = "3% back at restaurants and food merchants"
+        case let cat where cat.contains("GROCERY"):
+            rationale = "Great rewards on groceries."
+            rewardText = "4% back at grocery stores"
+        case let cat where cat.contains("GAS"):
+            rationale = "Bonus rewards on fuel purchases."
+            rewardText = "5% back at gas stations"
+        case let cat where cat.contains("TRAVEL"):
+            rationale = "Excellent rewards on travel purchases."
+            rewardText = "3% back on travel"
+        default:
+            rationale = "Solid rewards at \(mccLabel)."
+            rewardText = "1.5% back on this purchase"
+        }
+        
+        latestRecommendation = Recommendation(
+            card: chosenCard,
+            merchantName: merchantDisplayName,
+            rationale: rationale,
+            rewardText: rewardText
+        )
+    }
     
     /// Build a fake recommendation locally (Phase 1)
     func fetchRecommendation(for merchant: String) {
