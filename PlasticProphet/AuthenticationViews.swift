@@ -220,6 +220,10 @@ struct SignInView: View {
     private func signIn() {
         Task {
             await app.signIn(email: email, password: password)
+            // Dismiss this view after successful sign-in so ContentView can switch to the next screen
+            if app.isAuthenticated {
+                dismiss()
+            }
         }
     }
 }

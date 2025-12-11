@@ -96,10 +96,9 @@ final class AppState: ObservableObject {
         do {
             try await authService.signIn(email: email, password: password)
             
-            await MainActor.run {
-                self.isAuthenticated = self.authService.isAuthenticated
-                self.userEmail = email
-            }
+            self.isAuthenticated = self.authService.isAuthenticated
+            self.userEmail = email
+            print("🔐 AppState.isAuthenticated set to: \(self.isAuthenticated)")
         } catch {
             print("❌ Sign in error: \(error)")
         }
@@ -109,13 +108,11 @@ final class AppState: ObservableObject {
     func signOut() {
         Task {
             await authService.signOut()
-            await MainActor.run {
-                self.isAuthenticated = false
-                self.onboardingCompleted = false
-                self.userFirstName = ""
-                self.userLastName = ""
-                self.userEmail = ""
-            }
+            self.isAuthenticated = false
+            self.onboardingCompleted = false
+            self.userFirstName = ""
+            self.userLastName = ""
+            self.userEmail = ""
         }
     }
     

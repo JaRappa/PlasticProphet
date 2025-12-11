@@ -128,13 +128,14 @@ class CognitoAuthService: ObservableObject {
         let newIdToken = authResult["IdToken"] as? String
         let newRefreshToken = authResult["RefreshToken"] as? String
         
-        await MainActor.run {
-            self.accessToken = newAccessToken
-            self.idToken = newIdToken
-            self.refreshToken = newRefreshToken
-            self.currentUsername = email
-            self.isAuthenticated = (newAccessToken != nil)
-        }
+        print("🔑 Tokens received - AccessToken exists: \(newAccessToken != nil)")
+        
+        self.accessToken = newAccessToken
+        self.idToken = newIdToken
+        self.refreshToken = newRefreshToken
+        self.currentUsername = email
+        self.isAuthenticated = (newAccessToken != nil)
+        print("🔐 CognitoAuthService.isAuthenticated set to: \(self.isAuthenticated)")
         
         saveTokensToKeychain()
         print("✅ Sign in successful!")
@@ -143,14 +144,12 @@ class CognitoAuthService: ObservableObject {
     // MARK: - Sign Out
     
     func signOut() async {
-        await MainActor.run {
-            self.accessToken = nil
-            self.idToken = nil
-            self.refreshToken = nil
-            self.currentUsername = nil
-            self.isAuthenticated = false
-            clearTokensFromKeychain()
-        }
+        self.accessToken = nil
+        self.idToken = nil
+        self.refreshToken = nil
+        self.currentUsername = nil
+        self.isAuthenticated = false
+        clearTokensFromKeychain()
         print("✅ Signed out")
     }
     

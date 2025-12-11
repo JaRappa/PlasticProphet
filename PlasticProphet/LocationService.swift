@@ -49,15 +49,40 @@ class LocationService: NSObject, ObservableObject {
     
     // MARK: - Permission Requests
     
+    /// Refresh the current authorization status from the location manager
+    func refreshAuthorizationStatus() {
+        authorizationStatus = manager.authorizationStatus
+    }
+    
     /// Ask iOS for "While Using the App" location access.
     /// This will trigger the system popup if status is `.notDetermined`.
     func requestWhenInUseAuthorization() {
         manager.requestWhenInUseAuthorization()
     }
     
-    /// (Later if you want "Always" access, you could expose this.)
+    /// Request "Always" access for background location.
+    /// Per Apple docs, you must first have "When In Use" authorization before requesting "Always".
+    /// If status is notDetermined, this will first show the "When In Use" prompt.
+    /// If status is authorizedWhenInUse, this will show the "Upgrade to Always" prompt.
     func requestAlwaysAuthorization() {
-        manager.requestAlwaysAuthorization()
+        // Refresh status first to ensure we have the latest
+        let currentStatus = manager.authorizationStatus
+        authorizationStatus = currentStatus
+        
+        switch currentStatus {
+        case .notDetermined:
+            // Must request WhenInUse first per Apple's requirements
+            manager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse:
+            // Now we can request upgrade to Always
+            manager.requestAlwaysAuthorization()
+        case .authorizedAlways:
+            // Already have Always, nothing to do
+            break
+        default:
+            // Denied or restricted - can't request
+            break
+        }
     }
     
     // MARK: - Location Updates

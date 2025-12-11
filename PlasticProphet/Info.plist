@@ -2,9 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Privacy - Location When In Use Usage Description
-</key>
-	<string>PlasticProphet uses your location to recommend the best card at nearby merchants.
-</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>PlasticProphet needs "Always Allow" location access to notify you of the best card when you arrive at merchants, even when the app is in the background.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>PlasticProphet uses your location to recommend the best card at nearby merchants.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>PlasticProphet needs "Always Allow" location access to notify you of the best card when you arrive at merchants, even when the app is in the background.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>PlasticProphet uses your camera to scan credit cards for quick card entry.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 </dict>
 </plist>
