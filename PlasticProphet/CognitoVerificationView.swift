@@ -1,5 +1,6 @@
 // CognitoVerificationView.swift
-// Handles AWS Cognito email verification - after verification, user signs in via Hosted UI
+// Add this as a NEW file to your project
+// This handles AWS Cognito email verification with your design style
 
 import SwiftUI
 
@@ -8,22 +9,18 @@ struct CognitoVerificationView: View {
     @Environment(\.dismiss) private var dismiss
     
     let email: String
-    
-    @State private var code: [String] = ["", "", "", "", "", ""]
+    @State private var code: [String] = ["", "", "", "", "", ""] // 6 digits for AWS Cognito
     @FocusState private var focusedField: Int?
     @State private var isLoading = false
     @State private var errorMessage = ""
-    @State private var successMessage = ""
-    @State private var isResending = false
-    @State private var navigateToSignIn = false
     
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.adaptiveBackground.ignoresSafeArea()
+                Color.white.ignoresSafeArea()
                 
                 VStack(alignment: .center, spacing: 24) {
-                    // Email icon
+                    // Card icon
                     Image(systemName: "envelope.circle.fill")
                         .font(.system(size: 50))
                         .foregroundColor(Color.ppGreen)
@@ -32,13 +29,13 @@ struct CognitoVerificationView: View {
                     Text("Verify Your Email")
                         .font(.custom("Montserrat", size: 28))
                         .fontWeight(.bold)
-                        .foregroundColor(.adaptiveText)
+                        .foregroundColor(.black)
                     
-                    // Email display
+                    // Fixed text without concatenation
                     VStack(spacing: 4) {
                         Text("We sent a verification code to")
                             .font(.custom("Montserrat", size: 16))
-                            .foregroundColor(.adaptiveText)
+                            .foregroundColor(.black)
                         Text(email)
                             .font(.custom("Montserrat", size: 16))
                             .fontWeight(.bold)
@@ -48,14 +45,6 @@ struct CognitoVerificationView: View {
                     .padding(.horizontal, 32)
                     .padding(.top, 20)
                     
-                    // Success message
-                    if !successMessage.isEmpty {
-                        Text(successMessage)
-                            .font(.custom("Montserrat", size: 12))
-                            .foregroundColor(Color.ppGreen)
-                            .padding(.horizontal, 32)
-                    }
-                    
                     // Error message
                     if !errorMessage.isEmpty {
                         Text(errorMessage)
@@ -64,7 +53,7 @@ struct CognitoVerificationView: View {
                             .padding(.horizontal, 32)
                     }
                     
-                    // Code input boxes
+                    // Code input boxes (6 digits for AWS Cognito)
                     HStack(spacing: 12) {
                         ForEach(0..<6, id: \.self) { index in
                             TextField("", text: $code[index])
@@ -81,27 +70,19 @@ struct CognitoVerificationView: View {
                                 .keyboardType(.numberPad)
                                 .focused($focusedField, equals: index)
                                 .onChange(of: code[index]) { _, newValue in
-                                    handleCodeInput(index: index, newValue: newValue)
+                                    if newValue.count == 1 && index < 5 {
+                                        focusedField = index + 1
+                                    } else if newValue.isEmpty && index > 0 {
+                                        focusedField = index - 1
+                                    }
+                                    // Limit to 1 character
+                                    if newValue.count > 1 {
+                                        code[index] = String(newValue.prefix(1))
+                                    }
                                 }
                         }
                     }
                     .padding(.top, 32)
-                    
-                    // Resend Code Button
-                    Button(action: resendCode) {
-                        HStack {
-                            if isResending {
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: Color.ppGreen))
-                                    .scaleEffect(0.8)
-                            }
-                            Text("Resend Code")
-                                .font(.custom("Montserrat", size: 16))
-                                .foregroundColor(Color.ppGreen)
-                        }
-                    }
-                    .disabled(isResending || isLoading)
-                    .padding(.top, 16)
                     
                     Spacer()
                     
@@ -135,7 +116,7 @@ struct CognitoVerificationView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { dismiss() }) {
                         Image(systemName: "arrow.left")
-                            .foregroundColor(.adaptiveText)
+                            .foregroundColor(.black)
                             .font(.system(size: 20))
                     }
                 }
@@ -143,111 +124,31 @@ struct CognitoVerificationView: View {
             .onAppear {
                 focusedField = 0
             }
-            .navigationDestination(isPresented: $navigateToSignIn) {
-                SignInView()
-            }
         }
     }
-    
-    // MARK: - Computed Properties
     
     private var isCodeComplete: Bool {
         code.allSatisfy { !$0.isEmpty }
     }
     
-    // MARK: - Helper Methods
-    
-    private func handleCodeInput(index: Int, newValue: String) {
-        errorMessage = ""
-        successMessage = ""
-        
-        if newValue.count == 1 && index < 5 {
-            focusedField = index + 1
-        } else if newValue.isEmpty && index > 0 {
-            focusedField = index - 1
-        }
-        
-        if newValue.count > 1 {
-            code[index] = String(newValue.prefix(1))
-        }
-    }
-    
-    // MARK: - Verification
-    
     private func verifyCode() {
         errorMessage = ""
-        successMessage = ""
         isLoading = true
         
-        let verificationCode = code.joined()
-        
-        print("🔵 Attempting to verify code: \(verificationCode)")
+        let verificationCode = code.joined() // Combine all digits
         
         Task {
-            do {
-                // Confirm the signup
-                try await app.authService.confirmSignUp(email: email, code: verificationCode)
-                print("✅ Email confirmed!")
+            await app.confirmSignUp(email: email, code: verificationCode)
+            
+            await MainActor.run {
+                isLoading = false
                 
-                await MainActor.run {
-                    isLoading = false
-                    successMessage = "Email verified! Please sign in to continue."
-                    
-                    // Navigate to sign in after a brief delay to show success message
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        navigateToSignIn = true
-                    }
-                }
-            } catch {
-                await MainActor.run {
-                    isLoading = false
-                    print("❌ Confirmation failed: \(error.localizedDescription)")
-                    
-                    if error.localizedDescription.contains("CodeMismatchException") {
-                        errorMessage = "Invalid code. Please try again."
-                    } else if error.localizedDescription.contains("ExpiredCodeException") {
-                        errorMessage = "Code expired. Please request a new code."
-                    } else {
-                        errorMessage = "Invalid code provided, please request a code again."
-                    }
-                    
-                    code = ["", "", "", "", "", ""]
-                    focusedField = 0
-                }
-            }
-        }
-    }
-    
-    // MARK: - Resend Code
-    
-    private func resendCode() {
-        errorMessage = ""
-        successMessage = ""
-        isResending = true
-        
-        print("🔵 Resending verification code to: '\(email)'")
-        
-        Task {
-            do {
-                try await app.authService.resendConfirmationCode(email: email)
-                
-                await MainActor.run {
-                    isResending = false
-                    successMessage = "New code sent! Check your email."
-                    print("✅ New verification code sent")
-                    
-                    code = ["", "", "", "", "", ""]
-                    focusedField = 0
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        successMessage = ""
-                    }
-                }
-            } catch {
-                await MainActor.run {
-                    isResending = false
-                    errorMessage = "Failed to resend code. Please try again."
-                    print("❌ Failed to resend code: \(error.localizedDescription)")
+                // Check if verification was successful
+                if app.authService.isAuthenticated {
+                    dismiss() // Close verification view
+                    // User can now sign in
+                } else {
+                    errorMessage = "Invalid code. Please try again."
                 }
             }
         }

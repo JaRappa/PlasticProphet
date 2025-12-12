@@ -40,14 +40,14 @@ struct CardSelectionView: View {
                     Text("Search Cards")
                         .font(.custom("Montserrat", size: 32))
                         .fontWeight(.bold)
-                        .foregroundColor(.adaptiveText)
+                        .foregroundColor(.black)
                         .tracking(-1.5)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20)
                 .padding(.top, 30)
                 .padding(.bottom, 16)
-                .background(Color.adaptiveCardBackground)
+                .background(Color.white)
             }
             
             // Search and cards content
@@ -112,7 +112,7 @@ struct CardSelectionView: View {
                     .padding(.horizontal, 20)
                     .padding(.vertical, 16)
                 }
-                .background(Color.adaptiveCardBackground)
+                .background(Color.white)
             }
         }
         .background(Color(.systemGroupedBackground))
@@ -184,7 +184,7 @@ private struct CardTile: View {
                     Text(card.name)
                         .font(.custom("Montserrat", size: 15))
                         .fontWeight(.semibold)
-                        .foregroundColor(.adaptiveText)
+                        .foregroundColor(.black)
                         .multilineTextAlignment(.leading)
                     Text(card.rewardSummary)
                         .font(.custom("Montserrat", size: 11))

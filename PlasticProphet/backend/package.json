@@ -1,0 +1,19 @@
+{
+  "name": "plasticprophet-backend-serverless",
+  "version": "1.0.0",
+  "description": "Serverless backend (AWS Lambda + RDS) for PlasticProphet",
+  "main": "dist/handlers/locationEvents.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.137",
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.10.0",
+    "typescript": "^5.3.3"
+  }
+}

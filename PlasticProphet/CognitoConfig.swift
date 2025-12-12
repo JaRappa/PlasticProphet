@@ -22,6 +22,17 @@ struct CognitoConfig {
     /// Your domain: https://us-east-1v2s48yy0h.auth.us-east-1.amazoncognito.com
     static let domainPrefix = "us-east-1v2s48yy0h"
     
+    /// Full Hosted UI domain URL
+    /// Example final URL: https://<domainPrefix>.auth.us-east-1.amazoncognito.com
+    static var hostedUIDomain: String {
+        return "https://\(domainPrefix).auth.\(region).amazoncognito.com"
+    }
+
+    /// API Base URL (replace with YOUR API Gateway URL)
+    /// Example: "https://0vl413zppl.execute-api.us-east-1.amazonaws.com"
+    static let apiBaseURL = "https://0vl413zppl.execute-api.us-east-1.amazonaws.com"
+
+    
     // MARK: - Validation
     
     /// Check if credentials are properly configured

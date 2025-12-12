@@ -6,72 +6,94 @@ import SwiftUI
 // MARK: - Landing Page (Sign Up/Sign In Choice)
 struct AuthLandingView: View {
     @EnvironmentObject var app: AppState
-    @State private var showSignIn = false
-    @State private var showSignUp = false
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.adaptiveBackground.ignoresSafeArea()
+        ZStack {
+            Color.white.ignoresSafeArea()
+            
+            VStack(spacing: 40) {
+                Spacer()
                 
-                VStack(spacing: 40) {
-                    Spacer()
-                    
-                    // Logo
-                    AdaptiveLogo(width: 300, height: 300)
-                    
-                    Spacer()
-                    
-                    // Buttons
-                    VStack(spacing: 16) {
-                        Button(action: { showSignUp = true }) {
-                            Text("Sign Up")
-                                .font(.custom("Montserrat", size: 20))
-                                .fontWeight(.black)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(16)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color.ppGreen)
-                                )
-                                .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
-                        }
-                        
-                        Button(action: { showSignIn = true }) {
-                            Text("Sign In")
-                                .font(.custom("Montserrat", size: 20))
-                                .fontWeight(.black)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(16)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color.ppGreen)
-                                )
-                                .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
-                        }
+                // Logo
+                Image("App Logo Black")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 300, height: 300)
+                
+                Spacer()
+                
+                // Buttons
+                VStack(spacing: 16) {
+                    // ✅ Use NavigationLink instead of manual state + navigationDestination
+                    NavigationLink {
+                        SignUpView()
+                    } label: {
+                        Text("Sign Up")
+                            .font(.custom("Montserrat", size: 16))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color(hex: "2AC33C"))
+                            .cornerRadius(10)
                     }
-                    .padding(.horizontal, 40)
-                    .padding(.bottom, 60)
+                    
+                    NavigationLink {
+                        SignInView()
+                    } label: {
+                        Text("Sign In")
+                            .font(.custom("Montserrat", size: 16))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(hex: "2AC33C"))
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color(hex: "2AC33C"), lineWidth: 2)
+                            )
+                    }
+                    
+                    // 🚧 DEV BYPASS BUTTON — lets you skip the auth wall
+                    Button(action: {
+                        app.userFirstName = "Dev"
+                        app.userLastName = "User"
+                        app.userEmail = "dev@plasticprophet.test"
+                        app.isAuthenticated = true
+                    }) {
+                        Text("Skip for now (Dev)")
+                            .font(.custom("Montserrat", size: 14))
+                            .fontWeight(.medium)
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity)
+                            .padding(10)
+                    }
                 }
-            }
-            .navigationDestination(isPresented: $showSignIn) {
-                SignInView()
-            }
-            .navigationDestination(isPresented: $showSignUp) {
-                SignUpView()
+                .padding(.horizontal, 40)
+                .padding(.bottom, 60)
             }
         }
     }
 }
 
+#Preview("Landing") {
+    NavigationStack {
+        AuthLandingView()
+            .environmentObject(AppState())
+    }
+}
+
+// MARK: - Sign In View
 // MARK: - Sign In View
 struct SignInView: View {
     @EnvironmentObject var app: AppState
     @Environment(\.dismiss) private var dismiss
-    @State private var isLoading = false
-    @State private var errorMessage = ""
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @State private var showPassword: Bool = false
+    @State private var showForgotPassword = false
+    @FocusState private var focusedField: SignInField?
     
     enum SignInField {
         case email, password
@@ -79,9 +101,9 @@ struct SignInView: View {
     
     var body: some View {
         ZStack {
-            Color.adaptiveBackground.ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             
-            VStack(alignment: .center, spacing: 24) {
+            VStack(alignment: .leading, spacing: 24) {
                 // Card icon
                 Image(systemName: "creditcard.fill")
                     .font(.system(size: 50))
@@ -89,135 +111,119 @@ struct SignInView: View {
                     .rotationEffect(.degrees(15))
                     .padding(.top, 20)
                 
-                Text("Secure Sign In")
+                Text("Sign In")
                     .font(.custom("Montserrat", size: 32))
                     .fontWeight(.bold)
-                    .foregroundColor(.adaptiveText)
+                    .foregroundColor(.black)
                 
-                // Info text
-                VStack(spacing: 12) {
-                    Text("Sign in securely using Cognito")
-                        .font(.custom("Montserrat", size: 16))
-                        .foregroundColor(.adaptiveText)
-                        .multilineTextAlignment(.center)
+                VStack(alignment: .leading, spacing: 16) {
+                    // Email
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Email Address")
+                            .font(.custom("Montserrat", size: 14))
+                            .fontWeight(.medium)
+                            .foregroundColor(.black)
+                        
+                        TextField("Email Address", text: $email)
+                            .font(.custom("Montserrat", size: 16))
+                            .padding()
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(focusedField == .email ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
+                            .keyboardType(.emailAddress)
+                            .textInputAutocapitalization(.never)
+                            .focused($focusedField, equals: .email)
+                    }
                     
-                    Text("Your credentials are never shared with this app")
-                        .font(.custom("Montserrat", size: 14))
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.center)
-                }
-                .padding(.horizontal, 32)
-                .padding(.top, 20)
-                
-               /* // Debug info
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Debug Info:")
-                        .font(.custom("Montserrat", size: 14))
-                        .fontWeight(.bold)
-                    
-                    Text("Domain: us-east-1v2s48yy0h")
-                        .font(.custom("Montserrat", size: 12))
-                        .foregroundColor(.gray)
-                    
-                    Text("Client ID: 4odq1p8fovp5vtmjobhdqke2rl")
-                        .font(.custom("Montserrat", size: 12))
-                        .foregroundColor(.gray)
-                    
-                    Text("Callback: plasticprophet://auth-callback")
-                        .font(.custom("Montserrat", size: 12))
-                        .foregroundColor(.gray)
-                }
-                .padding(16)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(8)
-                .padding(.horizontal, 32)
-                */
-                // Error message
-                if !errorMessage.isEmpty {
-                    Text(errorMessage)
-                        .font(.custom("Montserrat", size: 12))
-                        .foregroundColor(.red)
-                        .padding(.horizontal, 32)
-                        .padding(12)
-                        .background(Color.red.opacity(0.1))
+                    // Password
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Password")
+                            .font(.custom("Montserrat", size: 14))
+                            .fontWeight(.medium)
+                            .foregroundColor(.black)
+                        
+                        HStack {
+                            if showPassword {
+                                TextField("Password", text: $password)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .password)
+                            } else {
+                                SecureField("Password", text: $password)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .password)
+                            }
+                            
+                            Button(action: { showPassword.toggle() }) {
+                                Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.trailing, 8)
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
                         .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
+                        )
+                    }
+                    
+                    // Forgot Password
+                    Button(action: { showForgotPassword = true }) {
+                        Text("Forgot Password?")
+                            .font(.custom("Montserrat", size: 14))
+                            .foregroundColor(.gray)
+                    }
                 }
+                .padding(.top, 20)
                 
                 Spacer()
                 
-                // Sign In Button (opens Cognito Hosted UI)
+                // Sign In Button
                 Button(action: signIn) {
-                    HStack {
-                        if isLoading {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        }
-                        Text("Continue to Sign In")
-                            .font(.custom("Montserrat", size: 20))
-                            .fontWeight(.black)
-                    }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.ppGreen)
-                    )
-                    .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
+                    Text("Sign In")
+                        .font(.custom("Montserrat", size: 20))
+                        .fontWeight(.black)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.ppGreen)
+                        )
+                        .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
                 }
-                .disabled(isLoading)
-                .opacity(isLoading ? 0.7 : 1.0)
-                .padding(.horizontal, 32)
-                .padding(.bottom, 20)
-                /*
-                // Test Callback URL Button
-                Button(action: testCallbackURL) {
-                    Text("Test Callback URL")
-                        .font(.custom("Montserrat", size: 14))
-                        .foregroundColor(.blue)
-                        .padding(.horizontal, 32)
-                } */
+                .disabled(email.isEmpty || password.isEmpty)
+                .opacity(email.isEmpty || password.isEmpty ? 0.5 : 1.0)
                 .padding(.bottom, 40)
             }
+            .padding(.horizontal, 32)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: { dismiss() }) {
                     Image(systemName: "arrow.left")
-                        .foregroundColor(.adaptiveText)
+                        .foregroundColor(.black)
                         .font(.system(size: 20))
                 }
             }
         }
-    }
-    
-    private func signIn() {
-        errorMessage = ""
-        isLoading = true
-        
-        Task {
-            await app.signIn()
-            
-            await MainActor.run {
-                isLoading = false
-                if app.isAuthenticated {
-                    print("✅ Successfully authenticated")
-                } else {
-                    errorMessage = "Sign in failed. Please try again."
-                }
-            }
+        .navigationDestination(isPresented: $showForgotPassword) {
+            ForgotPasswordView()
         }
     }
     
-    private func testCallbackURL() {
-        // Test if the callback URL scheme is properly registered
-        let testURL = URL(string: "plasticprophet://auth-callback?test=1")!
-        if UIApplication.shared.canOpenURL(testURL) {
-            UIApplication.shared.open(testURL)
-            errorMessage = "✅ Callback URL scheme is working!"
-        } else {
-            errorMessage = "❌ Callback URL scheme not registered. Check Info.plist"
+    private func signIn() {
+        Task {
+            await app.signIn(email: email, password: password)
+            // Dismiss this view after successful sign-in so ContentView can switch to the next screen
+            if app.isAuthenticated {
+                dismiss()
+            }
         }
     }
 }
@@ -226,222 +232,223 @@ struct SignInView: View {
 struct SignUpView: View {
     @EnvironmentObject var app: AppState
     @Environment(\.dismiss) private var dismiss
-    @State private var showVerification = false
-    @State private var signUpEmail = ""
-    @State private var navigateToSignIn = false
-    
-    // Form fields
     @State private var firstName: String = ""
     @State private var lastName: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
-    @State private var showPassword = false
-    @State private var showConfirmPassword = false
+    @State private var showPassword: Bool = false
+    @State private var showConfirmPassword: Bool = false
+    @FocusState private var focusedField: SignUpField?
+    @State private var showVerification = false
+    @State private var signUpEmail = ""
     
     enum SignUpField {
         case firstName, lastName, email, password, confirmPassword
     }
     
-    @FocusState private var focusedField: SignUpField?
+    private var isValidPassword: Bool {
+        password.count >= 8 &&
+        password.range(of: "[A-Z]", options: .regularExpression) != nil &&
+        password.range(of: "[a-z]", options: .regularExpression) != nil &&
+        password.range(of: "[^A-Za-z0-9]", options: .regularExpression) != nil
+    }
+    
+    private var canSignUp: Bool {
+        !firstName.isEmpty &&
+        !lastName.isEmpty &&
+        !email.isEmpty &&
+        isValidPassword &&
+        password == confirmPassword
+    }
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.adaptiveBackground.ignoresSafeArea()
-                
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 24) {
-                        // Card icon
-                        Image(systemName: "creditcard.fill")
-                            .font(.system(size: 50))
-                            .foregroundColor(Color.ppGreen)
-                            .rotationEffect(.degrees(15))
-                            .padding(.top, 20)
-                        
-                        Text("Create Your Account")
-                            .font(.custom("Montserrat", size: 32))
-                            .fontWeight(.bold)
-                            .foregroundColor(.adaptiveText)
-                        
-                        // First Name
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("First Name")
-                                .font(.custom("Montserrat", size: 14))
-                                .fontWeight(.medium)
-                                .foregroundColor(.adaptiveText)
-                            
-                            TextField("First Name", text: $firstName)
-                                .font(.custom("Montserrat", size: 16))
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(focusedField == .firstName ? Color.ppGreen : Color.clear, lineWidth: 2)
-                                )
-                                .focused($focusedField, equals: .firstName)
-                        }
-                        
-                        // Last Name
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Last Name")
-                                .font(.custom("Montserrat", size: 14))
-                                .fontWeight(.medium)
-                                .foregroundColor(.adaptiveText)
-                            
-                            TextField("Last Name", text: $lastName)
-                                .font(.custom("Montserrat", size: 16))
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(focusedField == .lastName ? Color.ppGreen : Color.clear, lineWidth: 2)
-                                )
-                                .focused($focusedField, equals: .lastName)
-                        }
-                        
-                        // Email
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Email Address")
-                                .font(.custom("Montserrat", size: 14))
-                                .fontWeight(.medium)
-                                .foregroundColor(.adaptiveText)
-                            
-                            TextField("Email Address", text: $email)
-                                .font(.custom("Montserrat", size: 16))
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(focusedField == .email ? Color.ppGreen : Color.clear, lineWidth: 2)
-                                )
-                                .keyboardType(.emailAddress)
-                                .textInputAutocapitalization(.never)
-                                .focused($focusedField, equals: .email)
-                        }
-                        
-                        // Password
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Password")
-                                .font(.custom("Montserrat", size: 14))
-                                .fontWeight(.medium)
-                                .foregroundColor(.adaptiveText)
-                            
-                            HStack {
-                                if showPassword {
-                                    TextField("Password", text: $password)
-                                        .font(.custom("Montserrat", size: 16))
-                                        .focused($focusedField, equals: .password)
-                                } else {
-                                    SecureField("Password", text: $password)
-                                        .font(.custom("Montserrat", size: 16))
-                                        .focused($focusedField, equals: .password)
-                                }
-                                
-                                Button(action: { showPassword.toggle() }) {
-                                    Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.trailing, 8)
-                            }
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
-                            )
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("Your password must include at least:")
-                                    .font(.custom("Montserrat", size: 11))
-                                    .foregroundColor(.secondary)
-                                Text("• 8 characters")
-                                    .font(.custom("Montserrat", size: 11))
-                                    .foregroundColor(.secondary)
-                                Text("• One uppercase and one lowercase characters")
-                                    .font(.custom("Montserrat", size: 11))
-                                    .foregroundColor(.secondary)
-                                Text("• One special character")
-                                    .font(.custom("Montserrat", size: 11))
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        
-                        // Confirm Password
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Confirm Password")
-                                .font(.custom("Montserrat", size: 14))
-                                .fontWeight(.medium)
-                                .foregroundColor(.adaptiveText)
-                            
-                            HStack {
-                                if showConfirmPassword {
-                                    TextField("Confirm Password", text: $confirmPassword)
-                                        .font(.custom("Montserrat", size: 16))
-                                        .focused($focusedField, equals: .confirmPassword)
-                                } else {
-                                    SecureField("Confirm Password", text: $confirmPassword)
-                                        .font(.custom("Montserrat", size: 16))
-                                        .focused($focusedField, equals: .confirmPassword)
-                                }
-                                
-                                Button(action: { showConfirmPassword.toggle() }) {
-                                    Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.trailing, 8)
-                            }
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(focusedField == .confirmPassword ? Color.ppGreen : Color.clear, lineWidth: 2)
-                            )
-                        }
-                        
-                        // Sign Up Button
-                        Button(action: signUp) {
-                            Text("Continue")
-                                .font(.custom("Montserrat", size: 20))
-                                .fontWeight(.black)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(16)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(canSignUp ? Color.ppGreen : Color.ppGreen.opacity(0.3))
-                                )
-                                .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
-                        }
-                        .disabled(!canSignUp)
+        ZStack {
+            Color.white.ignoresSafeArea()
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Card icon
+                    Image(systemName: "creditcard.fill")
+                        .font(.system(size: 50))
+                        .foregroundColor(Color.ppGreen)
+                        .rotationEffect(.degrees(15))
                         .padding(.top, 20)
-                        .padding(.bottom, 40)
+                    
+                    // First Name
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("First Name")
+                            .font(.custom("Montserrat", size: 14))
+                            .fontWeight(.medium)
+                            .foregroundColor(.black)
+                        
+                        TextField("First Name", text: $firstName)
+                            .font(.custom("Montserrat", size: 16))
+                            .padding()
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(focusedField == .firstName ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
+                            .focused($focusedField, equals: .firstName)
                     }
-                    .padding(.horizontal, 32)
+                    
+                    // Last Name
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Last Name")
+                            .font(.custom("Montserrat", size: 14))
+                            .fontWeight(.medium)
+                            .foregroundColor(.black)
+                        
+                        TextField("Last Name", text: $lastName)
+                            .font(.custom("Montserrat", size: 16))
+                            .padding()
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(focusedField == .lastName ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
+                            .focused($focusedField, equals: .lastName)
+                    }
+                    
+                    // Email
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Email Address")
+                            .font(.custom("Montserrat", size: 14))
+                            .fontWeight(.medium)
+                            .foregroundColor(.black)
+                        
+                        TextField("Email Address", text: $email)
+                            .font(.custom("Montserrat", size: 16))
+                            .padding()
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(focusedField == .email ? Color.ppGreen : Color.clear, lineWidth: 2)
+                            )
+                            .keyboardType(.emailAddress)
+                            .textInputAutocapitalization(.never)
+                            .focused($focusedField, equals: .email)
+                    }
+                    
+                    // Password
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Password")
+                            .font(.custom("Montserrat", size: 14))
+                            .fontWeight(.medium)
+                            .foregroundColor(.black)
+                        
+                        HStack {
+                            if showPassword {
+                                TextField("Password", text: $password)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .password)
+                            } else {
+                                SecureField("Password", text: $password)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .password)
+                            }
+                            
+                            Button(action: { showPassword.toggle() }) {
+                                Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.trailing, 8)
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(focusedField == .password ? Color.ppGreen : Color.clear, lineWidth: 2)
+                        )
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Your password must include at least:")
+                                .font(.custom("Montserrat", size: 11))
+                                .foregroundColor(.secondary)
+                            Text("• 8 characters")
+                                .font(.custom("Montserrat", size: 11))
+                                .foregroundColor(.secondary)
+                            Text("• One uppercase and one lowercase characters")
+                                .font(.custom("Montserrat", size: 11))
+                                .foregroundColor(.secondary)
+                            Text("• One special character")
+                                .font(.custom("Montserrat", size: 11))
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    
+                    // Confirm Password
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Confirm Password")
+                            .font(.custom("Montserrat", size: 14))
+                            .fontWeight(.medium)
+                            .foregroundColor(.black)
+                        
+                        HStack {
+                            if showConfirmPassword {
+                                TextField("Confirm Password", text: $confirmPassword)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .confirmPassword)
+                            } else {
+                                SecureField("Confirm Password", text: $confirmPassword)
+                                    .font(.custom("Montserrat", size: 16))
+                                    .focused($focusedField, equals: .confirmPassword)
+                            }
+                            
+                            Button(action: { showConfirmPassword.toggle() }) {
+                                Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.trailing, 8)
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(focusedField == .confirmPassword ? Color.ppGreen : Color.clear, lineWidth: 2)
+                        )
+                    }
+                    
+                    // Sign Up Button
+                    Button(action: signUp) {
+                        Text("Continue")
+                            .font(.custom("Montserrat", size: 20))
+                            .fontWeight(.black)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(canSignUp ? Color.ppGreen : Color.ppGreen.opacity(0.3))
+                            )
+                            .shadow(color: Color.ppShadow.opacity(0.3), radius: 4, x: 0, y: 2)
+                    }
+                    .disabled(!canSignUp)
+                    .padding(.top, 20)
+                    .padding(.bottom, 40)
+                }
+                .padding(.horizontal, 32)
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "arrow.left")
+                        .foregroundColor(.black)
+                        .font(.system(size: 20))
                 }
             }
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "arrow.left")
-                            .foregroundColor(.adaptiveText)
-                            .font(.system(size: 20))
-                    }
-                }
-            }
-            .sheet(isPresented: $showVerification) {
-                CognitoVerificationView(email: signUpEmail)
-                    .environmentObject(app)
-            }
-            .navigationDestination(isPresented: $navigateToSignIn) {
-                SignInView()
-            }
+        }
+        .sheet(isPresented: $showVerification) {
+            CognitoVerificationView(email: signUpEmail)
+                .environmentObject(app)
         }
     }
     
@@ -451,9 +458,9 @@ struct SignUpView: View {
         Task {
             await app.signUp(
                 email: email,
-                password: password,
-                firstName: firstName,
-                lastName: lastName
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName
             )
             
             await MainActor.run {
@@ -461,18 +468,10 @@ struct SignUpView: View {
             }
         }
     }
-    
-    private var canSignUp: Bool {
-        !firstName.isEmpty &&
-        !lastName.isEmpty &&
-        !email.isEmpty &&
-        password.count >= 8 &&
-        password == confirmPassword
-    }
 }
         
+        // MARK: - Forgot Password View
         struct ForgotPasswordView: View {
-            @EnvironmentObject var app: AppState
             @Environment(\.dismiss) private var dismiss
             @State private var email: String = ""
             @State private var showVerification = false
@@ -480,7 +479,7 @@ struct SignUpView: View {
             
             var body: some View {
                 ZStack {
-                    Color.adaptiveBackground.ignoresSafeArea()
+                    Color.white.ignoresSafeArea()
                     
                     VStack(alignment: .leading, spacing: 24) {
                         // Card icon
@@ -493,14 +492,14 @@ struct SignUpView: View {
                         Text("Forgot Password")
                             .font(.custom("Montserrat", size: 32))
                             .fontWeight(.bold)
-                            .foregroundColor(.adaptiveText)
+                            .foregroundColor(.black)
                         
                         // Email
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Email Address")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.medium)
-                                .foregroundColor(.adaptiveText)
+                                .foregroundColor(.black)
                             
                             TextField("Email Address", text: $email)
                                 .font(.custom("Montserrat", size: 16))
@@ -544,7 +543,7 @@ struct SignUpView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: { dismiss() }) {
                             Image(systemName: "arrow.left")
-                                .foregroundColor(.adaptiveText)
+                                .foregroundColor(.black)
                                 .font(.system(size: 20))
                         }
                     }
@@ -565,7 +564,7 @@ struct SignUpView: View {
             
             var body: some View {
                 ZStack {
-                    Color.adaptiveBackground.ignoresSafeArea()
+                    Color.white.ignoresSafeArea()
                     
                     VStack(alignment: .center, spacing: 24) {
                         // Card icon
@@ -579,18 +578,18 @@ struct SignUpView: View {
                         VStack(spacing: 4) {
                             Text("We sent a two-step authentication")
                                 .font(.custom("Montserrat", size: 16))
-                                .foregroundColor(.adaptiveText)
+                                .foregroundColor(.black)
                             HStack(spacing: 4) {
                                 Text("code to")
                                     .font(.custom("Montserrat", size: 16))
-                                    .foregroundColor(.adaptiveText)
+                                    .foregroundColor(.black)
                                 Text(email)
                                     .font(.custom("Montserrat", size: 16))
                                     .fontWeight(.bold)
                                     .foregroundColor(Color.ppGreen)
                                 Text(".")
                                     .font(.custom("Montserrat", size: 16))
-                                    .foregroundColor(.adaptiveText)
+                                    .foregroundColor(.black)
                             }
                         }
                         .multilineTextAlignment(.center)
@@ -654,7 +653,7 @@ struct SignUpView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: { dismiss() }) {
                             Image(systemName: "arrow.left")
-                                .foregroundColor(.adaptiveText)
+                                .foregroundColor(.black)
                                 .font(.system(size: 20))
                         }
                     }
@@ -700,7 +699,7 @@ struct SignUpView: View {
             
             var body: some View {
                 ZStack {
-                    Color.adaptiveBackground.ignoresSafeArea()
+                    Color.white.ignoresSafeArea()
                     
                     VStack(alignment: .leading, spacing: 24) {
                         // Card icon
@@ -715,7 +714,7 @@ struct SignUpView: View {
                             Text("Password")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.semibold)
-                                .foregroundColor(.adaptiveText)
+                                .foregroundColor(.black)
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Your password must include at least:")
@@ -767,7 +766,7 @@ struct SignUpView: View {
                             Text("Confirm Password")
                                 .font(.custom("Montserrat", size: 14))
                                 .fontWeight(.medium)
-                                .foregroundColor(.adaptiveText)
+                                .foregroundColor(.black)
                             
                             HStack {
                                 if showConfirmPassword {
@@ -821,7 +820,7 @@ struct SignUpView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: { dismiss() }) {
                             Image(systemName: "arrow.left")
-                                .foregroundColor(.adaptiveText)
+                                .foregroundColor(.black)
                                 .font(.system(size: 20))
                         }
                     }
@@ -861,3 +860,4 @@ struct SignUpView: View {
                     .environmentObject(AppState())
             }
         }
+    

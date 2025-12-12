@@ -1,6 +1,5 @@
 // SettingsView.swift
 // App settings and preferences
-
 import SwiftUI
 
 struct SettingsView: View {
@@ -27,7 +26,7 @@ struct SettingsView: View {
                             .font(.custom("Montserrat", size: 16))
                     } icon: {
                         Image(systemName: app.permissions.locationAuthorized ? "checkmark.circle.fill" : "xmark.circle.fill")
-                            .foregroundStyle(app.permissions.locationAuthorized ? .green : .red)
+                            .foregroundStyle(app.permissions.locationAuthorized ? .green : .red) // ✅ fixed
                     }
                 }
             }

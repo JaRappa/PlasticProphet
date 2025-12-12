@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C58D78E12EC24EE700AEC9FA /* schema_four_tables.sql in Resources */ = {isa = PBXBuildFile; fileRef = C58D78E02EC24EE700AEC9FA /* schema_four_tables.sql */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		891F5F222E941BA800A880E5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -28,12 +32,29 @@
 		891F5F142E941BA700A880E5 /* PlasticProphet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlasticProphet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F212E941BA800A880E5 /* PlasticProphetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F2B2E941BA800A880E5 /* PlasticProphetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C533E5C02EEA558500F7FE64 /* lambda_function.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = lambda_function.py; sourceTree = "<group>"; };
+		C533E5C12EEA558500F7FE64 /* mcc_directory.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = mcc_directory.py; sourceTree = "<group>"; };
+		C533E5C22EEA558500F7FE64 /* normalization.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = normalization.py; sourceTree = "<group>"; };
+		C533E5C42EEA558500F7FE64 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C533E5C52EEA558500F7FE64 /* requirements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
+		C533E5D42EEA55AD00F7FE64 /* mcc_codes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mcc_codes.json; sourceTree = "<group>"; };
+		C533E5D62EEA5EF800F7FE64 /* quick_test.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = quick_test.py; sourceTree = "<group>"; };
+		C533E5D72EEA5EF800F7FE64 /* test_event.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = test_event.json; sourceTree = "<group>"; };
+		C533E5D82EEA5EF800F7FE64 /* test_lambda.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = test_lambda.py; sourceTree = "<group>"; };
+		C533E5D92EEA5EF800F7FE64 /* TEST_RESULTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TEST_RESULTS.md; sourceTree = "<group>"; };
+		C533E5DA2EEA5EF800F7FE64 /* TESTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TESTING.md; sourceTree = "<group>"; };
+		C58D78DA2EC24E8200AEC9FA /* DevelopmentView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DevelopmentView.md; sourceTree = "<group>"; };
+		C58D78DB2EC24E8200AEC9FA /* LogicalView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LogicalView.md; sourceTree = "<group>"; };
+		C58D78DC2EC24E8200AEC9FA /* PhysicalView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PhysicalView.md; sourceTree = "<group>"; };
+		C58D78DD2EC24E8200AEC9FA /* Plastic Prophet App Flow V1.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Plastic Prophet App Flow V1.pdf"; sourceTree = "<group>"; };
+		C58D78DE2EC24E8200AEC9FA /* ProcessGeofenceRecomendation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ProcessGeofenceRecomendation.md; sourceTree = "<group>"; };
+		C58D78E02EC24EE700AEC9FA /* schema_four_tables.sql */ = {isa = PBXFileReference; lastKnownFileType = text; path = schema_four_tables.sql; sourceTree = "<group>"; };
 		F4B1A2C3D4E5B00000000001 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = data; name = "Montserrat-Regular.ttf"; path = "Fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		F4B1A2C3D4E5B00000000002 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = data; name = "Montserrat-SemiBold.ttf"; path = "Fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		88DC0A5F2EC197B500A15C98 /* Exceptions for "PlasticProphet" folder in "PlasticProphet" target */ = {
+		C58D78E62ECD356200AEC9FA /* Exceptions for "PlasticProphet" folder in "PlasticProphet" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -46,7 +67,7 @@
 		891F5F162E941BA700A880E5 /* PlasticProphet */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				88DC0A5F2EC197B500A15C98 /* Exceptions for "PlasticProphet" folder in "PlasticProphet" target */,
+				C58D78E62ECD356200AEC9FA /* Exceptions for "PlasticProphet" folder in "PlasticProphet" target */,
 			);
 			path = PlasticProphet;
 			sourceTree = "<group>";
@@ -59,11 +80,6 @@
 		891F5F2E2E941BA800A880E5 /* PlasticProphetUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = PlasticProphetUITests;
-			sourceTree = "<group>";
-		};
-		89853CBD2EC685E3008C6F03 /* LamdaFunctiones */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = LamdaFunctiones;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -105,13 +121,14 @@
 		891F5F0B2E941BA700A880E5 = {
 			isa = PBXGroup;
 			children = (
-				89853CBD2EC685E3008C6F03 /* LamdaFunctiones */,
+				C58D78DF2EC24E8200AEC9FA /* docs */,
 				88E0BD372EBEDA7C0035A9BC /* PlasticProphet.xctestplan */,
 				891F5F162E941BA700A880E5 /* PlasticProphet */,
 				891F5F242E941BA800A880E5 /* PlasticProphetTests */,
 				891F5F2E2E941BA800A880E5 /* PlasticProphetUITests */,
 				891F5F152E941BA700A880E5 /* Products */,
 				88415F672EA9351400E45262 /* Recovered References */,
+				C533E5C82EEA558500F7FE64 /* lambdafunction */,
 			);
 			sourceTree = "<group>";
 		};
@@ -123,6 +140,53 @@
 				891F5F2B2E941BA800A880E5 /* PlasticProphetUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		C533E5BC2EEA558500F7FE64 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				C533E5D42EEA55AD00F7FE64 /* mcc_codes.json */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		C533E5BD2EEA558500F7FE64 /* src */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		C533E5C82EEA558500F7FE64 /* lambdafunction */ = {
+			isa = PBXGroup;
+			children = (
+				C533E5BC2EEA558500F7FE64 /* data */,
+				C533E5BD2EEA558500F7FE64 /* src */,
+				C533E5C02EEA558500F7FE64 /* lambda_function.py */,
+				C533E5C12EEA558500F7FE64 /* mcc_directory.py */,
+				C533E5C22EEA558500F7FE64 /* normalization.py */,
+				C533E5C42EEA558500F7FE64 /* README.md */,
+				C533E5C52EEA558500F7FE64 /* requirements.txt */,
+				C533E5D62EEA5EF800F7FE64 /* quick_test.py */,
+				C533E5D72EEA5EF800F7FE64 /* test_event.json */,
+				C533E5D82EEA5EF800F7FE64 /* test_lambda.py */,
+				C533E5D92EEA5EF800F7FE64 /* TEST_RESULTS.md */,
+				C533E5DA2EEA5EF800F7FE64 /* TESTING.md */,
+			);
+			path = lambdafunction;
+			sourceTree = "<group>";
+		};
+		C58D78DF2EC24E8200AEC9FA /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				C58D78DA2EC24E8200AEC9FA /* DevelopmentView.md */,
+				C58D78DB2EC24E8200AEC9FA /* LogicalView.md */,
+				C58D78DC2EC24E8200AEC9FA /* PhysicalView.md */,
+				C58D78DD2EC24E8200AEC9FA /* Plastic Prophet App Flow V1.pdf */,
+				C58D78DE2EC24E8200AEC9FA /* ProcessGeofenceRecomendation.md */,
+				C58D78E02EC24EE700AEC9FA /* schema_four_tables.sql */,
+			);
+			path = docs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,7 +206,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				891F5F162E941BA700A880E5 /* PlasticProphet */,
-				89853CBD2EC685E3008C6F03 /* LamdaFunctiones */,
 			);
 			name = PlasticProphet;
 			packageProductDependencies = (
@@ -246,6 +309,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C58D78E12EC24EE700AEC9FA /* schema_four_tables.sql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,10 +496,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 399N64XP3Y;
+				DEVELOPMENT_TEAM = FUXMLN75LR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PlasticProphet/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "PlasticProphet uses your location to reccommend the best card at nearby merchants.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -446,7 +511,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Jake.PlasticProphet;
+				PRODUCT_BUNDLE_IDENTIFIER = caroline.PlasticProphet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -463,10 +528,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 399N64XP3Y;
+				DEVELOPMENT_TEAM = FUXMLN75LR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PlasticProphet/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "PlasticProphet uses your location to reccommend the best card at nearby merchants.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -477,7 +543,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Jake.PlasticProphet;
+				PRODUCT_BUNDLE_IDENTIFIER = caroline.PlasticProphet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
