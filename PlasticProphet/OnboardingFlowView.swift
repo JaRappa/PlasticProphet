@@ -173,9 +173,12 @@ struct OnboardingFlowView: View {
     
     private func startLocationStatusPolling() {
         stopLocationStatusPolling()
-        locationCheckTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
-            let newStatus = app.locationService.authorizationStatus
-            if newStatus != locationStatus { locationStatus = newStatus }
+        locationCheckTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { [weak app] _ in
+            Task { @MainActor in
+                guard let app = app else { return }
+                let newStatus = app.locationService.authorizationStatus
+                if newStatus != locationStatus { locationStatus = newStatus }
+            }
         }
     }
     

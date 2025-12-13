@@ -38,6 +38,10 @@ final class AppState: ObservableObject {
     let merchantNetworkService = MerchantNetworkService()
     @Published var lastNormalizedMerchant: NormalizedMerchantResponse? = nil
     
+    // MCC Matcher service for AI-powered category matching
+    let mccMatcherService = MCCMatcherService.shared
+    @Published var lastMCCMatch: MCCMatchResponse? = nil
+    
     @Published var showingScanner: Bool = false
     @Published var showingSettings: Bool = false
     
