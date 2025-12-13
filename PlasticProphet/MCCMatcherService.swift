@@ -45,11 +45,11 @@ class MCCMatcherService {
     /// Shared instance for convenience
     static let shared = MCCMatcherService()
     
-    /// Base URL for the API (uses the same API Gateway as other endpoints)
-    private let baseURL = CognitoConfig.apiBaseURL
+    /// Base URL for the MCC Matcher API
+    private let baseURL = "https://0vl413zppl.execute-api.us-east-1.amazonaws.com"
     
     /// Endpoint path for MCC matching
-    private let mccMatchPath = "/mcc-match"
+    private let mccMatchPath = "/MCCMatcherAPI"
     
     private init() {}
     
