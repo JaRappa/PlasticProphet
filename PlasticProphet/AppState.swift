@@ -139,6 +139,121 @@ final class AppState: ObservableObject {
     
     // MARK: - Recommendations
     
+    /// Fetch MCC code for a place using AI-powered matching
+    /// This is the primary method for getting accurate MCC codes from location data
+    func fetchMCCForPlace(
+        name: String,
+        category: String? = nil,
+        address: String? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
+        phoneNumber: String? = nil,
+        url: String? = nil
+    ) {
+        Task {
+            do {
+                print("🔍 Fetching MCC for: \(name)")
+                
+                let mccMatch = try await mccMatcherService.matchMCC(
+                    name: name,
+                    category: category,
+                    address: address,
+                    latitude: latitude,
+                    longitude: longitude,
+                    phoneNumber: phoneNumber,
+                    url: url
+                )
+                
+                await MainActor.run {
+                    self.lastMCCMatch = mccMatch
+                    print("✅ AI MCC Match: \(mccMatch.mcc) (\(mccMatch.confidence))")
+                    print("   Description: \(mccMatch.description ?? "N/A")")
+                    
+                    // Create recommendation using the AI-matched MCC
+                    self.createRecommendationFromMCCMatch(
+                        mccMatch: mccMatch,
+                        merchantName: name
+                    )
+                }
+            } catch {
+                await MainActor.run {
+                    print("❌ Failed to match MCC via AI: \(error.localizedDescription)")
+                    // Fallback to the old mock recommendation system
+                    self.fetchRecommendation(for: name)
+                }
+            }
+        }
+    }
+    
+    /// Create a recommendation based on AI-matched MCC code
+    private func createRecommendationFromMCCMatch(mccMatch: MCCMatchResponse, merchantName: String) {
+        let chosenCard: Card
+        if let firstCard = cards.first {
+            chosenCard = firstCard
+        } else {
+            chosenCard = Card(
+                name: "Wells Fargo Active Cash",
+                network: "Visa",
+                last4: "1234",
+                rewardSummary: "2% Everywhere"
+            )
+        }
+        
+        let description = mccMatch.description ?? "Unknown Category"
+        let irsDescription = mccMatch.irsDescription ?? description
+        
+        let rationale: String
+        let rewardText: String
+        
+        // Use the MCC code and description to provide smart recommendations
+        // MCC code ranges help determine category:
+        // 5812-5814: Eating/Drinking
+        // 5411: Grocery Stores
+        // 5541-5542: Gas Stations
+        // 4000-4999: Transportation/Travel
+        // 5311-5399: Retail/Department Stores
+        
+        let mccInt = Int(mccMatch.mcc) ?? 0
+        
+        switch mccInt {
+        case 5812...5814:
+            // Restaurants and eating places
+            rationale = "Higher cashback on dining at \(merchantName)."
+            rewardText = "3% back at restaurants"
+        case 5411:
+            // Grocery stores
+            rationale = "Great rewards on groceries."
+            rewardText = "4% back at grocery stores"
+        case 5541, 5542:
+            // Gas stations
+            rationale = "Bonus rewards on fuel purchases."
+            rewardText = "5% back at gas stations"
+        case 4000...4999:
+            // Travel & transportation
+            rationale = "Excellent rewards on travel."
+            rewardText = "3% back on travel"
+        case 5311...5399:
+            // Department stores & retail
+            rationale = "Good rewards at department stores."
+            rewardText = "2% back at retail stores"
+        case 5732:
+            // Electronics stores
+            rationale = "Solid rewards on electronics."
+            rewardText = "2% back at electronics stores"
+        default:
+            // General category - use description for context
+            rationale = "Solid rewards at \(irsDescription)."
+            rewardText = "1.5% back on this purchase"
+        }
+        
+        latestRecommendation = Recommendation(
+            card: chosenCard,
+            merchantName: merchantName,
+            rationale: rationale,
+            rewardText: rewardText
+        )
+    }
+    
     /// Fetch normalized merchant data from backend and create recommendation
     func fetchNormalizedMerchantData(merchantName: String) {
         Task {

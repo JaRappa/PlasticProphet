@@ -7,6 +7,339 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		89CD1BAC2EECC85100F04079 /* exceptions.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A992EECC85100F04079 /* exceptions.cpython-310.pyc */; };
+		89CD1BAD2EECC85100F04079 /* top_level.txt in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B3A2EECC85100F04079 /* top_level.txt */; };
+		89CD1BAE2EECC85100F04079 /* lambda_deployment.zip in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AFC2EECC85100F04079 /* lambda_deployment.zip */; };
+		89CD1BAF2EECC85100F04079 /* utils.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B682EECC85100F04079 /* utils.py */; };
+		89CD1BB02EECC85100F04079 /* csr.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B2A2EECC85100F04079 /* csr.py */; };
+		89CD1BB12EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A622EECC85100F04079 /* LICENSE */; };
+		89CD1BB22EECC85100F04079 /* util.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B322EECC85100F04079 /* util.py */; };
+		89CD1BB32EECC85100F04079 /* keys.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A3E2EECC85100F04079 /* keys.cpython-310.pyc */; };
+		89CD1BB42EECC85100F04079 /* _psycopg.cpython-310-darwin.so in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ACA2EECC85100F04079 /* _psycopg.cpython-310-darwin.so */; };
+		89CD1BB52EECC85100F04079 /* win.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A832EECC85100F04079 /* win.py */; };
+		89CD1BB62EECC85100F04079 /* rrule.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A912EECC85100F04079 /* rrule.py */; };
+		89CD1BB72EECC85100F04079 /* dbapi.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AA12EECC85100F04079 /* dbapi.py */; };
+		89CD1BB82EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AE02EECC85100F04079 /* RECORD */; };
+		89CD1BB92EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AE92EECC85100F04079 /* __init__.py */; };
+		89CD1BBA2EECC85100F04079 /* errors.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AB42EECC85100F04079 /* errors.cpython-310.pyc */; };
+		89CD1BBB2EECC85100F04079 /* _errors.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A322EECC85100F04079 /* _errors.cpython-310.pyc */; };
+		89CD1BBC2EECC85100F04079 /* utils.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AE72EECC85100F04079 /* utils.cpython-310.pyc */; };
+		89CD1BBD2EECC85100F04079 /* _range.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AB22EECC85100F04079 /* _range.cpython-310.pyc */; };
+		89CD1BBE2EECC85100F04079 /* GetProfileAPI.zip in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AFB2EECC85100F04079 /* GetProfileAPI.zip */; };
+		89CD1BBF2EECC85100F04079 /* crl.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A542EECC85100F04079 /* crl.py */; };
+		89CD1BC02EECC85100F04079 /* core.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B282EECC85100F04079 /* core.py */; };
+		89CD1BC12EECC85100F04079 /* parser.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B2D2EECC85100F04079 /* parser.py */; };
+		89CD1BC22EECC85100F04079 /* pem.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A5A2EECC85100F04079 /* pem.py */; };
+		89CD1BC32EECC85100F04079 /* core.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AEA2EECC85100F04079 /* core.py */; };
+		89CD1BC42EECC85100F04079 /* pem.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B172EECC85100F04079 /* pem.cpython-310.pyc */; };
+		89CD1BC52EECC85100F04079 /* easter.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A8F2EECC85100F04079 /* easter.py */; };
+		89CD1BC62EECC85100F04079 /* tz.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AB92EECC85100F04079 /* tz.cpython-310.pyc */; };
+		89CD1BC72EECC85100F04079 /* types.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B712EECC85100F04079 /* types.cpython-310.pyc */; };
+		89CD1BC82EECC85100F04079 /* _teletex_codec.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A372EECC85100F04079 /* _teletex_codec.cpython-310.pyc */; };
+		89CD1BC92EECC85100F04079 /* deploy.sh in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1BA82EECC85100F04079 /* deploy.sh */; };
+		89CD1BCA2EECC85100F04079 /* rrule.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B662EECC85100F04079 /* rrule.py */; };
+		89CD1BCB2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A952EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1BCC2EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B7F2EECC85100F04079 /* METADATA */; };
+		89CD1BCD2EECC85100F04079 /* extensions.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ACE2EECC85100F04079 /* extensions.py */; };
+		89CD1BCE2EECC85100F04079 /* _range.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ACB2EECC85100F04079 /* _range.py */; };
+		89CD1BCF2EECC85100F04079 /* six.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A2F2EECC85100F04079 /* six.cpython-310.pyc */; };
+		89CD1BD02EECC85100F04079 /* _common.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A802EECC85100F04079 /* _common.py */; };
+		89CD1BD12EECC85100F04079 /* tzwin.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B432EECC85100F04079 /* tzwin.cpython-310.pyc */; };
+		89CD1BD22EECC85100F04079 /* rebuild.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B5B2EECC85100F04079 /* rebuild.cpython-310.pyc */; };
+		89CD1BD32EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B822EECC85100F04079 /* WHEEL */; };
+		89CD1BD42EECC85100F04079 /* _inet.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A332EECC85100F04079 /* _inet.cpython-310.pyc */; };
+		89CD1BD52EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B062EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1BD62EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AF22EECC85100F04079 /* WHEEL */; };
+		89CD1BD72EECC85100F04079 /* _iri.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A4D2EECC85100F04079 /* _iri.py */; };
+		89CD1BD82EECC85100F04079 /* top_level.txt in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AF82EECC85100F04079 /* top_level.txt */; };
+		89CD1BD92EECC85100F04079 /* tzwin.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A6E2EECC85100F04079 /* tzwin.cpython-310.pyc */; };
+		89CD1BDA2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A852EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1BDB2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AE52EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1BDC2EECC85100F04079 /* isoparser.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B482EECC85100F04079 /* isoparser.cpython-310.pyc */; };
+		89CD1BDD2EECC85100F04079 /* utils.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AEB2EECC85100F04079 /* utils.py */; };
+		89CD1BDE2EECC85100F04079 /* legacy.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A9A2EECC85100F04079 /* legacy.cpython-310.pyc */; };
+		89CD1BDF2EECC85100F04079 /* top_level.txt in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ADA2EECC85100F04079 /* top_level.txt */; };
+		89CD1BE02EECC85100F04079 /* pem.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A422EECC85100F04079 /* pem.cpython-310.pyc */; };
+		89CD1BE12EECC85100F04079 /* _teletex_codec.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A4F2EECC85100F04079 /* _teletex_codec.py */; };
+		89CD1BE22EECC85100F04079 /* lambda_function.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AFD2EECC85100F04079 /* lambda_function.py */; };
+		89CD1BE32EECC85100F04079 /* converters.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B742EECC85100F04079 /* converters.py */; };
+		89CD1BE42EECC85100F04079 /* algos.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A392EECC85100F04079 /* algos.cpython-310.pyc */; };
+		89CD1BE52EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B382EECC85100F04079 /* METADATA */; };
+		89CD1BE62EECC85100F04079 /* _factories.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B502EECC85100F04079 /* _factories.cpython-310.pyc */; };
+		89CD1BE72EECC85100F04079 /* types.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A9C2EECC85100F04079 /* types.cpython-310.pyc */; };
+		89CD1BE82EECC85100F04079 /* top_level.txt in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B882EECC85100F04079 /* top_level.txt */; };
+		89CD1BE92EECC85100F04079 /* x509.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A472EECC85100F04079 /* x509.cpython-310.pyc */; };
+		89CD1BEA2EECC85100F04079 /* rrule.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B422EECC85100F04079 /* rrule.cpython-310.pyc */; };
+		89CD1BEB2EECC85100F04079 /* _inet.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B202EECC85100F04079 /* _inet.py */; };
+		89CD1BEC2EECC85100F04079 /* _common.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A7A2EECC85100F04079 /* _common.cpython-310.pyc */; };
+		89CD1BED2EECC85100F04079 /* core.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B102EECC85100F04079 /* core.cpython-310.pyc */; };
+		89CD1BEE2EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B362EECC85100F04079 /* INSTALLER */; };
+		89CD1BEF2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B3D2EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1BF02EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ADE2EECC85100F04079 /* LICENSE */; };
+		89CD1BF12EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B892EECC85100F04079 /* WHEEL */; };
+		89CD1BF22EECC85100F04079 /* x509.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B342EECC85100F04079 /* x509.py */; };
+		89CD1BF32EECC85100F04079 /* REQUESTED in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B812EECC85100F04079 /* REQUESTED */; };
+		89CD1BF42EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B5A2EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1BF52EECC85100F04079 /* core.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AE62EECC85100F04079 /* core.cpython-310.pyc */; };
+		89CD1BF62EECC85100F04079 /* _json.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AB12EECC85100F04079 /* _json.cpython-310.pyc */; };
+		89CD1BF72EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A312EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1BF82EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B9B2EECC85100F04079 /* INSTALLER */; };
+		89CD1BF92EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B9E2EECC85100F04079 /* RECORD */; };
+		89CD1BFA2EECC85100F04079 /* converters.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B6B2EECC85100F04079 /* converters.cpython-310.pyc */; };
+		89CD1BFB2EECC85100F04079 /* _ordereddict.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B232EECC85100F04079 /* _ordereddict.py */; };
+		89CD1BFC2EECC85100F04079 /* PostConfirmationTrigger.zip in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1BA32EECC85100F04079 /* PostConfirmationTrigger.zip */; };
+		89CD1BFD2EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AD72EECC85100F04079 /* METADATA */; };
+		89CD1BFE2EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B9D2EECC85100F04079 /* METADATA */; };
+		89CD1BFF2EECC85100F04079 /* tzwin.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A922EECC85100F04079 /* tzwin.py */; };
+		89CD1C002EECC85100F04079 /* dateutil-zoneinfo.tar.gz in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A892EECC85100F04079 /* dateutil-zoneinfo.tar.gz */; };
+		89CD1C012EECC85100F04079 /* REQUESTED in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AD92EECC85100F04079 /* REQUESTED */; };
+		89CD1C022EECC85100F04079 /* _parser.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A722EECC85100F04079 /* _parser.cpython-310.pyc */; };
+		89CD1C032EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B732EECC85100F04079 /* __init__.py */; };
+		89CD1C042EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B902EECC85100F04079 /* __init__.py */; };
+		89CD1C052EECC85100F04079 /* dbapi.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A982EECC85100F04079 /* dbapi.cpython-310.pyc */; };
+		89CD1C062EECC85100F04079 /* _ordereddict.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B0B2EECC85100F04079 /* _ordereddict.cpython-310.pyc */; };
+		89CD1C072EECC85100F04079 /* tsp.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A5C2EECC85100F04079 /* tsp.py */; };
+		89CD1C082EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AF12EECC85100F04079 /* RECORD */; };
+		89CD1C092EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A7F2EECC85100F04079 /* __init__.py */; };
+		89CD1C0A2EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1BA02EECC85100F04079 /* WHEEL */; };
+		89CD1C0B2EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B7C2EECC85100F04079 /* LICENSE */; };
+		89CD1C0C2EECC85100F04079 /* top_level.txt in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B9F2EECC85100F04079 /* top_level.txt */; };
+		89CD1C0D2EECC85100F04079 /* version.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A462EECC85100F04079 /* version.cpython-310.pyc */; };
+		89CD1C0E2EECC85100F04079 /* easter.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B642EECC85100F04079 /* easter.py */; };
+		89CD1C0F2EECC85100F04079 /* keys.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B132EECC85100F04079 /* keys.cpython-310.pyc */; };
+		89CD1C102EECC85100F04079 /* legacy.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B782EECC85100F04079 /* legacy.py */; };
+		89CD1C112EECC85100F04079 /* extras.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ACF2EECC85100F04079 /* extras.py */; };
+		89CD1C122EECC85100F04079 /* utils.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B442EECC85100F04079 /* utils.cpython-310.pyc */; };
+		89CD1C132EECC85100F04079 /* pdf.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B2E2EECC85100F04079 /* pdf.py */; };
+		89CD1C142EECC85100F04079 /* _version.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B632EECC85100F04079 /* _version.py */; };
+		89CD1C152EECC85100F04079 /* extensions.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AB52EECC85100F04079 /* extensions.cpython-310.pyc */; };
+		89CD1C162EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A682EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1C172EECC85100F04079 /* csr.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A3D2EECC85100F04079 /* csr.cpython-310.pyc */; };
+		89CD1C182EECC85100F04079 /* pkcs12.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A432EECC85100F04079 /* pkcs12.cpython-310.pyc */; };
+		89CD1C192EECC85100F04079 /* relativedelta.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B412EECC85100F04079 /* relativedelta.cpython-310.pyc */; };
+		89CD1C1A2EECC85100F04079 /* _common.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A8D2EECC85100F04079 /* _common.py */; };
+		89CD1C1B2EECC85100F04079 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1BA92EECC85100F04079 /* README.md */; };
+		89CD1C1C2EECC85100F04079 /* parser.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B152EECC85100F04079 /* parser.cpython-310.pyc */; };
+		89CD1C1D2EECC85100F04079 /* _inet.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A4B2EECC85100F04079 /* _inet.py */; };
+		89CD1C1E2EECC85100F04079 /* keys.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A562EECC85100F04079 /* keys.py */; };
+		89CD1C1F2EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AD42EECC85100F04079 /* LICENSE */; };
+		89CD1C202EECC85100F04079 /* crl.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B292EECC85100F04079 /* crl.py */; };
+		89CD1C212EECC85100F04079 /* core.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B752EECC85100F04079 /* core.py */; };
+		89CD1C222EECC85100F04079 /* requirements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AFE2EECC85100F04079 /* requirements.txt */; };
+		89CD1C232EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B5D2EECC85100F04079 /* __init__.py */; };
+		89CD1C242EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AAA2EECC85100F04079 /* METADATA */; };
+		89CD1C252EECC85100F04079 /* _factories.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A7B2EECC85100F04079 /* _factories.cpython-310.pyc */; };
+		89CD1C262EECC85100F04079 /* ocsp.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B2C2EECC85100F04079 /* ocsp.py */; };
+		89CD1C272EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B942EECC85100F04079 /* LICENSE */; };
+		89CD1C282EECC85100F04079 /* extras.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AB62EECC85100F04079 /* extras.cpython-310.pyc */; };
+		89CD1C292EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A492EECC85100F04079 /* __init__.py */; };
+		89CD1C2A2EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B962EECC85100F04079 /* INSTALLER */; };
+		89CD1C2B2EECC85100F04079 /* pdf.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B162EECC85100F04079 /* pdf.cpython-310.pyc */; };
+		89CD1C2C2EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B982EECC85100F04079 /* RECORD */; };
+		89CD1C2D2EECC85100F04079 /* legacy.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AA32EECC85100F04079 /* legacy.py */; };
+		89CD1C2E2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B462EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1C2F2EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B372EECC85100F04079 /* LICENSE */; };
+		89CD1C302EECC85100F04079 /* _types.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A502EECC85100F04079 /* _types.py */; };
+		89CD1C312EECC85100F04079 /* easter.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B402EECC85100F04079 /* easter.cpython-310.pyc */; };
+		89CD1C322EECC85100F04079 /* relativedelta.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A902EECC85100F04079 /* relativedelta.py */; };
+		89CD1C332EECC85100F04079 /* six.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1BA52EECC85100F04079 /* six.py */; };
+		89CD1C342EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AD62EECC85100F04079 /* INSTALLER */; };
+		89CD1C352EECC85100F04079 /* _factories.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A812EECC85100F04079 /* _factories.py */; };
+		89CD1C362EECC85100F04079 /* native.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B792EECC85100F04079 /* native.py */; };
+		89CD1C372EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ADD2EECC85100F04079 /* INSTALLER */; };
+		89CD1C382EECC85100F04079 /* top_level.txt in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A652EECC85100F04079 /* top_level.txt */; };
+		89CD1C392EECC85100F04079 /* core.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B6C2EECC85100F04079 /* core.cpython-310.pyc */; };
+		89CD1C3A2EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B972EECC85100F04079 /* METADATA */; };
+		89CD1C3B2EECC85100F04079 /* _iri.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B0A2EECC85100F04079 /* _iri.cpython-310.pyc */; };
+		89CD1C3C2EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AD82EECC85100F04079 /* RECORD */; };
+		89CD1C3D2EECC85100F04079 /* crl.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B112EECC85100F04079 /* crl.cpython-310.pyc */; };
+		89CD1C3E2EECC85100F04079 /* native.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A9B2EECC85100F04079 /* native.cpython-310.pyc */; };
+		89CD1C3F2EECC85100F04079 /* tz.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A822EECC85100F04079 /* tz.py */; };
+		89CD1C402EECC85100F04079 /* exceptions.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B6E2EECC85100F04079 /* exceptions.cpython-310.pyc */; };
+		89CD1C412EECC85100F04079 /* lambda_function.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1BA22EECC85100F04079 /* lambda_function.py */; };
+		89CD1C422EECC85100F04079 /* sql.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AD12EECC85100F04079 /* sql.py */; };
+		89CD1C432EECC85100F04079 /* _teletex_codec.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B242EECC85100F04079 /* _teletex_codec.py */; };
+		89CD1C442EECC85100F04079 /* tsp.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B192EECC85100F04079 /* tsp.cpython-310.pyc */; };
+		89CD1C452EECC85100F04079 /* util.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B1A2EECC85100F04079 /* util.cpython-310.pyc */; };
+		89CD1C462EECC85100F04079 /* version.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B1B2EECC85100F04079 /* version.cpython-310.pyc */; };
+		89CD1C472EECC85100F04079 /* legacy.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B6F2EECC85100F04079 /* legacy.cpython-310.pyc */; };
+		89CD1C482EECC85100F04079 /* pkcs12.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B302EECC85100F04079 /* pkcs12.py */; };
+		89CD1C492EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AEF2EECC85100F04079 /* INSTALLER */; };
+		89CD1C4A2EECC85100F04079 /* csr.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B122EECC85100F04079 /* csr.cpython-310.pyc */; };
+		89CD1C4B2EECC85100F04079 /* _iri.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B222EECC85100F04079 /* _iri.py */; };
+		89CD1C4C2EECC85100F04079 /* pool.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AB72EECC85100F04079 /* pool.cpython-310.pyc */; };
+		89CD1C4D2EECC85100F04079 /* core.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A532EECC85100F04079 /* core.py */; };
+		89CD1C4E2EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AF92EECC85100F04079 /* WHEEL */; };
+		89CD1C4F2EECC85100F04079 /* _ordereddict.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A362EECC85100F04079 /* _ordereddict.cpython-310.pyc */; };
+		89CD1C502EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A8C2EECC85100F04079 /* __init__.py */; };
+		89CD1C512EECC85100F04079 /* _parser.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B472EECC85100F04079 /* _parser.cpython-310.pyc */; };
+		89CD1C522EECC85100F04079 /* core.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B912EECC85100F04079 /* core.py */; };
+		89CD1C532EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B7E2EECC85100F04079 /* INSTALLER */; };
+		89CD1C542EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B842EECC85100F04079 /* INSTALLER */; };
+		89CD1C552EECC85100F04079 /* _teletex_codec.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B0C2EECC85100F04079 /* _teletex_codec.cpython-310.pyc */; };
+		89CD1C562EECC85100F04079 /* tz.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B572EECC85100F04079 /* tz.py */; };
+		89CD1C572EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A712EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1C582EECC85100F04079 /* core.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A3B2EECC85100F04079 /* core.cpython-310.pyc */; };
+		89CD1C592EECC85100F04079 /* rebuild.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A862EECC85100F04079 /* rebuild.cpython-310.pyc */; };
+		89CD1C5A2EECC85100F04079 /* exceptions.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AA22EECC85100F04079 /* exceptions.py */; };
+		89CD1C5B2EECC85100F04079 /* cms.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A3A2EECC85100F04079 /* cms.cpython-310.pyc */; };
+		89CD1C5C2EECC85100F04079 /* pool.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AD02EECC85100F04079 /* pool.py */; };
+		89CD1C5D2EECC85100F04079 /* native.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AA42EECC85100F04079 /* native.py */; };
+		89CD1C5E2EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A662EECC85100F04079 /* WHEEL */; };
+		89CD1C5F2EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B392EECC85100F04079 /* RECORD */; };
+		89CD1C602EECC85100F04079 /* pkcs12.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B182EECC85100F04079 /* pkcs12.cpython-310.pyc */; };
+		89CD1C612EECC85100F04079 /* _common.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B3E2EECC85100F04079 /* _common.cpython-310.pyc */; };
+		89CD1C622EECC85100F04079 /* isoparser.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A772EECC85100F04079 /* isoparser.py */; };
+		89CD1C632EECC85100F04079 /* utils.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B922EECC85100F04079 /* utils.py */; };
+		89CD1C642EECC85100F04079 /* core.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A972EECC85100F04079 /* core.cpython-310.pyc */; };
+		89CD1C652EECC85100F04079 /* errorcodes.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AB32EECC85100F04079 /* errorcodes.cpython-310.pyc */; };
+		89CD1C662EECC85100F04079 /* lamda_function.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B012EECC85100F04079 /* lamda_function.py */; };
+		89CD1C672EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AF42EECC85100F04079 /* INSTALLER */; };
+		89CD1C682EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AF02EECC85100F04079 /* METADATA */; };
+		89CD1C692EECC85100F04079 /* _ipaddress.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AC82EECC85100F04079 /* _ipaddress.py */; };
+		89CD1C6A2EECC85100F04079 /* errorcodes.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ACC2EECC85100F04079 /* errorcodes.py */; };
+		89CD1C6B2EECC85100F04079 /* tsp.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A442EECC85100F04079 /* tsp.cpython-310.pyc */; };
+		89CD1C6C2EECC85100F04079 /* run_migration.sh in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1BAA2EECC85100F04079 /* run_migration.sh */; };
+		89CD1C6D2EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B872EECC85100F04079 /* RECORD */; };
+		89CD1C6E2EECC85100F04079 /* _common.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A692EECC85100F04079 /* _common.cpython-310.pyc */; };
+		89CD1C6F2EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B852EECC85100F04079 /* LICENSE */; };
+		89CD1C702EECC85100F04079 /* zip-safe in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B8A2EECC85100F04079 /* zip-safe */; };
+		89CD1C712EECC85100F04079 /* _types.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A382EECC85100F04079 /* _types.cpython-310.pyc */; };
+		89CD1C722EECC85100F04079 /* _version.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B3F2EECC85100F04079 /* _version.cpython-310.pyc */; };
+		89CD1C732EECC85100F04079 /* REQUESTED in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AAC2EECC85100F04079 /* REQUESTED */; };
+		89CD1C742EECC85100F04079 /* cms.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B272EECC85100F04079 /* cms.py */; };
+		89CD1C752EECC85100F04079 /* cms.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B0F2EECC85100F04079 /* cms.cpython-310.pyc */; };
+		89CD1C762EECC85100F04079 /* sql.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AB82EECC85100F04079 /* sql.cpython-310.pyc */; };
+		89CD1C772EECC85100F04079 /* pdf.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A412EECC85100F04079 /* pdf.cpython-310.pyc */; };
+		89CD1C782EECC85100F04079 /* isoparser.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A732EECC85100F04079 /* isoparser.cpython-310.pyc */; };
+		89CD1C792EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A642EECC85100F04079 /* RECORD */; };
+		89CD1C7A2EECC85100F04079 /* types.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B7A2EECC85100F04079 /* types.py */; };
+		89CD1C7B2EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AA92EECC85100F04079 /* INSTALLER */; };
+		89CD1C7C2EECC85100F04079 /* tz.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B512EECC85100F04079 /* tz.cpython-310.pyc */; };
+		89CD1C7D2EECC85100F04079 /* exceptions.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B772EECC85100F04079 /* exceptions.py */; };
+		89CD1C7E2EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AC72EECC85100F04079 /* __init__.py */; };
+		89CD1C7F2EECC85100F04079 /* crl.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A3C2EECC85100F04079 /* crl.cpython-310.pyc */; };
+		89CD1C802EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AAD2EECC85100F04079 /* WHEEL */; };
+		89CD1C812EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B4E2EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1C822EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AF72EECC85100F04079 /* RECORD */; };
+		89CD1C832EECC85100F04079 /* win.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B522EECC85100F04079 /* win.cpython-310.pyc */; };
+		89CD1C842EECC85100F04079 /* utils.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A6F2EECC85100F04079 /* utils.cpython-310.pyc */; };
+		89CD1C852EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B862EECC85100F04079 /* METADATA */; };
+		89CD1C862EECC85100F04079 /* converters.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A9F2EECC85100F04079 /* converters.py */; };
+		89CD1C872EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AE22EECC85100F04079 /* WHEEL */; };
+		89CD1C882EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B992EECC85100F04079 /* WHEEL */; };
+		89CD1C892EECC85100F04079 /* _parser.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A762EECC85100F04079 /* _parser.py */; };
+		89CD1C8A2EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B542EECC85100F04079 /* __init__.py */; };
+		89CD1C8B2EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AAB2EECC85100F04079 /* RECORD */; };
+		89CD1C8C2EECC85100F04079 /* version.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A5E2EECC85100F04079 /* version.py */; };
+		89CD1C8D2EECC85100F04079 /* _ipaddress.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AB02EECC85100F04079 /* _ipaddress.cpython-310.pyc */; };
+		89CD1C8E2EECC85100F04079 /* util.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A452EECC85100F04079 /* util.cpython-310.pyc */; };
+		89CD1C8F2EECC85100F04079 /* types.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AA52EECC85100F04079 /* types.py */; };
+		89CD1C902EECC85100F04079 /* core.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AA02EECC85100F04079 /* core.py */; };
+		89CD1C912EECC85100F04079 /* tz.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AD22EECC85100F04079 /* tz.py */; };
+		89CD1C922EECC85100F04079 /* _inet.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B082EECC85100F04079 /* _inet.cpython-310.pyc */; };
+		89CD1C932EECC85100F04079 /* utils.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B8E2EECC85100F04079 /* utils.cpython-310.pyc */; };
+		89CD1C942EECC85100F04079 /* rebuild.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A8A2EECC85100F04079 /* rebuild.py */; };
+		89CD1C952EECC85100F04079 /* _types.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B0D2EECC85100F04079 /* _types.cpython-310.pyc */; };
+		89CD1C962EECC85100F04079 /* ocsp.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A572EECC85100F04079 /* ocsp.py */; };
+		89CD1C972EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AF62EECC85100F04079 /* METADATA */; };
+		89CD1C982EECC85100F04079 /* _int.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A4C2EECC85100F04079 /* _int.py */; };
+		89CD1C992EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B612EECC85100F04079 /* __init__.py */; };
+		89CD1C9A2EECC85100F04079 /* pkcs12.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A5B2EECC85100F04079 /* pkcs12.py */; };
+		89CD1C9B2EECC85100F04079 /* errors.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ACD2EECC85100F04079 /* errors.py */; };
+		89CD1C9C2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B8C2EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1C9D2EECC85100F04079 /* database_migration.sql in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1BA72EECC85100F04079 /* database_migration.sql */; };
+		89CD1C9E2EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A9E2EECC85100F04079 /* __init__.py */; };
+		89CD1C9F2EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AED2EECC85100F04079 /* LICENSE */; };
+		89CD1CA02EECC85100F04079 /* algos.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B0E2EECC85100F04079 /* algos.cpython-310.pyc */; };
+		89CD1CA12EECC85100F04079 /* cms.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A522EECC85100F04079 /* cms.py */; };
+		89CD1CA22EECC85100F04079 /* rebuild.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B5F2EECC85100F04079 /* rebuild.py */; };
+		89CD1CA32EECC85100F04079 /* RECORD in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B802EECC85100F04079 /* RECORD */; };
+		89CD1CA42EECC85100F04079 /* ocsp.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A3F2EECC85100F04079 /* ocsp.cpython-310.pyc */; };
+		89CD1CA52EECC85100F04079 /* _iri.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A352EECC85100F04079 /* _iri.cpython-310.pyc */; };
+		89CD1CA62EECC85100F04079 /* rrule.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A6D2EECC85100F04079 /* rrule.cpython-310.pyc */; };
+		89CD1CA72EECC85100F04079 /* tsp.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B312EECC85100F04079 /* tsp.py */; };
+		89CD1CA82EECC85100F04079 /* INSTALLER in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A612EECC85100F04079 /* INSTALLER */; };
+		89CD1CA92EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A632EECC85100F04079 /* METADATA */; };
+		89CD1CAA2EECC85100F04079 /* util.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A5D2EECC85100F04079 /* util.py */; };
+		89CD1CAB2EECC85100F04079 /* x509.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B1C2EECC85100F04079 /* x509.cpython-310.pyc */; };
+		89CD1CAC2EECC85100F04079 /* easter.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A6B2EECC85100F04079 /* easter.cpython-310.pyc */; };
+		89CD1CAD2EECC85100F04079 /* _factories.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B562EECC85100F04079 /* _factories.py */; };
+		89CD1CAE2EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A882EECC85100F04079 /* __init__.py */; };
+		89CD1CAF2EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ADB2EECC85100F04079 /* WHEEL */; };
+		89CD1CB02EECC85100F04079 /* _common.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B4F2EECC85100F04079 /* _common.cpython-310.pyc */; };
+		89CD1CB12EECC85100F04079 /* algos.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B262EECC85100F04079 /* algos.py */; };
+		89CD1CB22EECC85100F04079 /* _int.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B092EECC85100F04079 /* _int.cpython-310.pyc */; };
+		89CD1CB32EECC85100F04079 /* _errors.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A4A2EECC85100F04079 /* _errors.py */; };
+		89CD1CB42EECC85100F04079 /* x509.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A5F2EECC85100F04079 /* x509.py */; };
+		89CD1CB52EECC85100F04079 /* version.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B332EECC85100F04079 /* version.py */; };
+		89CD1CB62EECC85100F04079 /* parser.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A582EECC85100F04079 /* parser.py */; };
+		89CD1CB72EECC85100F04079 /* pdf.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A592EECC85100F04079 /* pdf.py */; };
+		89CD1CB82EECC85100F04079 /* zip-safe in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AE32EECC85100F04079 /* zip-safe */; };
+		89CD1CB92EECC85100F04079 /* dateutil-zoneinfo.tar.gz in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B5E2EECC85100F04079 /* dateutil-zoneinfo.tar.gz */; };
+		89CD1CBA2EECC85100F04079 /* _version.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A6A2EECC85100F04079 /* _version.cpython-310.pyc */; };
+		89CD1CBB2EECC85100F04079 /* _errors.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B072EECC85100F04079 /* _errors.cpython-310.pyc */; };
+		89CD1CBC2EECC85100F04079 /* _json.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AC92EECC85100F04079 /* _json.py */; };
+		89CD1CBD2EECC85100F04079 /* dbapi.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B762EECC85100F04079 /* dbapi.py */; };
+		89CD1CBE2EECC85100F04079 /* _types.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B252EECC85100F04079 /* _types.py */; };
+		89CD1CBF2EECC85100F04079 /* _version.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A8E2EECC85100F04079 /* _version.py */; };
+		89CD1CC02EECC85100F04079 /* six.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B042EECC85100F04079 /* six.cpython-310.pyc */; };
+		89CD1CC12EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B9C2EECC85100F04079 /* LICENSE */; };
+		89CD1CC22EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B1E2EECC85100F04079 /* __init__.py */; };
+		89CD1CC32EECC85100F04079 /* WHEEL in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B3B2EECC85100F04079 /* WHEEL */; };
+		89CD1CC42EECC85100F04079 /* _parser.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B4B2EECC85100F04079 /* _parser.py */; };
+		89CD1CC52EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A792EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1CC62EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AA72EECC85100F04079 /* LICENSE */; };
+		89CD1CC72EECC85100F04079 /* utils.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A932EECC85100F04079 /* utils.py */; };
+		89CD1CC82EECC85100F04079 /* relativedelta.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B652EECC85100F04079 /* relativedelta.py */; };
+		89CD1CC92EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B6A2EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1CCA2EECC85100F04079 /* _errors.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B1F2EECC85100F04079 /* _errors.py */; };
+		89CD1CCB2EECC85100F04079 /* ocsp.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B142EECC85100F04079 /* ocsp.cpython-310.pyc */; };
+		89CD1CCC2EECC85100F04079 /* _int.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B212EECC85100F04079 /* _int.py */; };
+		89CD1CCD2EECC85100F04079 /* relativedelta.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A6C2EECC85100F04079 /* relativedelta.cpython-310.pyc */; };
+		89CD1CCE2EECC85100F04079 /* METADATA in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1ADF2EECC85100F04079 /* METADATA */; };
+		89CD1CCF2EECC85100F04079 /* pem.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B2F2EECC85100F04079 /* pem.py */; };
+		89CD1CD02EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B4A2EECC85100F04079 /* __init__.py */; };
+		89CD1CD12EECC85100F04079 /* _ordereddict.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A4E2EECC85100F04079 /* _ordereddict.py */; };
+		89CD1CD22EECC85100F04079 /* algos.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A512EECC85100F04079 /* algos.py */; };
+		89CD1CD32EECC85100F04079 /* _common.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B622EECC85100F04079 /* _common.py */; };
+		89CD1CD42EECC85100F04079 /* csr.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A552EECC85100F04079 /* csr.py */; };
+		89CD1CD52EECC85100F04079 /* keys.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B2B2EECC85100F04079 /* keys.py */; };
+		89CD1CD62EECC85100F04079 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A752EECC85100F04079 /* __init__.py */; };
+		89CD1CD72EECC85100F04079 /* six.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AFF2EECC85100F04079 /* six.py */; };
+		89CD1CD82EECC85100F04079 /* win.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B582EECC85100F04079 /* win.py */; };
+		89CD1CD92EECC85100F04079 /* __init__.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AAF2EECC85100F04079 /* __init__.cpython-310.pyc */; };
+		89CD1CDA2EECC85100F04079 /* converters.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A962EECC85100F04079 /* converters.cpython-310.pyc */; };
+		89CD1CDB2EECC85100F04079 /* tzwin.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B672EECC85100F04079 /* tzwin.py */; };
+		89CD1CDC2EECC85100F04079 /* win.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A7D2EECC85100F04079 /* win.cpython-310.pyc */; };
+		89CD1CDD2EECC85100F04079 /* isoparser.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B4C2EECC85100F04079 /* isoparser.py */; };
+		89CD1CDE2EECC85100F04079 /* requirements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1BA42EECC85100F04079 /* requirements.txt */; };
+		89CD1CDF2EECC85100F04079 /* parser.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A402EECC85100F04079 /* parser.cpython-310.pyc */; };
+		89CD1CE02EECC85100F04079 /* top_level.txt in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AE12EECC85100F04079 /* top_level.txt */; };
+		89CD1CE12EECC85100F04079 /* _int.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A342EECC85100F04079 /* _int.cpython-310.pyc */; };
+		89CD1CE22EECC85100F04079 /* tz.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1A7C2EECC85100F04079 /* tz.cpython-310.pyc */; };
+		89CD1CE32EECC85100F04079 /* _common.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B552EECC85100F04079 /* _common.py */; };
+		89CD1CE42EECC85100F04079 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1AF52EECC85100F04079 /* LICENSE */; };
+		89CD1CE52EECC85100F04079 /* core.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B8D2EECC85100F04079 /* core.cpython-310.pyc */; };
+		89CD1CE62EECC85100F04079 /* dbapi.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B6D2EECC85100F04079 /* dbapi.cpython-310.pyc */; };
+		89CD1CE72EECC85100F04079 /* native.cpython-310.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1B702EECC85100F04079 /* native.cpython-310.pyc */; };
+		89CD1CE82EECC85100F04079 /* libsasl2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1AC42EECC85100F04079 /* libsasl2.3.dylib */; };
+		89CD1CE92EECC85100F04079 /* libgssapi_krb5.2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1ABD2EECC85100F04079 /* libgssapi_krb5.2.2.dylib */; };
+		89CD1CEA2EECC85100F04079 /* libcrypto.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1ABC2EECC85100F04079 /* libcrypto.3.dylib */; };
+		89CD1CEB2EECC85100F04079 /* liblber.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1AC12EECC85100F04079 /* liblber.2.dylib */; };
+		89CD1CEC2EECC85100F04079 /* libk5crypto.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1ABE2EECC85100F04079 /* libk5crypto.3.1.dylib */; };
+		89CD1CED2EECC85100F04079 /* libkrb5.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1ABF2EECC85100F04079 /* libkrb5.3.3.dylib */; };
+		89CD1CEE2EECC85100F04079 /* libkrb5support.1.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1AC02EECC85100F04079 /* libkrb5support.1.1.dylib */; };
+		89CD1CEF2EECC85100F04079 /* libldap.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1AC22EECC85100F04079 /* libldap.2.dylib */; };
+		89CD1CF02EECC85100F04079 /* libcom_err.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1ABB2EECC85100F04079 /* libcom_err.3.0.dylib */; };
+		89CD1CF12EECC85100F04079 /* libssl.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1AC52EECC85100F04079 /* libssl.3.dylib */; };
+		89CD1CF22EECC85100F04079 /* libpq.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89CD1AC32EECC85100F04079 /* libpq.5.dylib */; };
+		89CD1CFA2EECC8B200F04079 /* deploy.sh in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1CF52EECC8B200F04079 /* deploy.sh */; };
+		89CD1CFB2EECC8B200F04079 /* lambda_function.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1CF62EECC8B200F04079 /* lambda_function.py */; };
+		89CD1CFC2EECC8B200F04079 /* mcc_codes.json in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1CF72EECC8B200F04079 /* mcc_codes.json */; };
+		89CD1CFD2EECC8B200F04079 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1CF82EECC8B200F04079 /* README.md */; };
+		89CD1CFE2EECC8B200F04079 /* requirements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1CF92EECC8B200F04079 /* requirements.txt */; };
+		89CD1D002EECE65C00F04079 /* test_mcc_matcher.py in Resources */ = {isa = PBXBuildFile; fileRef = 89CD1CFF2EECE65C00F04079 /* test_mcc_matcher.py */; };
 		C58D78E12EC24EE700AEC9FA /* schema_four_tables.sql in Resources */ = {isa = PBXBuildFile; fileRef = C58D78E02EC24EE700AEC9FA /* schema_four_tables.sql */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +365,339 @@
 		891F5F142E941BA700A880E5 /* PlasticProphet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlasticProphet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F212E941BA800A880E5 /* PlasticProphetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F2B2E941BA800A880E5 /* PlasticProphetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		89CD1A2F2EECC85100F04079 /* six.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "six.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A312EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A322EECC85100F04079 /* _errors.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_errors.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A332EECC85100F04079 /* _inet.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_inet.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A342EECC85100F04079 /* _int.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_int.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A352EECC85100F04079 /* _iri.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_iri.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A362EECC85100F04079 /* _ordereddict.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_ordereddict.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A372EECC85100F04079 /* _teletex_codec.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_teletex_codec.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A382EECC85100F04079 /* _types.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_types.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A392EECC85100F04079 /* algos.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "algos.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A3A2EECC85100F04079 /* cms.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cms.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A3B2EECC85100F04079 /* core.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "core.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A3C2EECC85100F04079 /* crl.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "crl.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A3D2EECC85100F04079 /* csr.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "csr.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A3E2EECC85100F04079 /* keys.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "keys.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A3F2EECC85100F04079 /* ocsp.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ocsp.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A402EECC85100F04079 /* parser.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "parser.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A412EECC85100F04079 /* pdf.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pdf.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A422EECC85100F04079 /* pem.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pem.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A432EECC85100F04079 /* pkcs12.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pkcs12.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A442EECC85100F04079 /* tsp.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tsp.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A452EECC85100F04079 /* util.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "util.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A462EECC85100F04079 /* version.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "version.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A472EECC85100F04079 /* x509.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "x509.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A492EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1A4A2EECC85100F04079 /* _errors.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _errors.py; sourceTree = "<group>"; };
+		89CD1A4B2EECC85100F04079 /* _inet.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _inet.py; sourceTree = "<group>"; };
+		89CD1A4C2EECC85100F04079 /* _int.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _int.py; sourceTree = "<group>"; };
+		89CD1A4D2EECC85100F04079 /* _iri.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _iri.py; sourceTree = "<group>"; };
+		89CD1A4E2EECC85100F04079 /* _ordereddict.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _ordereddict.py; sourceTree = "<group>"; };
+		89CD1A4F2EECC85100F04079 /* _teletex_codec.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _teletex_codec.py; sourceTree = "<group>"; };
+		89CD1A502EECC85100F04079 /* _types.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _types.py; sourceTree = "<group>"; };
+		89CD1A512EECC85100F04079 /* algos.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = algos.py; sourceTree = "<group>"; };
+		89CD1A522EECC85100F04079 /* cms.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = cms.py; sourceTree = "<group>"; };
+		89CD1A532EECC85100F04079 /* core.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = core.py; sourceTree = "<group>"; };
+		89CD1A542EECC85100F04079 /* crl.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = crl.py; sourceTree = "<group>"; };
+		89CD1A552EECC85100F04079 /* csr.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = csr.py; sourceTree = "<group>"; };
+		89CD1A562EECC85100F04079 /* keys.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = keys.py; sourceTree = "<group>"; };
+		89CD1A572EECC85100F04079 /* ocsp.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = ocsp.py; sourceTree = "<group>"; };
+		89CD1A582EECC85100F04079 /* parser.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = parser.py; sourceTree = "<group>"; };
+		89CD1A592EECC85100F04079 /* pdf.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = pdf.py; sourceTree = "<group>"; };
+		89CD1A5A2EECC85100F04079 /* pem.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = pem.py; sourceTree = "<group>"; };
+		89CD1A5B2EECC85100F04079 /* pkcs12.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = pkcs12.py; sourceTree = "<group>"; };
+		89CD1A5C2EECC85100F04079 /* tsp.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tsp.py; sourceTree = "<group>"; };
+		89CD1A5D2EECC85100F04079 /* util.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = util.py; sourceTree = "<group>"; };
+		89CD1A5E2EECC85100F04079 /* version.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = version.py; sourceTree = "<group>"; };
+		89CD1A5F2EECC85100F04079 /* x509.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = x509.py; sourceTree = "<group>"; };
+		89CD1A612EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1A622EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1A632EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1A642EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1A652EECC85100F04079 /* top_level.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = top_level.txt; sourceTree = "<group>"; };
+		89CD1A662EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1A682EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A692EECC85100F04079 /* _common.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_common.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A6A2EECC85100F04079 /* _version.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_version.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A6B2EECC85100F04079 /* easter.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "easter.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A6C2EECC85100F04079 /* relativedelta.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "relativedelta.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A6D2EECC85100F04079 /* rrule.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rrule.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A6E2EECC85100F04079 /* tzwin.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tzwin.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A6F2EECC85100F04079 /* utils.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "utils.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A712EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A722EECC85100F04079 /* _parser.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_parser.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A732EECC85100F04079 /* isoparser.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "isoparser.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A752EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1A762EECC85100F04079 /* _parser.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _parser.py; sourceTree = "<group>"; };
+		89CD1A772EECC85100F04079 /* isoparser.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = isoparser.py; sourceTree = "<group>"; };
+		89CD1A792EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A7A2EECC85100F04079 /* _common.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_common.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A7B2EECC85100F04079 /* _factories.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_factories.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A7C2EECC85100F04079 /* tz.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tz.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A7D2EECC85100F04079 /* win.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "win.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A7F2EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1A802EECC85100F04079 /* _common.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _common.py; sourceTree = "<group>"; };
+		89CD1A812EECC85100F04079 /* _factories.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _factories.py; sourceTree = "<group>"; };
+		89CD1A822EECC85100F04079 /* tz.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tz.py; sourceTree = "<group>"; };
+		89CD1A832EECC85100F04079 /* win.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = win.py; sourceTree = "<group>"; };
+		89CD1A852EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A862EECC85100F04079 /* rebuild.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rebuild.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A882EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1A892EECC85100F04079 /* dateutil-zoneinfo.tar.gz */ = {isa = PBXFileReference; lastKnownFileType = archive.gzip; path = "dateutil-zoneinfo.tar.gz"; sourceTree = "<group>"; };
+		89CD1A8A2EECC85100F04079 /* rebuild.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = rebuild.py; sourceTree = "<group>"; };
+		89CD1A8C2EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1A8D2EECC85100F04079 /* _common.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _common.py; sourceTree = "<group>"; };
+		89CD1A8E2EECC85100F04079 /* _version.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _version.py; sourceTree = "<group>"; };
+		89CD1A8F2EECC85100F04079 /* easter.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = easter.py; sourceTree = "<group>"; };
+		89CD1A902EECC85100F04079 /* relativedelta.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = relativedelta.py; sourceTree = "<group>"; };
+		89CD1A912EECC85100F04079 /* rrule.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = rrule.py; sourceTree = "<group>"; };
+		89CD1A922EECC85100F04079 /* tzwin.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tzwin.py; sourceTree = "<group>"; };
+		89CD1A932EECC85100F04079 /* utils.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = utils.py; sourceTree = "<group>"; };
+		89CD1A952EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A962EECC85100F04079 /* converters.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "converters.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A972EECC85100F04079 /* core.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "core.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A982EECC85100F04079 /* dbapi.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dbapi.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A992EECC85100F04079 /* exceptions.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "exceptions.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A9A2EECC85100F04079 /* legacy.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "legacy.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A9B2EECC85100F04079 /* native.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "native.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A9C2EECC85100F04079 /* types.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "types.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1A9E2EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1A9F2EECC85100F04079 /* converters.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = converters.py; sourceTree = "<group>"; };
+		89CD1AA02EECC85100F04079 /* core.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = core.py; sourceTree = "<group>"; };
+		89CD1AA12EECC85100F04079 /* dbapi.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = dbapi.py; sourceTree = "<group>"; };
+		89CD1AA22EECC85100F04079 /* exceptions.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = exceptions.py; sourceTree = "<group>"; };
+		89CD1AA32EECC85100F04079 /* legacy.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = legacy.py; sourceTree = "<group>"; };
+		89CD1AA42EECC85100F04079 /* native.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = native.py; sourceTree = "<group>"; };
+		89CD1AA52EECC85100F04079 /* types.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = types.py; sourceTree = "<group>"; };
+		89CD1AA72EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1AA92EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1AAA2EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1AAB2EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1AAC2EECC85100F04079 /* REQUESTED */ = {isa = PBXFileReference; lastKnownFileType = text; path = REQUESTED; sourceTree = "<group>"; };
+		89CD1AAD2EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1AAF2EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AB02EECC85100F04079 /* _ipaddress.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_ipaddress.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AB12EECC85100F04079 /* _json.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_json.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AB22EECC85100F04079 /* _range.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_range.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AB32EECC85100F04079 /* errorcodes.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "errorcodes.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AB42EECC85100F04079 /* errors.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "errors.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AB52EECC85100F04079 /* extensions.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "extensions.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AB62EECC85100F04079 /* extras.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "extras.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AB72EECC85100F04079 /* pool.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pool.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AB82EECC85100F04079 /* sql.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sql.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AB92EECC85100F04079 /* tz.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tz.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1ABB2EECC85100F04079 /* libcom_err.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcom_err.3.0.dylib; sourceTree = "<group>"; };
+		89CD1ABC2EECC85100F04079 /* libcrypto.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcrypto.3.dylib; sourceTree = "<group>"; };
+		89CD1ABD2EECC85100F04079 /* libgssapi_krb5.2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libgssapi_krb5.2.2.dylib; sourceTree = "<group>"; };
+		89CD1ABE2EECC85100F04079 /* libk5crypto.3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libk5crypto.3.1.dylib; sourceTree = "<group>"; };
+		89CD1ABF2EECC85100F04079 /* libkrb5.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libkrb5.3.3.dylib; sourceTree = "<group>"; };
+		89CD1AC02EECC85100F04079 /* libkrb5support.1.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libkrb5support.1.1.dylib; sourceTree = "<group>"; };
+		89CD1AC12EECC85100F04079 /* liblber.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = liblber.2.dylib; sourceTree = "<group>"; };
+		89CD1AC22EECC85100F04079 /* libldap.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libldap.2.dylib; sourceTree = "<group>"; };
+		89CD1AC32EECC85100F04079 /* libpq.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpq.5.dylib; sourceTree = "<group>"; };
+		89CD1AC42EECC85100F04079 /* libsasl2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsasl2.3.dylib; sourceTree = "<group>"; };
+		89CD1AC52EECC85100F04079 /* libssl.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.3.dylib; sourceTree = "<group>"; };
+		89CD1AC72EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1AC82EECC85100F04079 /* _ipaddress.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _ipaddress.py; sourceTree = "<group>"; };
+		89CD1AC92EECC85100F04079 /* _json.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _json.py; sourceTree = "<group>"; };
+		89CD1ACA2EECC85100F04079 /* _psycopg.cpython-310-darwin.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; path = "_psycopg.cpython-310-darwin.so"; sourceTree = "<group>"; };
+		89CD1ACB2EECC85100F04079 /* _range.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _range.py; sourceTree = "<group>"; };
+		89CD1ACC2EECC85100F04079 /* errorcodes.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = errorcodes.py; sourceTree = "<group>"; };
+		89CD1ACD2EECC85100F04079 /* errors.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = errors.py; sourceTree = "<group>"; };
+		89CD1ACE2EECC85100F04079 /* extensions.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = extensions.py; sourceTree = "<group>"; };
+		89CD1ACF2EECC85100F04079 /* extras.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = extras.py; sourceTree = "<group>"; };
+		89CD1AD02EECC85100F04079 /* pool.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = pool.py; sourceTree = "<group>"; };
+		89CD1AD12EECC85100F04079 /* sql.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = sql.py; sourceTree = "<group>"; };
+		89CD1AD22EECC85100F04079 /* tz.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tz.py; sourceTree = "<group>"; };
+		89CD1AD42EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1AD62EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1AD72EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1AD82EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1AD92EECC85100F04079 /* REQUESTED */ = {isa = PBXFileReference; lastKnownFileType = text; path = REQUESTED; sourceTree = "<group>"; };
+		89CD1ADA2EECC85100F04079 /* top_level.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = top_level.txt; sourceTree = "<group>"; };
+		89CD1ADB2EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1ADD2EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1ADE2EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1ADF2EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1AE02EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1AE12EECC85100F04079 /* top_level.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = top_level.txt; sourceTree = "<group>"; };
+		89CD1AE22EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1AE32EECC85100F04079 /* zip-safe */ = {isa = PBXFileReference; lastKnownFileType = text; path = "zip-safe"; sourceTree = "<group>"; };
+		89CD1AE52EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AE62EECC85100F04079 /* core.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "core.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AE72EECC85100F04079 /* utils.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "utils.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1AE92EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1AEA2EECC85100F04079 /* core.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = core.py; sourceTree = "<group>"; };
+		89CD1AEB2EECC85100F04079 /* utils.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = utils.py; sourceTree = "<group>"; };
+		89CD1AED2EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1AEF2EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1AF02EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1AF12EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1AF22EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1AF42EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1AF52EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1AF62EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1AF72EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1AF82EECC85100F04079 /* top_level.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = top_level.txt; sourceTree = "<group>"; };
+		89CD1AF92EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1AFB2EECC85100F04079 /* GetProfileAPI.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = GetProfileAPI.zip; sourceTree = "<group>"; };
+		89CD1AFC2EECC85100F04079 /* lambda_deployment.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = lambda_deployment.zip; sourceTree = "<group>"; };
+		89CD1AFD2EECC85100F04079 /* lambda_function.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = lambda_function.py; sourceTree = "<group>"; };
+		89CD1AFE2EECC85100F04079 /* requirements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
+		89CD1AFF2EECC85100F04079 /* six.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = six.py; sourceTree = "<group>"; };
+		89CD1B012EECC85100F04079 /* lamda_function.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = lamda_function.py; sourceTree = "<group>"; };
+		89CD1B042EECC85100F04079 /* six.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "six.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B062EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B072EECC85100F04079 /* _errors.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_errors.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B082EECC85100F04079 /* _inet.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_inet.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B092EECC85100F04079 /* _int.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_int.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B0A2EECC85100F04079 /* _iri.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_iri.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B0B2EECC85100F04079 /* _ordereddict.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_ordereddict.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B0C2EECC85100F04079 /* _teletex_codec.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_teletex_codec.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B0D2EECC85100F04079 /* _types.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_types.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B0E2EECC85100F04079 /* algos.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "algos.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B0F2EECC85100F04079 /* cms.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cms.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B102EECC85100F04079 /* core.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "core.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B112EECC85100F04079 /* crl.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "crl.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B122EECC85100F04079 /* csr.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "csr.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B132EECC85100F04079 /* keys.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "keys.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B142EECC85100F04079 /* ocsp.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ocsp.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B152EECC85100F04079 /* parser.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "parser.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B162EECC85100F04079 /* pdf.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pdf.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B172EECC85100F04079 /* pem.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pem.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B182EECC85100F04079 /* pkcs12.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pkcs12.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B192EECC85100F04079 /* tsp.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tsp.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B1A2EECC85100F04079 /* util.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "util.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B1B2EECC85100F04079 /* version.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "version.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B1C2EECC85100F04079 /* x509.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "x509.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B1E2EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1B1F2EECC85100F04079 /* _errors.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _errors.py; sourceTree = "<group>"; };
+		89CD1B202EECC85100F04079 /* _inet.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _inet.py; sourceTree = "<group>"; };
+		89CD1B212EECC85100F04079 /* _int.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _int.py; sourceTree = "<group>"; };
+		89CD1B222EECC85100F04079 /* _iri.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _iri.py; sourceTree = "<group>"; };
+		89CD1B232EECC85100F04079 /* _ordereddict.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _ordereddict.py; sourceTree = "<group>"; };
+		89CD1B242EECC85100F04079 /* _teletex_codec.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _teletex_codec.py; sourceTree = "<group>"; };
+		89CD1B252EECC85100F04079 /* _types.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _types.py; sourceTree = "<group>"; };
+		89CD1B262EECC85100F04079 /* algos.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = algos.py; sourceTree = "<group>"; };
+		89CD1B272EECC85100F04079 /* cms.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = cms.py; sourceTree = "<group>"; };
+		89CD1B282EECC85100F04079 /* core.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = core.py; sourceTree = "<group>"; };
+		89CD1B292EECC85100F04079 /* crl.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = crl.py; sourceTree = "<group>"; };
+		89CD1B2A2EECC85100F04079 /* csr.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = csr.py; sourceTree = "<group>"; };
+		89CD1B2B2EECC85100F04079 /* keys.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = keys.py; sourceTree = "<group>"; };
+		89CD1B2C2EECC85100F04079 /* ocsp.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = ocsp.py; sourceTree = "<group>"; };
+		89CD1B2D2EECC85100F04079 /* parser.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = parser.py; sourceTree = "<group>"; };
+		89CD1B2E2EECC85100F04079 /* pdf.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = pdf.py; sourceTree = "<group>"; };
+		89CD1B2F2EECC85100F04079 /* pem.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = pem.py; sourceTree = "<group>"; };
+		89CD1B302EECC85100F04079 /* pkcs12.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = pkcs12.py; sourceTree = "<group>"; };
+		89CD1B312EECC85100F04079 /* tsp.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tsp.py; sourceTree = "<group>"; };
+		89CD1B322EECC85100F04079 /* util.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = util.py; sourceTree = "<group>"; };
+		89CD1B332EECC85100F04079 /* version.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = version.py; sourceTree = "<group>"; };
+		89CD1B342EECC85100F04079 /* x509.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = x509.py; sourceTree = "<group>"; };
+		89CD1B362EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1B372EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1B382EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1B392EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1B3A2EECC85100F04079 /* top_level.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = top_level.txt; sourceTree = "<group>"; };
+		89CD1B3B2EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1B3D2EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B3E2EECC85100F04079 /* _common.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_common.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B3F2EECC85100F04079 /* _version.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_version.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B402EECC85100F04079 /* easter.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "easter.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B412EECC85100F04079 /* relativedelta.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "relativedelta.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B422EECC85100F04079 /* rrule.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rrule.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B432EECC85100F04079 /* tzwin.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tzwin.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B442EECC85100F04079 /* utils.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "utils.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B462EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B472EECC85100F04079 /* _parser.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_parser.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B482EECC85100F04079 /* isoparser.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "isoparser.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B4A2EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1B4B2EECC85100F04079 /* _parser.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _parser.py; sourceTree = "<group>"; };
+		89CD1B4C2EECC85100F04079 /* isoparser.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = isoparser.py; sourceTree = "<group>"; };
+		89CD1B4E2EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B4F2EECC85100F04079 /* _common.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_common.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B502EECC85100F04079 /* _factories.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "_factories.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B512EECC85100F04079 /* tz.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tz.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B522EECC85100F04079 /* win.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "win.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B542EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1B552EECC85100F04079 /* _common.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _common.py; sourceTree = "<group>"; };
+		89CD1B562EECC85100F04079 /* _factories.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _factories.py; sourceTree = "<group>"; };
+		89CD1B572EECC85100F04079 /* tz.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tz.py; sourceTree = "<group>"; };
+		89CD1B582EECC85100F04079 /* win.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = win.py; sourceTree = "<group>"; };
+		89CD1B5A2EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B5B2EECC85100F04079 /* rebuild.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rebuild.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B5D2EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1B5E2EECC85100F04079 /* dateutil-zoneinfo.tar.gz */ = {isa = PBXFileReference; lastKnownFileType = archive.gzip; path = "dateutil-zoneinfo.tar.gz"; sourceTree = "<group>"; };
+		89CD1B5F2EECC85100F04079 /* rebuild.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = rebuild.py; sourceTree = "<group>"; };
+		89CD1B612EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1B622EECC85100F04079 /* _common.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _common.py; sourceTree = "<group>"; };
+		89CD1B632EECC85100F04079 /* _version.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = _version.py; sourceTree = "<group>"; };
+		89CD1B642EECC85100F04079 /* easter.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = easter.py; sourceTree = "<group>"; };
+		89CD1B652EECC85100F04079 /* relativedelta.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = relativedelta.py; sourceTree = "<group>"; };
+		89CD1B662EECC85100F04079 /* rrule.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = rrule.py; sourceTree = "<group>"; };
+		89CD1B672EECC85100F04079 /* tzwin.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tzwin.py; sourceTree = "<group>"; };
+		89CD1B682EECC85100F04079 /* utils.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = utils.py; sourceTree = "<group>"; };
+		89CD1B6A2EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B6B2EECC85100F04079 /* converters.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "converters.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B6C2EECC85100F04079 /* core.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "core.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B6D2EECC85100F04079 /* dbapi.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dbapi.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B6E2EECC85100F04079 /* exceptions.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "exceptions.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B6F2EECC85100F04079 /* legacy.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "legacy.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B702EECC85100F04079 /* native.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "native.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B712EECC85100F04079 /* types.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "types.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B732EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1B742EECC85100F04079 /* converters.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = converters.py; sourceTree = "<group>"; };
+		89CD1B752EECC85100F04079 /* core.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = core.py; sourceTree = "<group>"; };
+		89CD1B762EECC85100F04079 /* dbapi.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = dbapi.py; sourceTree = "<group>"; };
+		89CD1B772EECC85100F04079 /* exceptions.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = exceptions.py; sourceTree = "<group>"; };
+		89CD1B782EECC85100F04079 /* legacy.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = legacy.py; sourceTree = "<group>"; };
+		89CD1B792EECC85100F04079 /* native.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = native.py; sourceTree = "<group>"; };
+		89CD1B7A2EECC85100F04079 /* types.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = types.py; sourceTree = "<group>"; };
+		89CD1B7C2EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1B7E2EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1B7F2EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1B802EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1B812EECC85100F04079 /* REQUESTED */ = {isa = PBXFileReference; lastKnownFileType = text; path = REQUESTED; sourceTree = "<group>"; };
+		89CD1B822EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1B842EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1B852EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1B862EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1B872EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1B882EECC85100F04079 /* top_level.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = top_level.txt; sourceTree = "<group>"; };
+		89CD1B892EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1B8A2EECC85100F04079 /* zip-safe */ = {isa = PBXFileReference; lastKnownFileType = text; path = "zip-safe"; sourceTree = "<group>"; };
+		89CD1B8C2EECC85100F04079 /* __init__.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B8D2EECC85100F04079 /* core.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "core.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B8E2EECC85100F04079 /* utils.cpython-310.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "utils.cpython-310.pyc"; sourceTree = "<group>"; };
+		89CD1B902EECC85100F04079 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		89CD1B912EECC85100F04079 /* core.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = core.py; sourceTree = "<group>"; };
+		89CD1B922EECC85100F04079 /* utils.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = utils.py; sourceTree = "<group>"; };
+		89CD1B942EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1B962EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1B972EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1B982EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1B992EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1B9B2EECC85100F04079 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		89CD1B9C2EECC85100F04079 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		89CD1B9D2EECC85100F04079 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		89CD1B9E2EECC85100F04079 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		89CD1B9F2EECC85100F04079 /* top_level.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = top_level.txt; sourceTree = "<group>"; };
+		89CD1BA02EECC85100F04079 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		89CD1BA22EECC85100F04079 /* lambda_function.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = lambda_function.py; sourceTree = "<group>"; };
+		89CD1BA32EECC85100F04079 /* PostConfirmationTrigger.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = PostConfirmationTrigger.zip; sourceTree = "<group>"; };
+		89CD1BA42EECC85100F04079 /* requirements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
+		89CD1BA52EECC85100F04079 /* six.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = six.py; sourceTree = "<group>"; };
+		89CD1BA72EECC85100F04079 /* database_migration.sql */ = {isa = PBXFileReference; lastKnownFileType = text; path = database_migration.sql; sourceTree = "<group>"; };
+		89CD1BA82EECC85100F04079 /* deploy.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = deploy.sh; sourceTree = "<group>"; };
+		89CD1BA92EECC85100F04079 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		89CD1BAA2EECC85100F04079 /* run_migration.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = run_migration.sh; sourceTree = "<group>"; };
+		89CD1CF52EECC8B200F04079 /* deploy.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = deploy.sh; sourceTree = "<group>"; };
+		89CD1CF62EECC8B200F04079 /* lambda_function.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = lambda_function.py; sourceTree = "<group>"; };
+		89CD1CF72EECC8B200F04079 /* mcc_codes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mcc_codes.json; sourceTree = "<group>"; };
+		89CD1CF82EECC8B200F04079 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		89CD1CF92EECC8B200F04079 /* requirements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
+		89CD1CFF2EECE65C00F04079 /* test_mcc_matcher.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = test_mcc_matcher.py; sourceTree = "<group>"; };
 		C533E5C02EEA558500F7FE64 /* lambda_function.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = lambda_function.py; sourceTree = "<group>"; };
 		C533E5C12EEA558500F7FE64 /* mcc_directory.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = mcc_directory.py; sourceTree = "<group>"; };
 		C533E5C22EEA558500F7FE64 /* normalization.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = normalization.py; sourceTree = "<group>"; };
@@ -89,6 +755,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89CD1CE82EECC85100F04079 /* libsasl2.3.dylib in Frameworks */,
+				89CD1CE92EECC85100F04079 /* libgssapi_krb5.2.2.dylib in Frameworks */,
+				89CD1CEA2EECC85100F04079 /* libcrypto.3.dylib in Frameworks */,
+				89CD1CEB2EECC85100F04079 /* liblber.2.dylib in Frameworks */,
+				89CD1CEC2EECC85100F04079 /* libk5crypto.3.1.dylib in Frameworks */,
+				89CD1CED2EECC85100F04079 /* libkrb5.3.3.dylib in Frameworks */,
+				89CD1CEE2EECC85100F04079 /* libkrb5support.1.1.dylib in Frameworks */,
+				89CD1CEF2EECC85100F04079 /* libldap.2.dylib in Frameworks */,
+				89CD1CF02EECC85100F04079 /* libcom_err.3.0.dylib in Frameworks */,
+				89CD1CF12EECC85100F04079 /* libssl.3.dylib in Frameworks */,
+				89CD1CF22EECC85100F04079 /* libpq.5.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +806,7 @@
 				891F5F152E941BA700A880E5 /* Products */,
 				88415F672EA9351400E45262 /* Recovered References */,
 				C533E5C82EEA558500F7FE64 /* lambdafunction */,
+				89CD1BAB2EECC85100F04079 /* lambda */,
 			);
 			sourceTree = "<group>";
 		};
@@ -140,6 +818,770 @@
 				891F5F2B2E941BA800A880E5 /* PlasticProphetUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		89CD1A302EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A2F2EECC85100F04079 /* six.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1A482EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A312EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1A322EECC85100F04079 /* _errors.cpython-310.pyc */,
+				89CD1A332EECC85100F04079 /* _inet.cpython-310.pyc */,
+				89CD1A342EECC85100F04079 /* _int.cpython-310.pyc */,
+				89CD1A352EECC85100F04079 /* _iri.cpython-310.pyc */,
+				89CD1A362EECC85100F04079 /* _ordereddict.cpython-310.pyc */,
+				89CD1A372EECC85100F04079 /* _teletex_codec.cpython-310.pyc */,
+				89CD1A382EECC85100F04079 /* _types.cpython-310.pyc */,
+				89CD1A392EECC85100F04079 /* algos.cpython-310.pyc */,
+				89CD1A3A2EECC85100F04079 /* cms.cpython-310.pyc */,
+				89CD1A3B2EECC85100F04079 /* core.cpython-310.pyc */,
+				89CD1A3C2EECC85100F04079 /* crl.cpython-310.pyc */,
+				89CD1A3D2EECC85100F04079 /* csr.cpython-310.pyc */,
+				89CD1A3E2EECC85100F04079 /* keys.cpython-310.pyc */,
+				89CD1A3F2EECC85100F04079 /* ocsp.cpython-310.pyc */,
+				89CD1A402EECC85100F04079 /* parser.cpython-310.pyc */,
+				89CD1A412EECC85100F04079 /* pdf.cpython-310.pyc */,
+				89CD1A422EECC85100F04079 /* pem.cpython-310.pyc */,
+				89CD1A432EECC85100F04079 /* pkcs12.cpython-310.pyc */,
+				89CD1A442EECC85100F04079 /* tsp.cpython-310.pyc */,
+				89CD1A452EECC85100F04079 /* util.cpython-310.pyc */,
+				89CD1A462EECC85100F04079 /* version.cpython-310.pyc */,
+				89CD1A472EECC85100F04079 /* x509.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1A602EECC85100F04079 /* asn1crypto */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A482EECC85100F04079 /* __pycache__ */,
+				89CD1A492EECC85100F04079 /* __init__.py */,
+				89CD1A4A2EECC85100F04079 /* _errors.py */,
+				89CD1A4B2EECC85100F04079 /* _inet.py */,
+				89CD1A4C2EECC85100F04079 /* _int.py */,
+				89CD1A4D2EECC85100F04079 /* _iri.py */,
+				89CD1A4E2EECC85100F04079 /* _ordereddict.py */,
+				89CD1A4F2EECC85100F04079 /* _teletex_codec.py */,
+				89CD1A502EECC85100F04079 /* _types.py */,
+				89CD1A512EECC85100F04079 /* algos.py */,
+				89CD1A522EECC85100F04079 /* cms.py */,
+				89CD1A532EECC85100F04079 /* core.py */,
+				89CD1A542EECC85100F04079 /* crl.py */,
+				89CD1A552EECC85100F04079 /* csr.py */,
+				89CD1A562EECC85100F04079 /* keys.py */,
+				89CD1A572EECC85100F04079 /* ocsp.py */,
+				89CD1A582EECC85100F04079 /* parser.py */,
+				89CD1A592EECC85100F04079 /* pdf.py */,
+				89CD1A5A2EECC85100F04079 /* pem.py */,
+				89CD1A5B2EECC85100F04079 /* pkcs12.py */,
+				89CD1A5C2EECC85100F04079 /* tsp.py */,
+				89CD1A5D2EECC85100F04079 /* util.py */,
+				89CD1A5E2EECC85100F04079 /* version.py */,
+				89CD1A5F2EECC85100F04079 /* x509.py */,
+			);
+			path = asn1crypto;
+			sourceTree = "<group>";
+		};
+		89CD1A672EECC85100F04079 /* asn1crypto-1.5.1.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A612EECC85100F04079 /* INSTALLER */,
+				89CD1A622EECC85100F04079 /* LICENSE */,
+				89CD1A632EECC85100F04079 /* METADATA */,
+				89CD1A642EECC85100F04079 /* RECORD */,
+				89CD1A652EECC85100F04079 /* top_level.txt */,
+				89CD1A662EECC85100F04079 /* WHEEL */,
+			);
+			path = "asn1crypto-1.5.1.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1A702EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A682EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1A692EECC85100F04079 /* _common.cpython-310.pyc */,
+				89CD1A6A2EECC85100F04079 /* _version.cpython-310.pyc */,
+				89CD1A6B2EECC85100F04079 /* easter.cpython-310.pyc */,
+				89CD1A6C2EECC85100F04079 /* relativedelta.cpython-310.pyc */,
+				89CD1A6D2EECC85100F04079 /* rrule.cpython-310.pyc */,
+				89CD1A6E2EECC85100F04079 /* tzwin.cpython-310.pyc */,
+				89CD1A6F2EECC85100F04079 /* utils.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1A742EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A712EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1A722EECC85100F04079 /* _parser.cpython-310.pyc */,
+				89CD1A732EECC85100F04079 /* isoparser.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1A782EECC85100F04079 /* parser */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A742EECC85100F04079 /* __pycache__ */,
+				89CD1A752EECC85100F04079 /* __init__.py */,
+				89CD1A762EECC85100F04079 /* _parser.py */,
+				89CD1A772EECC85100F04079 /* isoparser.py */,
+			);
+			path = parser;
+			sourceTree = "<group>";
+		};
+		89CD1A7E2EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A792EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1A7A2EECC85100F04079 /* _common.cpython-310.pyc */,
+				89CD1A7B2EECC85100F04079 /* _factories.cpython-310.pyc */,
+				89CD1A7C2EECC85100F04079 /* tz.cpython-310.pyc */,
+				89CD1A7D2EECC85100F04079 /* win.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1A842EECC85100F04079 /* tz */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A7E2EECC85100F04079 /* __pycache__ */,
+				89CD1A7F2EECC85100F04079 /* __init__.py */,
+				89CD1A802EECC85100F04079 /* _common.py */,
+				89CD1A812EECC85100F04079 /* _factories.py */,
+				89CD1A822EECC85100F04079 /* tz.py */,
+				89CD1A832EECC85100F04079 /* win.py */,
+			);
+			path = tz;
+			sourceTree = "<group>";
+		};
+		89CD1A872EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A852EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1A862EECC85100F04079 /* rebuild.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1A8B2EECC85100F04079 /* zoneinfo */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A872EECC85100F04079 /* __pycache__ */,
+				89CD1A882EECC85100F04079 /* __init__.py */,
+				89CD1A892EECC85100F04079 /* dateutil-zoneinfo.tar.gz */,
+				89CD1A8A2EECC85100F04079 /* rebuild.py */,
+			);
+			path = zoneinfo;
+			sourceTree = "<group>";
+		};
+		89CD1A942EECC85100F04079 /* dateutil */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A702EECC85100F04079 /* __pycache__ */,
+				89CD1A782EECC85100F04079 /* parser */,
+				89CD1A842EECC85100F04079 /* tz */,
+				89CD1A8B2EECC85100F04079 /* zoneinfo */,
+				89CD1A8C2EECC85100F04079 /* __init__.py */,
+				89CD1A8D2EECC85100F04079 /* _common.py */,
+				89CD1A8E2EECC85100F04079 /* _version.py */,
+				89CD1A8F2EECC85100F04079 /* easter.py */,
+				89CD1A902EECC85100F04079 /* relativedelta.py */,
+				89CD1A912EECC85100F04079 /* rrule.py */,
+				89CD1A922EECC85100F04079 /* tzwin.py */,
+				89CD1A932EECC85100F04079 /* utils.py */,
+			);
+			path = dateutil;
+			sourceTree = "<group>";
+		};
+		89CD1A9D2EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A952EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1A962EECC85100F04079 /* converters.cpython-310.pyc */,
+				89CD1A972EECC85100F04079 /* core.cpython-310.pyc */,
+				89CD1A982EECC85100F04079 /* dbapi.cpython-310.pyc */,
+				89CD1A992EECC85100F04079 /* exceptions.cpython-310.pyc */,
+				89CD1A9A2EECC85100F04079 /* legacy.cpython-310.pyc */,
+				89CD1A9B2EECC85100F04079 /* native.cpython-310.pyc */,
+				89CD1A9C2EECC85100F04079 /* types.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1AA62EECC85100F04079 /* pg8000 */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A9D2EECC85100F04079 /* __pycache__ */,
+				89CD1A9E2EECC85100F04079 /* __init__.py */,
+				89CD1A9F2EECC85100F04079 /* converters.py */,
+				89CD1AA02EECC85100F04079 /* core.py */,
+				89CD1AA12EECC85100F04079 /* dbapi.py */,
+				89CD1AA22EECC85100F04079 /* exceptions.py */,
+				89CD1AA32EECC85100F04079 /* legacy.py */,
+				89CD1AA42EECC85100F04079 /* native.py */,
+				89CD1AA52EECC85100F04079 /* types.py */,
+			);
+			path = pg8000;
+			sourceTree = "<group>";
+		};
+		89CD1AA82EECC85100F04079 /* licenses */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1AA72EECC85100F04079 /* LICENSE */,
+			);
+			path = licenses;
+			sourceTree = "<group>";
+		};
+		89CD1AAE2EECC85100F04079 /* pg8000-1.31.5.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1AA82EECC85100F04079 /* licenses */,
+				89CD1AA92EECC85100F04079 /* INSTALLER */,
+				89CD1AAA2EECC85100F04079 /* METADATA */,
+				89CD1AAB2EECC85100F04079 /* RECORD */,
+				89CD1AAC2EECC85100F04079 /* REQUESTED */,
+				89CD1AAD2EECC85100F04079 /* WHEEL */,
+			);
+			path = "pg8000-1.31.5.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1ABA2EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1AAF2EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1AB02EECC85100F04079 /* _ipaddress.cpython-310.pyc */,
+				89CD1AB12EECC85100F04079 /* _json.cpython-310.pyc */,
+				89CD1AB22EECC85100F04079 /* _range.cpython-310.pyc */,
+				89CD1AB32EECC85100F04079 /* errorcodes.cpython-310.pyc */,
+				89CD1AB42EECC85100F04079 /* errors.cpython-310.pyc */,
+				89CD1AB52EECC85100F04079 /* extensions.cpython-310.pyc */,
+				89CD1AB62EECC85100F04079 /* extras.cpython-310.pyc */,
+				89CD1AB72EECC85100F04079 /* pool.cpython-310.pyc */,
+				89CD1AB82EECC85100F04079 /* sql.cpython-310.pyc */,
+				89CD1AB92EECC85100F04079 /* tz.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1AC62EECC85100F04079 /* .dylibs */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1ABB2EECC85100F04079 /* libcom_err.3.0.dylib */,
+				89CD1ABC2EECC85100F04079 /* libcrypto.3.dylib */,
+				89CD1ABD2EECC85100F04079 /* libgssapi_krb5.2.2.dylib */,
+				89CD1ABE2EECC85100F04079 /* libk5crypto.3.1.dylib */,
+				89CD1ABF2EECC85100F04079 /* libkrb5.3.3.dylib */,
+				89CD1AC02EECC85100F04079 /* libkrb5support.1.1.dylib */,
+				89CD1AC12EECC85100F04079 /* liblber.2.dylib */,
+				89CD1AC22EECC85100F04079 /* libldap.2.dylib */,
+				89CD1AC32EECC85100F04079 /* libpq.5.dylib */,
+				89CD1AC42EECC85100F04079 /* libsasl2.3.dylib */,
+				89CD1AC52EECC85100F04079 /* libssl.3.dylib */,
+			);
+			path = .dylibs;
+			sourceTree = "<group>";
+		};
+		89CD1AD32EECC85100F04079 /* psycopg2 */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1ABA2EECC85100F04079 /* __pycache__ */,
+				89CD1AC62EECC85100F04079 /* .dylibs */,
+				89CD1AC72EECC85100F04079 /* __init__.py */,
+				89CD1AC82EECC85100F04079 /* _ipaddress.py */,
+				89CD1AC92EECC85100F04079 /* _json.py */,
+				89CD1ACA2EECC85100F04079 /* _psycopg.cpython-310-darwin.so */,
+				89CD1ACB2EECC85100F04079 /* _range.py */,
+				89CD1ACC2EECC85100F04079 /* errorcodes.py */,
+				89CD1ACD2EECC85100F04079 /* errors.py */,
+				89CD1ACE2EECC85100F04079 /* extensions.py */,
+				89CD1ACF2EECC85100F04079 /* extras.py */,
+				89CD1AD02EECC85100F04079 /* pool.py */,
+				89CD1AD12EECC85100F04079 /* sql.py */,
+				89CD1AD22EECC85100F04079 /* tz.py */,
+			);
+			path = psycopg2;
+			sourceTree = "<group>";
+		};
+		89CD1AD52EECC85100F04079 /* licenses */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1AD42EECC85100F04079 /* LICENSE */,
+			);
+			path = licenses;
+			sourceTree = "<group>";
+		};
+		89CD1ADC2EECC85100F04079 /* psycopg2_binary-2.9.11.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1AD52EECC85100F04079 /* licenses */,
+				89CD1AD62EECC85100F04079 /* INSTALLER */,
+				89CD1AD72EECC85100F04079 /* METADATA */,
+				89CD1AD82EECC85100F04079 /* RECORD */,
+				89CD1AD92EECC85100F04079 /* REQUESTED */,
+				89CD1ADA2EECC85100F04079 /* top_level.txt */,
+				89CD1ADB2EECC85100F04079 /* WHEEL */,
+			);
+			path = "psycopg2_binary-2.9.11.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1AE42EECC85100F04079 /* python_dateutil-2.9.0.post0.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1ADD2EECC85100F04079 /* INSTALLER */,
+				89CD1ADE2EECC85100F04079 /* LICENSE */,
+				89CD1ADF2EECC85100F04079 /* METADATA */,
+				89CD1AE02EECC85100F04079 /* RECORD */,
+				89CD1AE12EECC85100F04079 /* top_level.txt */,
+				89CD1AE22EECC85100F04079 /* WHEEL */,
+				89CD1AE32EECC85100F04079 /* zip-safe */,
+			);
+			path = "python_dateutil-2.9.0.post0.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1AE82EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1AE52EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1AE62EECC85100F04079 /* core.cpython-310.pyc */,
+				89CD1AE72EECC85100F04079 /* utils.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1AEC2EECC85100F04079 /* scramp */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1AE82EECC85100F04079 /* __pycache__ */,
+				89CD1AE92EECC85100F04079 /* __init__.py */,
+				89CD1AEA2EECC85100F04079 /* core.py */,
+				89CD1AEB2EECC85100F04079 /* utils.py */,
+			);
+			path = scramp;
+			sourceTree = "<group>";
+		};
+		89CD1AEE2EECC85100F04079 /* licenses */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1AED2EECC85100F04079 /* LICENSE */,
+			);
+			path = licenses;
+			sourceTree = "<group>";
+		};
+		89CD1AF32EECC85100F04079 /* scramp-1.4.6.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1AEE2EECC85100F04079 /* licenses */,
+				89CD1AEF2EECC85100F04079 /* INSTALLER */,
+				89CD1AF02EECC85100F04079 /* METADATA */,
+				89CD1AF12EECC85100F04079 /* RECORD */,
+				89CD1AF22EECC85100F04079 /* WHEEL */,
+			);
+			path = "scramp-1.4.6.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1AFA2EECC85100F04079 /* six-1.17.0.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1AF42EECC85100F04079 /* INSTALLER */,
+				89CD1AF52EECC85100F04079 /* LICENSE */,
+				89CD1AF62EECC85100F04079 /* METADATA */,
+				89CD1AF72EECC85100F04079 /* RECORD */,
+				89CD1AF82EECC85100F04079 /* top_level.txt */,
+				89CD1AF92EECC85100F04079 /* WHEEL */,
+			);
+			path = "six-1.17.0.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1B002EECC85100F04079 /* GetProfileAPI */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1A302EECC85100F04079 /* __pycache__ */,
+				89CD1A602EECC85100F04079 /* asn1crypto */,
+				89CD1A672EECC85100F04079 /* asn1crypto-1.5.1.dist-info */,
+				89CD1A942EECC85100F04079 /* dateutil */,
+				89CD1AA62EECC85100F04079 /* pg8000 */,
+				89CD1AAE2EECC85100F04079 /* pg8000-1.31.5.dist-info */,
+				89CD1AD32EECC85100F04079 /* psycopg2 */,
+				89CD1ADC2EECC85100F04079 /* psycopg2_binary-2.9.11.dist-info */,
+				89CD1AE42EECC85100F04079 /* python_dateutil-2.9.0.post0.dist-info */,
+				89CD1AEC2EECC85100F04079 /* scramp */,
+				89CD1AF32EECC85100F04079 /* scramp-1.4.6.dist-info */,
+				89CD1AFA2EECC85100F04079 /* six-1.17.0.dist-info */,
+				89CD1AFB2EECC85100F04079 /* GetProfileAPI.zip */,
+				89CD1AFC2EECC85100F04079 /* lambda_deployment.zip */,
+				89CD1AFD2EECC85100F04079 /* lambda_function.py */,
+				89CD1AFE2EECC85100F04079 /* requirements.txt */,
+				89CD1AFF2EECC85100F04079 /* six.py */,
+			);
+			path = GetProfileAPI;
+			sourceTree = "<group>";
+		};
+		89CD1B022EECC85100F04079 /* HealthAPI */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B012EECC85100F04079 /* lamda_function.py */,
+			);
+			path = HealthAPI;
+			sourceTree = "<group>";
+		};
+		89CD1B032EECC85100F04079 /* MCCMatcherAPI */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1CF52EECC8B200F04079 /* deploy.sh */,
+				89CD1CF62EECC8B200F04079 /* lambda_function.py */,
+				89CD1CF72EECC8B200F04079 /* mcc_codes.json */,
+				89CD1CF82EECC8B200F04079 /* README.md */,
+				89CD1CF92EECC8B200F04079 /* requirements.txt */,
+				89CD1CFF2EECE65C00F04079 /* test_mcc_matcher.py */,
+			);
+			path = MCCMatcherAPI;
+			sourceTree = "<group>";
+		};
+		89CD1B052EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B042EECC85100F04079 /* six.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1B1D2EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B062EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1B072EECC85100F04079 /* _errors.cpython-310.pyc */,
+				89CD1B082EECC85100F04079 /* _inet.cpython-310.pyc */,
+				89CD1B092EECC85100F04079 /* _int.cpython-310.pyc */,
+				89CD1B0A2EECC85100F04079 /* _iri.cpython-310.pyc */,
+				89CD1B0B2EECC85100F04079 /* _ordereddict.cpython-310.pyc */,
+				89CD1B0C2EECC85100F04079 /* _teletex_codec.cpython-310.pyc */,
+				89CD1B0D2EECC85100F04079 /* _types.cpython-310.pyc */,
+				89CD1B0E2EECC85100F04079 /* algos.cpython-310.pyc */,
+				89CD1B0F2EECC85100F04079 /* cms.cpython-310.pyc */,
+				89CD1B102EECC85100F04079 /* core.cpython-310.pyc */,
+				89CD1B112EECC85100F04079 /* crl.cpython-310.pyc */,
+				89CD1B122EECC85100F04079 /* csr.cpython-310.pyc */,
+				89CD1B132EECC85100F04079 /* keys.cpython-310.pyc */,
+				89CD1B142EECC85100F04079 /* ocsp.cpython-310.pyc */,
+				89CD1B152EECC85100F04079 /* parser.cpython-310.pyc */,
+				89CD1B162EECC85100F04079 /* pdf.cpython-310.pyc */,
+				89CD1B172EECC85100F04079 /* pem.cpython-310.pyc */,
+				89CD1B182EECC85100F04079 /* pkcs12.cpython-310.pyc */,
+				89CD1B192EECC85100F04079 /* tsp.cpython-310.pyc */,
+				89CD1B1A2EECC85100F04079 /* util.cpython-310.pyc */,
+				89CD1B1B2EECC85100F04079 /* version.cpython-310.pyc */,
+				89CD1B1C2EECC85100F04079 /* x509.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1B352EECC85100F04079 /* asn1crypto */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B1D2EECC85100F04079 /* __pycache__ */,
+				89CD1B1E2EECC85100F04079 /* __init__.py */,
+				89CD1B1F2EECC85100F04079 /* _errors.py */,
+				89CD1B202EECC85100F04079 /* _inet.py */,
+				89CD1B212EECC85100F04079 /* _int.py */,
+				89CD1B222EECC85100F04079 /* _iri.py */,
+				89CD1B232EECC85100F04079 /* _ordereddict.py */,
+				89CD1B242EECC85100F04079 /* _teletex_codec.py */,
+				89CD1B252EECC85100F04079 /* _types.py */,
+				89CD1B262EECC85100F04079 /* algos.py */,
+				89CD1B272EECC85100F04079 /* cms.py */,
+				89CD1B282EECC85100F04079 /* core.py */,
+				89CD1B292EECC85100F04079 /* crl.py */,
+				89CD1B2A2EECC85100F04079 /* csr.py */,
+				89CD1B2B2EECC85100F04079 /* keys.py */,
+				89CD1B2C2EECC85100F04079 /* ocsp.py */,
+				89CD1B2D2EECC85100F04079 /* parser.py */,
+				89CD1B2E2EECC85100F04079 /* pdf.py */,
+				89CD1B2F2EECC85100F04079 /* pem.py */,
+				89CD1B302EECC85100F04079 /* pkcs12.py */,
+				89CD1B312EECC85100F04079 /* tsp.py */,
+				89CD1B322EECC85100F04079 /* util.py */,
+				89CD1B332EECC85100F04079 /* version.py */,
+				89CD1B342EECC85100F04079 /* x509.py */,
+			);
+			path = asn1crypto;
+			sourceTree = "<group>";
+		};
+		89CD1B3C2EECC85100F04079 /* asn1crypto-1.5.1.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B362EECC85100F04079 /* INSTALLER */,
+				89CD1B372EECC85100F04079 /* LICENSE */,
+				89CD1B382EECC85100F04079 /* METADATA */,
+				89CD1B392EECC85100F04079 /* RECORD */,
+				89CD1B3A2EECC85100F04079 /* top_level.txt */,
+				89CD1B3B2EECC85100F04079 /* WHEEL */,
+			);
+			path = "asn1crypto-1.5.1.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1B452EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B3D2EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1B3E2EECC85100F04079 /* _common.cpython-310.pyc */,
+				89CD1B3F2EECC85100F04079 /* _version.cpython-310.pyc */,
+				89CD1B402EECC85100F04079 /* easter.cpython-310.pyc */,
+				89CD1B412EECC85100F04079 /* relativedelta.cpython-310.pyc */,
+				89CD1B422EECC85100F04079 /* rrule.cpython-310.pyc */,
+				89CD1B432EECC85100F04079 /* tzwin.cpython-310.pyc */,
+				89CD1B442EECC85100F04079 /* utils.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1B492EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B462EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1B472EECC85100F04079 /* _parser.cpython-310.pyc */,
+				89CD1B482EECC85100F04079 /* isoparser.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1B4D2EECC85100F04079 /* parser */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B492EECC85100F04079 /* __pycache__ */,
+				89CD1B4A2EECC85100F04079 /* __init__.py */,
+				89CD1B4B2EECC85100F04079 /* _parser.py */,
+				89CD1B4C2EECC85100F04079 /* isoparser.py */,
+			);
+			path = parser;
+			sourceTree = "<group>";
+		};
+		89CD1B532EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B4E2EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1B4F2EECC85100F04079 /* _common.cpython-310.pyc */,
+				89CD1B502EECC85100F04079 /* _factories.cpython-310.pyc */,
+				89CD1B512EECC85100F04079 /* tz.cpython-310.pyc */,
+				89CD1B522EECC85100F04079 /* win.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1B592EECC85100F04079 /* tz */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B532EECC85100F04079 /* __pycache__ */,
+				89CD1B542EECC85100F04079 /* __init__.py */,
+				89CD1B552EECC85100F04079 /* _common.py */,
+				89CD1B562EECC85100F04079 /* _factories.py */,
+				89CD1B572EECC85100F04079 /* tz.py */,
+				89CD1B582EECC85100F04079 /* win.py */,
+			);
+			path = tz;
+			sourceTree = "<group>";
+		};
+		89CD1B5C2EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B5A2EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1B5B2EECC85100F04079 /* rebuild.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1B602EECC85100F04079 /* zoneinfo */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B5C2EECC85100F04079 /* __pycache__ */,
+				89CD1B5D2EECC85100F04079 /* __init__.py */,
+				89CD1B5E2EECC85100F04079 /* dateutil-zoneinfo.tar.gz */,
+				89CD1B5F2EECC85100F04079 /* rebuild.py */,
+			);
+			path = zoneinfo;
+			sourceTree = "<group>";
+		};
+		89CD1B692EECC85100F04079 /* dateutil */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B452EECC85100F04079 /* __pycache__ */,
+				89CD1B4D2EECC85100F04079 /* parser */,
+				89CD1B592EECC85100F04079 /* tz */,
+				89CD1B602EECC85100F04079 /* zoneinfo */,
+				89CD1B612EECC85100F04079 /* __init__.py */,
+				89CD1B622EECC85100F04079 /* _common.py */,
+				89CD1B632EECC85100F04079 /* _version.py */,
+				89CD1B642EECC85100F04079 /* easter.py */,
+				89CD1B652EECC85100F04079 /* relativedelta.py */,
+				89CD1B662EECC85100F04079 /* rrule.py */,
+				89CD1B672EECC85100F04079 /* tzwin.py */,
+				89CD1B682EECC85100F04079 /* utils.py */,
+			);
+			path = dateutil;
+			sourceTree = "<group>";
+		};
+		89CD1B722EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B6A2EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1B6B2EECC85100F04079 /* converters.cpython-310.pyc */,
+				89CD1B6C2EECC85100F04079 /* core.cpython-310.pyc */,
+				89CD1B6D2EECC85100F04079 /* dbapi.cpython-310.pyc */,
+				89CD1B6E2EECC85100F04079 /* exceptions.cpython-310.pyc */,
+				89CD1B6F2EECC85100F04079 /* legacy.cpython-310.pyc */,
+				89CD1B702EECC85100F04079 /* native.cpython-310.pyc */,
+				89CD1B712EECC85100F04079 /* types.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1B7B2EECC85100F04079 /* pg8000 */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B722EECC85100F04079 /* __pycache__ */,
+				89CD1B732EECC85100F04079 /* __init__.py */,
+				89CD1B742EECC85100F04079 /* converters.py */,
+				89CD1B752EECC85100F04079 /* core.py */,
+				89CD1B762EECC85100F04079 /* dbapi.py */,
+				89CD1B772EECC85100F04079 /* exceptions.py */,
+				89CD1B782EECC85100F04079 /* legacy.py */,
+				89CD1B792EECC85100F04079 /* native.py */,
+				89CD1B7A2EECC85100F04079 /* types.py */,
+			);
+			path = pg8000;
+			sourceTree = "<group>";
+		};
+		89CD1B7D2EECC85100F04079 /* licenses */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B7C2EECC85100F04079 /* LICENSE */,
+			);
+			path = licenses;
+			sourceTree = "<group>";
+		};
+		89CD1B832EECC85100F04079 /* pg8000-1.31.5.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B7D2EECC85100F04079 /* licenses */,
+				89CD1B7E2EECC85100F04079 /* INSTALLER */,
+				89CD1B7F2EECC85100F04079 /* METADATA */,
+				89CD1B802EECC85100F04079 /* RECORD */,
+				89CD1B812EECC85100F04079 /* REQUESTED */,
+				89CD1B822EECC85100F04079 /* WHEEL */,
+			);
+			path = "pg8000-1.31.5.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1B8B2EECC85100F04079 /* python_dateutil-2.9.0.post0.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B842EECC85100F04079 /* INSTALLER */,
+				89CD1B852EECC85100F04079 /* LICENSE */,
+				89CD1B862EECC85100F04079 /* METADATA */,
+				89CD1B872EECC85100F04079 /* RECORD */,
+				89CD1B882EECC85100F04079 /* top_level.txt */,
+				89CD1B892EECC85100F04079 /* WHEEL */,
+				89CD1B8A2EECC85100F04079 /* zip-safe */,
+			);
+			path = "python_dateutil-2.9.0.post0.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1B8F2EECC85100F04079 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B8C2EECC85100F04079 /* __init__.cpython-310.pyc */,
+				89CD1B8D2EECC85100F04079 /* core.cpython-310.pyc */,
+				89CD1B8E2EECC85100F04079 /* utils.cpython-310.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		89CD1B932EECC85100F04079 /* scramp */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B8F2EECC85100F04079 /* __pycache__ */,
+				89CD1B902EECC85100F04079 /* __init__.py */,
+				89CD1B912EECC85100F04079 /* core.py */,
+				89CD1B922EECC85100F04079 /* utils.py */,
+			);
+			path = scramp;
+			sourceTree = "<group>";
+		};
+		89CD1B952EECC85100F04079 /* licenses */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B942EECC85100F04079 /* LICENSE */,
+			);
+			path = licenses;
+			sourceTree = "<group>";
+		};
+		89CD1B9A2EECC85100F04079 /* scramp-1.4.6.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B952EECC85100F04079 /* licenses */,
+				89CD1B962EECC85100F04079 /* INSTALLER */,
+				89CD1B972EECC85100F04079 /* METADATA */,
+				89CD1B982EECC85100F04079 /* RECORD */,
+				89CD1B992EECC85100F04079 /* WHEEL */,
+			);
+			path = "scramp-1.4.6.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1BA12EECC85100F04079 /* six-1.17.0.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B9B2EECC85100F04079 /* INSTALLER */,
+				89CD1B9C2EECC85100F04079 /* LICENSE */,
+				89CD1B9D2EECC85100F04079 /* METADATA */,
+				89CD1B9E2EECC85100F04079 /* RECORD */,
+				89CD1B9F2EECC85100F04079 /* top_level.txt */,
+				89CD1BA02EECC85100F04079 /* WHEEL */,
+			);
+			path = "six-1.17.0.dist-info";
+			sourceTree = "<group>";
+		};
+		89CD1BA62EECC85100F04079 /* PostConfirmationTrigger */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B052EECC85100F04079 /* __pycache__ */,
+				89CD1B352EECC85100F04079 /* asn1crypto */,
+				89CD1B3C2EECC85100F04079 /* asn1crypto-1.5.1.dist-info */,
+				89CD1B692EECC85100F04079 /* dateutil */,
+				89CD1B7B2EECC85100F04079 /* pg8000 */,
+				89CD1B832EECC85100F04079 /* pg8000-1.31.5.dist-info */,
+				89CD1B8B2EECC85100F04079 /* python_dateutil-2.9.0.post0.dist-info */,
+				89CD1B932EECC85100F04079 /* scramp */,
+				89CD1B9A2EECC85100F04079 /* scramp-1.4.6.dist-info */,
+				89CD1BA12EECC85100F04079 /* six-1.17.0.dist-info */,
+				89CD1BA22EECC85100F04079 /* lambda_function.py */,
+				89CD1BA32EECC85100F04079 /* PostConfirmationTrigger.zip */,
+				89CD1BA42EECC85100F04079 /* requirements.txt */,
+				89CD1BA52EECC85100F04079 /* six.py */,
+			);
+			path = PostConfirmationTrigger;
+			sourceTree = "<group>";
+		};
+		89CD1BAB2EECC85100F04079 /* lambda */ = {
+			isa = PBXGroup;
+			children = (
+				89CD1B002EECC85100F04079 /* GetProfileAPI */,
+				89CD1B022EECC85100F04079 /* HealthAPI */,
+				89CD1B032EECC85100F04079 /* MCCMatcherAPI */,
+				89CD1BA62EECC85100F04079 /* PostConfirmationTrigger */,
+				89CD1BA72EECC85100F04079 /* database_migration.sql */,
+				89CD1BA82EECC85100F04079 /* deploy.sh */,
+				89CD1BA92EECC85100F04079 /* README.md */,
+				89CD1BAA2EECC85100F04079 /* run_migration.sh */,
+			);
+			path = lambda;
 			sourceTree = "<group>";
 		};
 		C533E5BC2EEA558500F7FE64 /* data */ = {
@@ -309,6 +1751,328 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89CD1CFA2EECC8B200F04079 /* deploy.sh in Resources */,
+				89CD1CFB2EECC8B200F04079 /* lambda_function.py in Resources */,
+				89CD1CFC2EECC8B200F04079 /* mcc_codes.json in Resources */,
+				89CD1CFD2EECC8B200F04079 /* README.md in Resources */,
+				89CD1CFE2EECC8B200F04079 /* requirements.txt in Resources */,
+				89CD1BAC2EECC85100F04079 /* exceptions.cpython-310.pyc in Resources */,
+				89CD1BAD2EECC85100F04079 /* top_level.txt in Resources */,
+				89CD1BAE2EECC85100F04079 /* lambda_deployment.zip in Resources */,
+				89CD1BAF2EECC85100F04079 /* utils.py in Resources */,
+				89CD1BB02EECC85100F04079 /* csr.py in Resources */,
+				89CD1BB12EECC85100F04079 /* LICENSE in Resources */,
+				89CD1BB22EECC85100F04079 /* util.py in Resources */,
+				89CD1BB32EECC85100F04079 /* keys.cpython-310.pyc in Resources */,
+				89CD1BB42EECC85100F04079 /* _psycopg.cpython-310-darwin.so in Resources */,
+				89CD1BB52EECC85100F04079 /* win.py in Resources */,
+				89CD1BB62EECC85100F04079 /* rrule.py in Resources */,
+				89CD1BB72EECC85100F04079 /* dbapi.py in Resources */,
+				89CD1BB82EECC85100F04079 /* RECORD in Resources */,
+				89CD1BB92EECC85100F04079 /* __init__.py in Resources */,
+				89CD1BBA2EECC85100F04079 /* errors.cpython-310.pyc in Resources */,
+				89CD1BBB2EECC85100F04079 /* _errors.cpython-310.pyc in Resources */,
+				89CD1BBC2EECC85100F04079 /* utils.cpython-310.pyc in Resources */,
+				89CD1BBD2EECC85100F04079 /* _range.cpython-310.pyc in Resources */,
+				89CD1BBE2EECC85100F04079 /* GetProfileAPI.zip in Resources */,
+				89CD1BBF2EECC85100F04079 /* crl.py in Resources */,
+				89CD1BC02EECC85100F04079 /* core.py in Resources */,
+				89CD1BC12EECC85100F04079 /* parser.py in Resources */,
+				89CD1BC22EECC85100F04079 /* pem.py in Resources */,
+				89CD1BC32EECC85100F04079 /* core.py in Resources */,
+				89CD1BC42EECC85100F04079 /* pem.cpython-310.pyc in Resources */,
+				89CD1BC52EECC85100F04079 /* easter.py in Resources */,
+				89CD1BC62EECC85100F04079 /* tz.cpython-310.pyc in Resources */,
+				89CD1BC72EECC85100F04079 /* types.cpython-310.pyc in Resources */,
+				89CD1BC82EECC85100F04079 /* _teletex_codec.cpython-310.pyc in Resources */,
+				89CD1BC92EECC85100F04079 /* deploy.sh in Resources */,
+				89CD1BCA2EECC85100F04079 /* rrule.py in Resources */,
+				89CD1BCB2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1BCC2EECC85100F04079 /* METADATA in Resources */,
+				89CD1BCD2EECC85100F04079 /* extensions.py in Resources */,
+				89CD1BCE2EECC85100F04079 /* _range.py in Resources */,
+				89CD1BCF2EECC85100F04079 /* six.cpython-310.pyc in Resources */,
+				89CD1BD02EECC85100F04079 /* _common.py in Resources */,
+				89CD1BD12EECC85100F04079 /* tzwin.cpython-310.pyc in Resources */,
+				89CD1BD22EECC85100F04079 /* rebuild.cpython-310.pyc in Resources */,
+				89CD1BD32EECC85100F04079 /* WHEEL in Resources */,
+				89CD1BD42EECC85100F04079 /* _inet.cpython-310.pyc in Resources */,
+				89CD1BD52EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1BD62EECC85100F04079 /* WHEEL in Resources */,
+				89CD1BD72EECC85100F04079 /* _iri.py in Resources */,
+				89CD1BD82EECC85100F04079 /* top_level.txt in Resources */,
+				89CD1BD92EECC85100F04079 /* tzwin.cpython-310.pyc in Resources */,
+				89CD1BDA2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1BDB2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1BDC2EECC85100F04079 /* isoparser.cpython-310.pyc in Resources */,
+				89CD1BDD2EECC85100F04079 /* utils.py in Resources */,
+				89CD1BDE2EECC85100F04079 /* legacy.cpython-310.pyc in Resources */,
+				89CD1BDF2EECC85100F04079 /* top_level.txt in Resources */,
+				89CD1BE02EECC85100F04079 /* pem.cpython-310.pyc in Resources */,
+				89CD1BE12EECC85100F04079 /* _teletex_codec.py in Resources */,
+				89CD1BE22EECC85100F04079 /* lambda_function.py in Resources */,
+				89CD1BE32EECC85100F04079 /* converters.py in Resources */,
+				89CD1BE42EECC85100F04079 /* algos.cpython-310.pyc in Resources */,
+				89CD1BE52EECC85100F04079 /* METADATA in Resources */,
+				89CD1BE62EECC85100F04079 /* _factories.cpython-310.pyc in Resources */,
+				89CD1BE72EECC85100F04079 /* types.cpython-310.pyc in Resources */,
+				89CD1BE82EECC85100F04079 /* top_level.txt in Resources */,
+				89CD1BE92EECC85100F04079 /* x509.cpython-310.pyc in Resources */,
+				89CD1BEA2EECC85100F04079 /* rrule.cpython-310.pyc in Resources */,
+				89CD1BEB2EECC85100F04079 /* _inet.py in Resources */,
+				89CD1BEC2EECC85100F04079 /* _common.cpython-310.pyc in Resources */,
+				89CD1BED2EECC85100F04079 /* core.cpython-310.pyc in Resources */,
+				89CD1BEE2EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1BEF2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1BF02EECC85100F04079 /* LICENSE in Resources */,
+				89CD1BF12EECC85100F04079 /* WHEEL in Resources */,
+				89CD1BF22EECC85100F04079 /* x509.py in Resources */,
+				89CD1BF32EECC85100F04079 /* REQUESTED in Resources */,
+				89CD1BF42EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1BF52EECC85100F04079 /* core.cpython-310.pyc in Resources */,
+				89CD1BF62EECC85100F04079 /* _json.cpython-310.pyc in Resources */,
+				89CD1BF72EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1BF82EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1BF92EECC85100F04079 /* RECORD in Resources */,
+				89CD1BFA2EECC85100F04079 /* converters.cpython-310.pyc in Resources */,
+				89CD1BFB2EECC85100F04079 /* _ordereddict.py in Resources */,
+				89CD1BFC2EECC85100F04079 /* PostConfirmationTrigger.zip in Resources */,
+				89CD1BFD2EECC85100F04079 /* METADATA in Resources */,
+				89CD1BFE2EECC85100F04079 /* METADATA in Resources */,
+				89CD1BFF2EECC85100F04079 /* tzwin.py in Resources */,
+				89CD1C002EECC85100F04079 /* dateutil-zoneinfo.tar.gz in Resources */,
+				89CD1C012EECC85100F04079 /* REQUESTED in Resources */,
+				89CD1C022EECC85100F04079 /* _parser.cpython-310.pyc in Resources */,
+				89CD1C032EECC85100F04079 /* __init__.py in Resources */,
+				89CD1C042EECC85100F04079 /* __init__.py in Resources */,
+				89CD1C052EECC85100F04079 /* dbapi.cpython-310.pyc in Resources */,
+				89CD1C062EECC85100F04079 /* _ordereddict.cpython-310.pyc in Resources */,
+				89CD1C072EECC85100F04079 /* tsp.py in Resources */,
+				89CD1C082EECC85100F04079 /* RECORD in Resources */,
+				89CD1C092EECC85100F04079 /* __init__.py in Resources */,
+				89CD1C0A2EECC85100F04079 /* WHEEL in Resources */,
+				89CD1C0B2EECC85100F04079 /* LICENSE in Resources */,
+				89CD1C0C2EECC85100F04079 /* top_level.txt in Resources */,
+				89CD1C0D2EECC85100F04079 /* version.cpython-310.pyc in Resources */,
+				89CD1C0E2EECC85100F04079 /* easter.py in Resources */,
+				89CD1C0F2EECC85100F04079 /* keys.cpython-310.pyc in Resources */,
+				89CD1C102EECC85100F04079 /* legacy.py in Resources */,
+				89CD1C112EECC85100F04079 /* extras.py in Resources */,
+				89CD1C122EECC85100F04079 /* utils.cpython-310.pyc in Resources */,
+				89CD1C132EECC85100F04079 /* pdf.py in Resources */,
+				89CD1C142EECC85100F04079 /* _version.py in Resources */,
+				89CD1C152EECC85100F04079 /* extensions.cpython-310.pyc in Resources */,
+				89CD1C162EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1C172EECC85100F04079 /* csr.cpython-310.pyc in Resources */,
+				89CD1C182EECC85100F04079 /* pkcs12.cpython-310.pyc in Resources */,
+				89CD1C192EECC85100F04079 /* relativedelta.cpython-310.pyc in Resources */,
+				89CD1C1A2EECC85100F04079 /* _common.py in Resources */,
+				89CD1C1B2EECC85100F04079 /* README.md in Resources */,
+				89CD1C1C2EECC85100F04079 /* parser.cpython-310.pyc in Resources */,
+				89CD1C1D2EECC85100F04079 /* _inet.py in Resources */,
+				89CD1C1E2EECC85100F04079 /* keys.py in Resources */,
+				89CD1C1F2EECC85100F04079 /* LICENSE in Resources */,
+				89CD1C202EECC85100F04079 /* crl.py in Resources */,
+				89CD1C212EECC85100F04079 /* core.py in Resources */,
+				89CD1C222EECC85100F04079 /* requirements.txt in Resources */,
+				89CD1C232EECC85100F04079 /* __init__.py in Resources */,
+				89CD1C242EECC85100F04079 /* METADATA in Resources */,
+				89CD1C252EECC85100F04079 /* _factories.cpython-310.pyc in Resources */,
+				89CD1C262EECC85100F04079 /* ocsp.py in Resources */,
+				89CD1C272EECC85100F04079 /* LICENSE in Resources */,
+				89CD1C282EECC85100F04079 /* extras.cpython-310.pyc in Resources */,
+				89CD1C292EECC85100F04079 /* __init__.py in Resources */,
+				89CD1C2A2EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1C2B2EECC85100F04079 /* pdf.cpython-310.pyc in Resources */,
+				89CD1C2C2EECC85100F04079 /* RECORD in Resources */,
+				89CD1C2D2EECC85100F04079 /* legacy.py in Resources */,
+				89CD1C2E2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1C2F2EECC85100F04079 /* LICENSE in Resources */,
+				89CD1C302EECC85100F04079 /* _types.py in Resources */,
+				89CD1C312EECC85100F04079 /* easter.cpython-310.pyc in Resources */,
+				89CD1C322EECC85100F04079 /* relativedelta.py in Resources */,
+				89CD1C332EECC85100F04079 /* six.py in Resources */,
+				89CD1C342EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1C352EECC85100F04079 /* _factories.py in Resources */,
+				89CD1C362EECC85100F04079 /* native.py in Resources */,
+				89CD1C372EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1C382EECC85100F04079 /* top_level.txt in Resources */,
+				89CD1C392EECC85100F04079 /* core.cpython-310.pyc in Resources */,
+				89CD1C3A2EECC85100F04079 /* METADATA in Resources */,
+				89CD1C3B2EECC85100F04079 /* _iri.cpython-310.pyc in Resources */,
+				89CD1C3C2EECC85100F04079 /* RECORD in Resources */,
+				89CD1C3D2EECC85100F04079 /* crl.cpython-310.pyc in Resources */,
+				89CD1C3E2EECC85100F04079 /* native.cpython-310.pyc in Resources */,
+				89CD1C3F2EECC85100F04079 /* tz.py in Resources */,
+				89CD1C402EECC85100F04079 /* exceptions.cpython-310.pyc in Resources */,
+				89CD1C412EECC85100F04079 /* lambda_function.py in Resources */,
+				89CD1C422EECC85100F04079 /* sql.py in Resources */,
+				89CD1C432EECC85100F04079 /* _teletex_codec.py in Resources */,
+				89CD1C442EECC85100F04079 /* tsp.cpython-310.pyc in Resources */,
+				89CD1C452EECC85100F04079 /* util.cpython-310.pyc in Resources */,
+				89CD1C462EECC85100F04079 /* version.cpython-310.pyc in Resources */,
+				89CD1C472EECC85100F04079 /* legacy.cpython-310.pyc in Resources */,
+				89CD1C482EECC85100F04079 /* pkcs12.py in Resources */,
+				89CD1C492EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1C4A2EECC85100F04079 /* csr.cpython-310.pyc in Resources */,
+				89CD1C4B2EECC85100F04079 /* _iri.py in Resources */,
+				89CD1C4C2EECC85100F04079 /* pool.cpython-310.pyc in Resources */,
+				89CD1C4D2EECC85100F04079 /* core.py in Resources */,
+				89CD1C4E2EECC85100F04079 /* WHEEL in Resources */,
+				89CD1C4F2EECC85100F04079 /* _ordereddict.cpython-310.pyc in Resources */,
+				89CD1C502EECC85100F04079 /* __init__.py in Resources */,
+				89CD1C512EECC85100F04079 /* _parser.cpython-310.pyc in Resources */,
+				89CD1C522EECC85100F04079 /* core.py in Resources */,
+				89CD1C532EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1C542EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1C552EECC85100F04079 /* _teletex_codec.cpython-310.pyc in Resources */,
+				89CD1C562EECC85100F04079 /* tz.py in Resources */,
+				89CD1C572EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1C582EECC85100F04079 /* core.cpython-310.pyc in Resources */,
+				89CD1C592EECC85100F04079 /* rebuild.cpython-310.pyc in Resources */,
+				89CD1C5A2EECC85100F04079 /* exceptions.py in Resources */,
+				89CD1C5B2EECC85100F04079 /* cms.cpython-310.pyc in Resources */,
+				89CD1C5C2EECC85100F04079 /* pool.py in Resources */,
+				89CD1C5D2EECC85100F04079 /* native.py in Resources */,
+				89CD1C5E2EECC85100F04079 /* WHEEL in Resources */,
+				89CD1C5F2EECC85100F04079 /* RECORD in Resources */,
+				89CD1C602EECC85100F04079 /* pkcs12.cpython-310.pyc in Resources */,
+				89CD1C612EECC85100F04079 /* _common.cpython-310.pyc in Resources */,
+				89CD1C622EECC85100F04079 /* isoparser.py in Resources */,
+				89CD1C632EECC85100F04079 /* utils.py in Resources */,
+				89CD1C642EECC85100F04079 /* core.cpython-310.pyc in Resources */,
+				89CD1C652EECC85100F04079 /* errorcodes.cpython-310.pyc in Resources */,
+				89CD1C662EECC85100F04079 /* lamda_function.py in Resources */,
+				89CD1C672EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1C682EECC85100F04079 /* METADATA in Resources */,
+				89CD1C692EECC85100F04079 /* _ipaddress.py in Resources */,
+				89CD1C6A2EECC85100F04079 /* errorcodes.py in Resources */,
+				89CD1C6B2EECC85100F04079 /* tsp.cpython-310.pyc in Resources */,
+				89CD1C6C2EECC85100F04079 /* run_migration.sh in Resources */,
+				89CD1C6D2EECC85100F04079 /* RECORD in Resources */,
+				89CD1C6E2EECC85100F04079 /* _common.cpython-310.pyc in Resources */,
+				89CD1C6F2EECC85100F04079 /* LICENSE in Resources */,
+				89CD1C702EECC85100F04079 /* zip-safe in Resources */,
+				89CD1C712EECC85100F04079 /* _types.cpython-310.pyc in Resources */,
+				89CD1D002EECE65C00F04079 /* test_mcc_matcher.py in Resources */,
+				89CD1C722EECC85100F04079 /* _version.cpython-310.pyc in Resources */,
+				89CD1C732EECC85100F04079 /* REQUESTED in Resources */,
+				89CD1C742EECC85100F04079 /* cms.py in Resources */,
+				89CD1C752EECC85100F04079 /* cms.cpython-310.pyc in Resources */,
+				89CD1C762EECC85100F04079 /* sql.cpython-310.pyc in Resources */,
+				89CD1C772EECC85100F04079 /* pdf.cpython-310.pyc in Resources */,
+				89CD1C782EECC85100F04079 /* isoparser.cpython-310.pyc in Resources */,
+				89CD1C792EECC85100F04079 /* RECORD in Resources */,
+				89CD1C7A2EECC85100F04079 /* types.py in Resources */,
+				89CD1C7B2EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1C7C2EECC85100F04079 /* tz.cpython-310.pyc in Resources */,
+				89CD1C7D2EECC85100F04079 /* exceptions.py in Resources */,
+				89CD1C7E2EECC85100F04079 /* __init__.py in Resources */,
+				89CD1C7F2EECC85100F04079 /* crl.cpython-310.pyc in Resources */,
+				89CD1C802EECC85100F04079 /* WHEEL in Resources */,
+				89CD1C812EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1C822EECC85100F04079 /* RECORD in Resources */,
+				89CD1C832EECC85100F04079 /* win.cpython-310.pyc in Resources */,
+				89CD1C842EECC85100F04079 /* utils.cpython-310.pyc in Resources */,
+				89CD1C852EECC85100F04079 /* METADATA in Resources */,
+				89CD1C862EECC85100F04079 /* converters.py in Resources */,
+				89CD1C872EECC85100F04079 /* WHEEL in Resources */,
+				89CD1C882EECC85100F04079 /* WHEEL in Resources */,
+				89CD1C892EECC85100F04079 /* _parser.py in Resources */,
+				89CD1C8A2EECC85100F04079 /* __init__.py in Resources */,
+				89CD1C8B2EECC85100F04079 /* RECORD in Resources */,
+				89CD1C8C2EECC85100F04079 /* version.py in Resources */,
+				89CD1C8D2EECC85100F04079 /* _ipaddress.cpython-310.pyc in Resources */,
+				89CD1C8E2EECC85100F04079 /* util.cpython-310.pyc in Resources */,
+				89CD1C8F2EECC85100F04079 /* types.py in Resources */,
+				89CD1C902EECC85100F04079 /* core.py in Resources */,
+				89CD1C912EECC85100F04079 /* tz.py in Resources */,
+				89CD1C922EECC85100F04079 /* _inet.cpython-310.pyc in Resources */,
+				89CD1C932EECC85100F04079 /* utils.cpython-310.pyc in Resources */,
+				89CD1C942EECC85100F04079 /* rebuild.py in Resources */,
+				89CD1C952EECC85100F04079 /* _types.cpython-310.pyc in Resources */,
+				89CD1C962EECC85100F04079 /* ocsp.py in Resources */,
+				89CD1C972EECC85100F04079 /* METADATA in Resources */,
+				89CD1C982EECC85100F04079 /* _int.py in Resources */,
+				89CD1C992EECC85100F04079 /* __init__.py in Resources */,
+				89CD1C9A2EECC85100F04079 /* pkcs12.py in Resources */,
+				89CD1C9B2EECC85100F04079 /* errors.py in Resources */,
+				89CD1C9C2EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1C9D2EECC85100F04079 /* database_migration.sql in Resources */,
+				89CD1C9E2EECC85100F04079 /* __init__.py in Resources */,
+				89CD1C9F2EECC85100F04079 /* LICENSE in Resources */,
+				89CD1CA02EECC85100F04079 /* algos.cpython-310.pyc in Resources */,
+				89CD1CA12EECC85100F04079 /* cms.py in Resources */,
+				89CD1CA22EECC85100F04079 /* rebuild.py in Resources */,
+				89CD1CA32EECC85100F04079 /* RECORD in Resources */,
+				89CD1CA42EECC85100F04079 /* ocsp.cpython-310.pyc in Resources */,
+				89CD1CA52EECC85100F04079 /* _iri.cpython-310.pyc in Resources */,
+				89CD1CA62EECC85100F04079 /* rrule.cpython-310.pyc in Resources */,
+				89CD1CA72EECC85100F04079 /* tsp.py in Resources */,
+				89CD1CA82EECC85100F04079 /* INSTALLER in Resources */,
+				89CD1CA92EECC85100F04079 /* METADATA in Resources */,
+				89CD1CAA2EECC85100F04079 /* util.py in Resources */,
+				89CD1CAB2EECC85100F04079 /* x509.cpython-310.pyc in Resources */,
+				89CD1CAC2EECC85100F04079 /* easter.cpython-310.pyc in Resources */,
+				89CD1CAD2EECC85100F04079 /* _factories.py in Resources */,
+				89CD1CAE2EECC85100F04079 /* __init__.py in Resources */,
+				89CD1CAF2EECC85100F04079 /* WHEEL in Resources */,
+				89CD1CB02EECC85100F04079 /* _common.cpython-310.pyc in Resources */,
+				89CD1CB12EECC85100F04079 /* algos.py in Resources */,
+				89CD1CB22EECC85100F04079 /* _int.cpython-310.pyc in Resources */,
+				89CD1CB32EECC85100F04079 /* _errors.py in Resources */,
+				89CD1CB42EECC85100F04079 /* x509.py in Resources */,
+				89CD1CB52EECC85100F04079 /* version.py in Resources */,
+				89CD1CB62EECC85100F04079 /* parser.py in Resources */,
+				89CD1CB72EECC85100F04079 /* pdf.py in Resources */,
+				89CD1CB82EECC85100F04079 /* zip-safe in Resources */,
+				89CD1CB92EECC85100F04079 /* dateutil-zoneinfo.tar.gz in Resources */,
+				89CD1CBA2EECC85100F04079 /* _version.cpython-310.pyc in Resources */,
+				89CD1CBB2EECC85100F04079 /* _errors.cpython-310.pyc in Resources */,
+				89CD1CBC2EECC85100F04079 /* _json.py in Resources */,
+				89CD1CBD2EECC85100F04079 /* dbapi.py in Resources */,
+				89CD1CBE2EECC85100F04079 /* _types.py in Resources */,
+				89CD1CBF2EECC85100F04079 /* _version.py in Resources */,
+				89CD1CC02EECC85100F04079 /* six.cpython-310.pyc in Resources */,
+				89CD1CC12EECC85100F04079 /* LICENSE in Resources */,
+				89CD1CC22EECC85100F04079 /* __init__.py in Resources */,
+				89CD1CC32EECC85100F04079 /* WHEEL in Resources */,
+				89CD1CC42EECC85100F04079 /* _parser.py in Resources */,
+				89CD1CC52EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1CC62EECC85100F04079 /* LICENSE in Resources */,
+				89CD1CC72EECC85100F04079 /* utils.py in Resources */,
+				89CD1CC82EECC85100F04079 /* relativedelta.py in Resources */,
+				89CD1CC92EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1CCA2EECC85100F04079 /* _errors.py in Resources */,
+				89CD1CCB2EECC85100F04079 /* ocsp.cpython-310.pyc in Resources */,
+				89CD1CCC2EECC85100F04079 /* _int.py in Resources */,
+				89CD1CCD2EECC85100F04079 /* relativedelta.cpython-310.pyc in Resources */,
+				89CD1CCE2EECC85100F04079 /* METADATA in Resources */,
+				89CD1CCF2EECC85100F04079 /* pem.py in Resources */,
+				89CD1CD02EECC85100F04079 /* __init__.py in Resources */,
+				89CD1CD12EECC85100F04079 /* _ordereddict.py in Resources */,
+				89CD1CD22EECC85100F04079 /* algos.py in Resources */,
+				89CD1CD32EECC85100F04079 /* _common.py in Resources */,
+				89CD1CD42EECC85100F04079 /* csr.py in Resources */,
+				89CD1CD52EECC85100F04079 /* keys.py in Resources */,
+				89CD1CD62EECC85100F04079 /* __init__.py in Resources */,
+				89CD1CD72EECC85100F04079 /* six.py in Resources */,
+				89CD1CD82EECC85100F04079 /* win.py in Resources */,
+				89CD1CD92EECC85100F04079 /* __init__.cpython-310.pyc in Resources */,
+				89CD1CDA2EECC85100F04079 /* converters.cpython-310.pyc in Resources */,
+				89CD1CDB2EECC85100F04079 /* tzwin.py in Resources */,
+				89CD1CDC2EECC85100F04079 /* win.cpython-310.pyc in Resources */,
+				89CD1CDD2EECC85100F04079 /* isoparser.py in Resources */,
+				89CD1CDE2EECC85100F04079 /* requirements.txt in Resources */,
+				89CD1CDF2EECC85100F04079 /* parser.cpython-310.pyc in Resources */,
+				89CD1CE02EECC85100F04079 /* top_level.txt in Resources */,
+				89CD1CE12EECC85100F04079 /* _int.cpython-310.pyc in Resources */,
+				89CD1CE22EECC85100F04079 /* tz.cpython-310.pyc in Resources */,
+				89CD1CE32EECC85100F04079 /* _common.py in Resources */,
+				89CD1CE42EECC85100F04079 /* LICENSE in Resources */,
+				89CD1CE52EECC85100F04079 /* core.cpython-310.pyc in Resources */,
+				89CD1CE62EECC85100F04079 /* dbapi.cpython-310.pyc in Resources */,
+				89CD1CE72EECC85100F04079 /* native.cpython-310.pyc in Resources */,
 				C58D78E12EC24EE700AEC9FA /* schema_four_tables.sql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -510,6 +2274,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lambda/GetProfileAPI/psycopg2/.dylibs",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = caroline.PlasticProphet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -541,6 +2309,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lambda/GetProfileAPI/psycopg2/.dylibs",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = caroline.PlasticProphet;
