@@ -1,18 +1,14 @@
 // OnboardingFlowView.swift
-// Enhanced multi-step onboarding flow
-
 import SwiftUI
 import CoreLocation
+import UserNotifications
 
 struct OnboardingFlowView: View {
     enum Step { case intro, tos, permissions, addCards, done }
     @EnvironmentObject var app: AppState
     @State private var step: Step = .intro
-    @State private var showManualEntry: Bool = false
-    @State private var manualCardNumber: String = ""
-    @State private var manualNetwork: String = ""
-    @State private var manualRewards: String = ""
     @State private var locationStatus: CLAuthorizationStatus = .notDetermined
+    @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
     @State private var locationCheckTimer: Timer?
 
     var body: some View {
@@ -21,64 +17,79 @@ struct OnboardingFlowView: View {
             case .intro: IntroStepView(step: $step)
             case .tos: TOSStepView(step: $step).environmentObject(app)
             case .permissions: permissionsStepContent
-            case .addCards: AddCardsStepView(step: $step, showManualEntry: $showManualEntry, manualCardNumber: $manualCardNumber, manualNetwork: $manualNetwork, manualRewards: $manualRewards).environmentObject(app)
+            case .addCards: AddCardsStepView(step: $step).environmentObject(app)
             case .done: DoneStepView().environmentObject(app)
             }
             if step != .done { Spacer(minLength: 0) }
         }
         .padding()
         .animation(.default, value: step)
-        .onChange(of: app.onboardingCompleted) { _, _ in
-            if app.onboardingCompleted { step = .done }
-        }
         .onChange(of: app.locationService.authorizationStatus) { _, newStatus in
             locationStatus = newStatus
-            app.markPermissions(location: newStatus == .authorizedAlways)
             if newStatus == .authorizedAlways { stopLocationStatusPolling() }
         }
-        .onAppear { locationStatus = app.locationService.authorizationStatus }
+        .onAppear {
+            locationStatus = app.locationService.authorizationStatus
+            checkNotificationStatus()
+        }
         .onDisappear { stopLocationStatusPolling() }
     }
     
-    // MARK: - Permissions Step
+    private func checkNotificationStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async { notificationStatus = settings.authorizationStatus }
+        }
+    }
+    
     private var permissionsStepContent: some View {
         VStack(spacing: 0) {
-            permissionsHeader
-            VStack(spacing: 20) {
-                cameraSection
-                locationSection
-            }.padding(.horizontal).padding(.top, 24)
+            VStack(spacing: 12) {
+                Text("Permissions").font(.custom("Montserrat", size: 28)).fontWeight(.bold).foregroundColor(.black).tracking(-1.5)
+                Text("To provide you with the best experience, PlasticProphet needs access to your location and notifications.")
+                    .font(.custom("Montserrat", size: 15)).foregroundColor(.secondary).multilineTextAlignment(.center).padding(.horizontal)
+            }.padding(.top, 20)
+            
+            ScrollView {
+                VStack(spacing: 20) {
+                    notificationSection
+                    locationSection
+                }.padding(.horizontal).padding(.top, 24)
+            }
             Spacer()
             continueButton
         }
         .padding(.vertical)
-        .onAppear { locationStatus = app.locationService.authorizationStatus }
+        .onAppear { locationStatus = app.locationService.authorizationStatus; checkNotificationStatus() }
     }
     
-    private var permissionsHeader: some View {
-        VStack(spacing: 12) {
-            Text("Permissions")
-                .font(.custom("Montserrat", size: 28)).fontWeight(.bold)
-                .foregroundColor(.black).tracking(-1.5)
-            Text("To provide you with the best experience, PlasticProphet needs access to your camera and location.")
-                .font(.custom("Montserrat", size: 15)).foregroundColor(.secondary)
-                .multilineTextAlignment(.center).padding(.horizontal)
-        }.padding(.top, 20)
-    }
-    
-    private var cameraSection: some View {
+    private var notificationSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Image(systemName: "camera.fill").foregroundColor(Color(hex: "2ac33c")).font(.title2)
-                Text("Camera Access").font(.custom("Montserrat", size: 18)).fontWeight(.semibold).foregroundColor(.black)
+                Image(systemName: "bell.fill").foregroundColor(Color(hex: "2ac33c")).font(.title2)
+                Text("Notification Access").font(.custom("Montserrat", size: 18)).fontWeight(.semibold).foregroundColor(.black)
                 Spacer()
             }
-            Text("Scan your credit cards quickly for instant card entry and recognition.")
+            Text("Get notified which card to use when you arrive at stores, gas stations, and restaurants.")
                 .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
-            Toggle("Camera Authorized", isOn: Binding(
-                get: { app.permissions.cameraAuthorized },
-                set: { newValue in app.markPermissions(camera: newValue) }
-            )).font(.custom("Montserrat", size: 18)).fontWeight(.medium).tint(Color(hex: "2ac33c"))
+            HStack(spacing: 8) {
+                if notificationStatus == .authorized {
+                    Image(systemName: "checkmark.circle.fill").foregroundColor(Color(hex: "2ac33c"))
+                    Text("Notifications: Enabled ✓").font(.custom("Montserrat", size: 16))
+                } else {
+                    Image(systemName: "bell.badge").foregroundColor(.orange)
+                    Text("Notifications: Not Set").font(.custom("Montserrat", size: 16))
+                }
+            }
+            Button {
+                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in
+                    DispatchQueue.main.async { checkNotificationStatus() }
+                }
+            } label: {
+                Text(notificationStatus == .authorized ? "Notifications Enabled ✓" : "Enable Notifications")
+                    .font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.white)
+                    .frame(maxWidth: .infinity).padding(12)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(notificationStatus == .authorized ? Color.gray.opacity(0.5) : Color(hex: "2ac33c")))
+            }.disabled(notificationStatus == .authorized)
         }.padding().background(Color.gray.opacity(0.05)).cornerRadius(12)
     }
     
@@ -89,93 +100,52 @@ struct OnboardingFlowView: View {
                 Text("Location Access").font(.custom("Montserrat", size: 18)).fontWeight(.semibold).foregroundColor(.black)
                 Spacer()
             }
-            Text("Receive personalized recommendations based on nearby merchants and locations.")
+            Text("Receive personalized recommendations based on nearby merchants.")
                 .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
-            locationStatusRow
-            locationInstructions
-            locationButton
+            HStack(spacing: 8) {
+                if locationStatus == .authorizedAlways {
+                    Image(systemName: "checkmark.circle.fill").foregroundColor(Color(hex: "2ac33c"))
+                    Text("Location: Always Allow ✓").font(.custom("Montserrat", size: 16))
+                } else if locationStatus == .authorizedWhenInUse {
+                    Image(systemName: "exclamationmark.circle.fill").foregroundColor(.orange)
+                    Text("Location: While Using App").font(.custom("Montserrat", size: 16))
+                } else {
+                    Image(systemName: "xmark.circle.fill").foregroundColor(.red)
+                    Text("Location: Not Set").font(.custom("Montserrat", size: 16))
+                }
+            }
+            if locationStatus == .authorizedWhenInUse {
+                Text("Tap below to request 'Always Allow' for background notifications.")
+                    .font(.custom("Montserrat", size: 12)).foregroundColor(.orange)
+            }
+            Button {
+                app.locationService.requestAlwaysAuthorization()
+                startLocationStatusPolling()
+            } label: {
+                let text = locationStatus == .authorizedAlways ? "Always Allow Enabled ✓" : (locationStatus == .authorizedWhenInUse ? "Upgrade to Always Allow" : "Enable Location")
+                Text(text).font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.white)
+                    .frame(maxWidth: .infinity).padding(12)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(locationStatus == .authorizedAlways ? Color.gray.opacity(0.5) : Color(hex: "2ac33c")))
+            }.disabled(locationStatus == .authorizedAlways)
         }.padding().background(Color.gray.opacity(0.05)).cornerRadius(12)
     }
     
-    private var locationStatusRow: some View {
-        HStack(spacing: 8) {
-            statusIcon
-            Text(statusText).font(.custom("Montserrat", size: 16)).foregroundColor(.primary)
-        }
-    }
-    
-    @ViewBuilder
-    private var statusIcon: some View {
-        switch locationStatus {
-        case .authorizedAlways:
-            Image(systemName: "checkmark.circle.fill").foregroundColor(Color(hex: "2ac33c"))
-        case .authorizedWhenInUse:
-            Image(systemName: "exclamationmark.circle.fill").foregroundColor(.orange)
-        default:
-            Image(systemName: "xmark.circle.fill").foregroundColor(.red)
-        }
-    }
-    
-    private var statusText: String {
-        switch locationStatus {
-        case .notDetermined: return "Location: Not Determined"
-        case .restricted: return "Location: Restricted"
-        case .denied: return "Location: Denied"
-        case .authorizedWhenInUse: return "Location: While Using App"
-        case .authorizedAlways: return "Location: Always Allow ✓"
-        @unknown default: return "Location: Unknown"
-        }
-    }
-    
-    @ViewBuilder
-    private var locationInstructions: some View {
-        if locationStatus == .authorizedWhenInUse {
-            Text("You selected 'While Using'. Tap below to request 'Always Allow' for background notifications when you arrive at merchants.")
-                .font(.custom("Montserrat", size: 12)).foregroundColor(.orange)
-        } else if locationStatus == .notDetermined {
-            Text("When prompted, please select 'Allow While Using App' first. Then tap the button again to upgrade to 'Always Allow'.")
-                .font(.custom("Montserrat", size: 12)).foregroundColor(.secondary)
-        }
-    }
-    
-    private var locationButton: some View {
-        Button {
-            app.locationService.requestAlwaysAuthorization()
-            startLocationStatusPolling()
-        } label: {
-            Text(locationButtonText)
-                .font(.custom("Montserrat", size: 16)).fontWeight(.semibold)
-                .foregroundColor(.white).frame(maxWidth: .infinity).padding(12)
-                .background(RoundedRectangle(cornerRadius: 10)
-                    .fill(locationStatus == .authorizedAlways ? Color.gray.opacity(0.5) : Color(hex: "2ac33c")))
-        }.disabled(locationStatus == .authorizedAlways)
-    }
-    
-    private var locationButtonText: String {
-        switch locationStatus {
-        case .authorizedAlways: return "Always Allow Enabled ✓"
-        case .authorizedWhenInUse: return "Upgrade to Always Allow"
-        default: return "Enable Location"
-        }
-    }
-    
     private var continueButton: some View {
-        let canContinue = app.permissions.cameraAuthorized && locationStatus == .authorizedAlways
+        let canContinue = notificationStatus == .authorized && locationStatus == .authorizedAlways
         return Button(action: { step = .addCards }) {
-            Text("Continue")
-                .font(.custom("Montserrat", size: 20)).fontWeight(.black)
-                .foregroundColor(.white).frame(maxWidth: .infinity).padding(16)
-                .background(RoundedRectangle(cornerRadius: 12)
-                    .fill(canContinue ? Color(hex: "2ac33c") : Color.ppGreen.opacity(0.4)))
-                .shadow(color: Color(hex: "0a3a0e").opacity(0.3), radius: 4, x: 0, y: 2)
+            Text("Continue").font(.custom("Montserrat", size: 20)).fontWeight(.black).foregroundColor(.white)
+                .frame(maxWidth: .infinity).padding(16)
+                .background(RoundedRectangle(cornerRadius: 12).fill(canContinue ? Color(hex: "2ac33c") : Color.ppGreen.opacity(0.4)))
         }.disabled(!canContinue).padding(.horizontal).padding(.bottom, 20)
     }
     
     private func startLocationStatusPolling() {
         stopLocationStatusPolling()
         locationCheckTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
-            let newStatus = app.locationService.authorizationStatus
-            if newStatus != locationStatus { locationStatus = newStatus }
+            Task { @MainActor in
+                let newStatus = app.locationService.authorizationStatus
+                if newStatus != locationStatus { locationStatus = newStatus }
+            }
         }
     }
     
@@ -185,7 +155,6 @@ struct OnboardingFlowView: View {
     }
 }
 
-// MARK: - Intro Step
 struct IntroStepView: View {
     @Binding var step: OnboardingFlowView.Step
     var body: some View {
@@ -193,31 +162,29 @@ struct IntroStepView: View {
             Color.white
             VStack(spacing: 40) {
                 VStack(spacing: 12) {
-                    Text("Welcome to")
-                        .font(.custom("Montserrat", size: 38)).fontWeight(.black)
-                        .foregroundColor(.black).multilineTextAlignment(.center).tracking(-1.5)
-                        .shadow(color: Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.25), radius: 2, x: 0, y: 4)
-                        .minimumScaleFactor(0.5).lineLimit(1)
+                    Text("Welcome to").font(.custom("Montserrat", size: 38)).fontWeight(.black).foregroundColor(.black).tracking(-1.5)
                     Image("App Logo Black").resizable().scaledToFit().frame(width: 280, height: 280)
                 }
                 Button(action: { withAnimation { step = .tos } }) {
-                    Text("Let's Get Started!")
-                        .font(.custom("Montserrat", size: 22)).fontWeight(.heavy).foregroundColor(.white)
+                    Text("Let's Get Started!").font(.custom("Montserrat", size: 22)).fontWeight(.heavy).foregroundColor(.white)
                         .padding(16).frame(maxWidth: .infinity)
-                        .background(RoundedRectangle(cornerRadius: 12).fill(Color.ppGreen.opacity(0.75))
-                            .shadow(color: Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.15), radius: 8, x: 0, y: 4))
-                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(red: 0.16, green: 0.76, blue: 0.24), lineWidth: 2))
-                        .shadow(color: Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.3), radius: 4, x: 0, y: 2)
+                        .background(RoundedRectangle(cornerRadius: 12).fill(Color.ppGreen.opacity(0.75)))
                 }.padding(.horizontal, 24)
             }.padding(16).frame(maxWidth: 340)
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
-// MARK: - TOS Step
 struct TOSStepView: View {
     @Binding var step: OnboardingFlowView.Step
     @EnvironmentObject var app: AppState
+    @State private var isOver18: Bool = false
+    @State private var acceptedPrivacyPolicy: Bool = false
+    
+    private var canContinue: Bool {
+        app.acceptedTos && isOver18 && acceptedPrivacyPolicy
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             Text("Terms of Service")
@@ -234,111 +201,160 @@ struct TOSStepView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Terms and Conditions").font(.custom("Montserrat", size: 18)).fontWeight(.semibold).foregroundColor(.black)
-                Text("By using PlasticProphet you agree to our terms and conditions. This is a placeholder Terms of Service.")
+                Text("Last Updated: December 15, 2025")
+                    .font(.custom("Montserrat", size: 12)).foregroundColor(.secondary).italic()
+                
+                Text("Please read these Terms of Service carefully before using PlasticProphet.")
                     .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
-                Text("1. Acceptance of Terms").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
-                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.").font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
-                Text("2. User Responsibilities").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
-                Text("Duis aute irure dolor in reprehenderit in voluptate velit.").font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
-                Text("3. Privacy Policy").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
-                Text("Sed ut perspiciatis unde omnis iste natus error sit voluptatem.").font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                
+                Group {
+                    Text("1. Acceptance of Terms").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("By accessing or using PlasticProphet, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using this application.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                    
+                    Text("2. Description of Service").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("PlasticProphet provides credit card recommendation services based on your location and merchant category codes (MCC). The app suggests which credit card may offer the best rewards for purchases at nearby establishments. These recommendations are for informational purposes only and should not be considered financial advice.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                    
+                    Text("3. User Responsibilities").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account. You agree to provide accurate, current, and complete information during registration.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                }
+                
+                Group {
+                    Text("4. Location Services").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("PlasticProphet uses location services to provide relevant recommendations. By enabling location services, you consent to the collection and use of your location data as described in our Privacy Policy.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                    
+                    Text("5. No Financial Advice").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("The information provided by PlasticProphet is for general informational purposes only. It is not intended to be financial, legal, or professional advice. Always consult with qualified professionals before making financial decisions.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                    
+                    Text("6. Limitation of Liability").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("In no event shall PlasticProphet be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the service.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                    
+                    Text("7. Contact Us").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("If you have any questions about these Terms, please contact us at support@plasticprophet.com.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                }
             }.padding()
         }.background(Color.gray.opacity(0.05)).cornerRadius(12).padding(.horizontal)
     }
     
     private var tosFooter: some View {
-        VStack(spacing: 16) {
-            Toggle("I accept Terms of Service", isOn: $app.acceptedTos)
-                .font(.custom("Montserrat", size: 20)).fontWeight(.medium)
+        VStack(spacing: 12) {
+            Toggle(isOn: $isOver18) {
+                Text("I confirm that I am 18 years or older")
+                    .font(.custom("Montserrat", size: 14)).fontWeight(.medium)
+            }
+            .tint(Color(hex: "2ac33c")).padding(.horizontal)
+            
+            HStack {
+                Toggle(isOn: $acceptedPrivacyPolicy) {
+                    HStack(spacing: 4) {
+                        Text("I agree to the")
+                            .font(.custom("Montserrat", size: 14)).fontWeight(.medium)
+                        Link("Privacy Policy", destination: URL(string: "https://plasticprophet.com/privacy")!)
+                            .font(.custom("Montserrat", size: 14)).fontWeight(.semibold)
+                            .foregroundColor(Color(hex: "2ac33c"))
+                    }
+                }
+                .tint(Color(hex: "2ac33c"))
+            }
+            .padding(.horizontal)
+            
+            Toggle("I accept the Terms of Service", isOn: $app.acceptedTos)
+                .font(.custom("Montserrat", size: 14)).fontWeight(.medium)
                 .tint(Color(hex: "2ac33c")).padding(.horizontal)
+            
             Button(action: { step = .permissions }) {
                 Text("Continue")
                     .font(.custom("Montserrat", size: 20)).fontWeight(.black)
                     .foregroundColor(.white).frame(maxWidth: .infinity).padding(16)
                     .background(RoundedRectangle(cornerRadius: 12)
-                        .fill(app.acceptedTos ? Color(hex: "2ac33c") : Color.ppGreen.opacity(0.4)))
-                    .shadow(color: Color(hex: "0a3a0e").opacity(0.3), radius: 4, x: 0, y: 2)
-            }.disabled(!app.acceptedTos).padding(.horizontal).padding(.bottom, 20)
+                        .fill(canContinue ? Color(hex: "2ac33c") : Color.ppGreen.opacity(0.4)))
+            }.disabled(!canContinue).padding(.horizontal).padding(.bottom, 20)
         }
     }
 }
 
-// MARK: - Add Cards Step
 struct AddCardsStepView: View {
     @Binding var step: OnboardingFlowView.Step
-    @Binding var showManualEntry: Bool
-    @Binding var manualCardNumber: String
-    @Binding var manualNetwork: String
-    @Binding var manualRewards: String
     @EnvironmentObject var app: AppState
+    @State private var showAddCard = false
     
     var body: some View {
         VStack(spacing: 16) {
             Text("Add Your Cards").font(.custom("Montserrat", size: 28)).fontWeight(.bold).foregroundColor(.black).tracking(-1.5)
-            Text("Search or scan to add your cards.")
-                .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
-                .multilineTextAlignment(.center).padding(.horizontal)
-            CardSelectionView(showHeader: false, showDoneButton: false).environmentObject(app)
-            manualEntryButton
-            actionButtons
-        }.padding().sheet(isPresented: $showManualEntry) { manualEntrySheet }
-    }
-    
-    private var manualEntryButton: some View {
-        Button(action: { showManualEntry = true }) {
-            HStack {
-                Image(systemName: "pencil")
-                Text("Add Manually")
-            }.font(.custom("Montserrat", size: 16)).fontWeight(.semibold)
-            .foregroundColor(Color(hex: "2ac33c")).padding(12).frame(maxWidth: .infinity)
-            .background(Color(hex: "2ac33c").opacity(0.1)).cornerRadius(10)
-        }.padding(.horizontal)
-    }
-    
-    private var actionButtons: some View {
-        HStack(spacing: 12) {
-            Button(action: { app.onboardingCompleted = true; step = .done }) {
-                Text("Skip for now")
-                    .font(.custom("Montserrat", size: 20)).fontWeight(.bold).foregroundColor(.gray)
-                    .frame(maxWidth: .infinity).padding(.vertical, 16)
-                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
+            Text("Add your credit cards to get personalized recommendations.").font(.custom("Montserrat", size: 14)).foregroundColor(.secondary).multilineTextAlignment(.center).padding(.horizontal)
+            
+            if !app.cards.isEmpty {
+                ScrollView {
+                    VStack(spacing: 8) {
+                        ForEach(app.cards) { card in
+                            HStack {
+                                cardLogo(for: card)
+                                Text(card.name).font(.custom("Montserrat", size: 14))
+                                Spacer()
+                                Image(systemName: "checkmark.circle.fill").foregroundColor(.ppGreen)
+                            }.padding(12).background(Color.gray.opacity(0.05)).cornerRadius(8)
+                        }
+                    }.padding(.horizontal)
+                }.frame(maxHeight: 200)
             }
-            Button(action: { app.proceedIfReady(); step = .done }) {
-                Text("Finish")
-                    .font(.custom("Montserrat", size: 20)).fontWeight(.black).foregroundColor(.white)
-                    .frame(maxWidth: .infinity).padding(.vertical, 16)
-                    .background(RoundedRectangle(cornerRadius: 12)
-                        .fill(app.cards.isEmpty ? Color.ppGreen.opacity(0.3) : Color(hex: "2ac33c")))
-                    .shadow(color: Color(hex: "0a3a0e").opacity(0.3), radius: 4, x: 0, y: 2)
-            }.disabled(app.cards.isEmpty)
-        }.padding(.horizontal)
+            
+            Button(action: { showAddCard = true }) {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text(app.cards.isEmpty ? "Add Your First Card" : "Add Another Card")
+                }.font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.white)
+                    .frame(maxWidth: .infinity).padding(14)
+                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.ppGreen))
+            }.padding(.horizontal)
+            
+            Spacer()
+            
+            HStack(spacing: 12) {
+                Button(action: { app.onboardingCompleted = true; step = .done }) {
+                    Text("Skip for now").font(.custom("Montserrat", size: 18)).fontWeight(.bold).foregroundColor(.gray)
+                        .frame(maxWidth: .infinity).padding(.vertical, 16)
+                        .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
+                }
+                Button(action: { app.onboardingCompleted = true; step = .done }) {
+                    Text("Continue").font(.custom("Montserrat", size: 18)).fontWeight(.black).foregroundColor(.white)
+                        .frame(maxWidth: .infinity).padding(.vertical, 16)
+                        .background(RoundedRectangle(cornerRadius: 12).fill(app.cards.isEmpty ? Color.ppGreen.opacity(0.4) : Color(hex: "2ac33c")))
+                }.disabled(app.cards.isEmpty)
+            }.padding(.horizontal).padding(.bottom, 20)
+        }
+        .sheet(isPresented: $showAddCard) { AddCardView().environmentObject(app) }
     }
     
-    private var manualEntrySheet: some View {
-        NavigationStack {
-            Form {
-                Section(header: Text("Card Info")) {
-                    TextField("Card number", text: $manualCardNumber).keyboardType(.numberPad)
-                    TextField("Card type (e.g. Visa)", text: $manualNetwork)
-                    TextField("Rewards summary", text: $manualRewards)
-                }
-                Section {
-                    Button("Add Card") {
-                        let digits = manualCardNumber.filter { $0.isNumber }
-                        guard digits.count >= 4 else { return }
-                        let last4 = String(digits.suffix(4))
-                        let name = manualNetwork.isEmpty ? "Manual Card ••••\(last4)" : "\(manualNetwork) ••••\(last4)"
-                        app.cards.append(Card(name: name, network: manualNetwork.isEmpty ? "Unknown" : manualNetwork, last4: last4, rewardSummary: manualRewards))
-                        manualCardNumber = ""; manualNetwork = ""; manualRewards = ""; showManualEntry = false
-                    }.disabled(manualCardNumber.filter { $0.isNumber }.count < 4)
-                    Button("Cancel") { showManualEntry = false }.tint(.red)
-                }
-            }.navigationTitle("Add Card Manually").navigationBarTitleDisplayMode(.inline)
+    @ViewBuilder
+    private func cardLogo(for card: Card) -> some View {
+        let name = card.name.lowercased()
+        let key = (card.cardKey ?? "").lowercased()
+        if name.contains("chase") || key.contains("chase") {
+            Image("Chase").resizable().scaledToFit().frame(width: 30, height: 30).clipShape(RoundedRectangle(cornerRadius: 4))
+        } else if name.contains("amex") || name.contains("american express") || key.contains("amex") {
+            Image("Amex").resizable().scaledToFit().frame(width: 30, height: 30).clipShape(RoundedRectangle(cornerRadius: 4))
+        } else if name.contains("capital one") || key.contains("capitalone") {
+            Image("CapitalOne").resizable().scaledToFit().frame(width: 30, height: 30).clipShape(RoundedRectangle(cornerRadius: 4))
+        } else if name.contains("discover") || key.contains("discover") {
+            Image("Discover").resizable().scaledToFit().frame(width: 30, height: 30).clipShape(RoundedRectangle(cornerRadius: 4))
+        } else if name.contains("wells fargo") || key.contains("wellsfargo") {
+            Image("WellsFargo").resizable().scaledToFit().frame(width: 30, height: 30).clipShape(RoundedRectangle(cornerRadius: 4))
+        } else if name.contains("apple") || key.contains("apple") {
+            Image("Apple").resizable().scaledToFit().frame(width: 30, height: 30).clipShape(RoundedRectangle(cornerRadius: 4))
+        } else if name.contains("target") || key.contains("target") {
+            Image("Target").resizable().scaledToFit().frame(width: 30, height: 30).clipShape(RoundedRectangle(cornerRadius: 4))
+        } else {
+            Image(systemName: "creditcard.fill").foregroundColor(.ppGreen)
         }
     }
 }
 
-// MARK: - Done Step
 struct DoneStepView: View {
     @EnvironmentObject var app: AppState
     var body: some View {
@@ -352,11 +368,9 @@ struct DoneStepView: View {
                 }
                 Text("You can start receiving recommendations.").font(.custom("Montserrat", size: 16)).foregroundColor(.secondary)
                 Button(action: { app.onboardingCompleted = true; app.selectedTab = 0 }) {
-                    Text("Enter App")
-                        .font(.custom("Montserrat", size: 20)).fontWeight(.black)
-                        .foregroundColor(.white).frame(maxWidth: .infinity).padding(16)
+                    Text("Enter App").font(.custom("Montserrat", size: 20)).fontWeight(.black).foregroundColor(.white)
+                        .frame(maxWidth: .infinity).padding(16)
                         .background(RoundedRectangle(cornerRadius: 12).fill(Color(hex: "2ac33c")))
-                        .shadow(color: Color(hex: "0a3a0e").opacity(0.3), radius: 4, x: 0, y: 2)
                 }.padding(.horizontal, 24).padding(.top, 8)
             }
             Spacer()
@@ -364,6 +378,4 @@ struct DoneStepView: View {
     }
 }
 
-#Preview {
-    OnboardingFlowView().environmentObject(AppState())
-}
+#Preview { OnboardingFlowView().environmentObject(AppState()) }

@@ -9,20 +9,40 @@ import SwiftUI
 @MainActor
 final class AppState: ObservableObject {
     
+    // MARK: - UserDefaults Keys
+    private enum Keys {
+        static let cards = "saved_cards"
+        static let onboardingCompleted = "onboarding_completed"
+        static let acceptedTos = "accepted_tos"
+        static let userFirstName = "user_first_name"
+        static let userLastName = "user_last_name"
+        static let userEmail = "user_email"
+    }
+    
     // MARK: - Authentication
     
     @Published var isAuthenticated: Bool = false
-    @Published var userFirstName: String = ""
-    @Published var userLastName: String = ""
-    @Published var userEmail: String = ""
+    @Published var userFirstName: String = "" {
+        didSet { UserDefaults.standard.set(userFirstName, forKey: Keys.userFirstName) }
+    }
+    @Published var userLastName: String = "" {
+        didSet { UserDefaults.standard.set(userLastName, forKey: Keys.userLastName) }
+    }
+    @Published var userEmail: String = "" {
+        didSet { UserDefaults.standard.set(userEmail, forKey: Keys.userEmail) }
+    }
     
     // Cognito Authentication service
     @Published var authService = CognitoAuthService()
     
     // MARK: - Onboarding & Permissions
     
-    @Published var onboardingCompleted: Bool = false
-    @Published var acceptedTos: Bool = false
+    @Published var onboardingCompleted: Bool = false {
+        didSet { UserDefaults.standard.set(onboardingCompleted, forKey: Keys.onboardingCompleted) }
+    }
+    @Published var acceptedTos: Bool = false {
+        didSet { UserDefaults.standard.set(acceptedTos, forKey: Keys.acceptedTos) }
+    }
     @Published var permissions = PermissionsStatus()
     
     // MARK: - Location
@@ -31,12 +51,18 @@ final class AppState: ObservableObject {
     
     // MARK: - App Data
     
-    @Published var cards: [Card] = []
+    @Published var cards: [Card] = [] {
+        didSet { saveCards() }
+    }
     @Published var latestRecommendation: Recommendation? = nil
     
     // Backend service for merchant data
     let merchantNetworkService = MerchantNetworkService()
     @Published var lastNormalizedMerchant: NormalizedMerchantResponse? = nil
+    
+    // MCC Matcher service for AI-powered category matching
+    let mccMatcherService = MCCMatcherService.shared
+    @Published var lastMCCMatch: MCCMatchResponse? = nil
     
     @Published var showingScanner: Bool = false
     @Published var showingSettings: Bool = false
@@ -47,11 +73,68 @@ final class AppState: ObservableObject {
     // MARK: - Init
     
     init() {
+        // Load persisted data first
+        loadPersistedData()
+        
+        // Check if user has a valid session
+        authService.checkSession()
+        isAuthenticated = authService.isAuthenticated
+        
         // Connect geofence events → fetch normalized merchant data from backend
         locationService.onMerchantRegionEntered = { [weak self] merchantName in
             guard let self else { return }
             print("🔥 AppState received geofence enter for: \(merchantName)")
             self.fetchNormalizedMerchantData(merchantName: merchantName)
+        }
+        
+        print("📱 AppState initialized - isAuthenticated: \(isAuthenticated), onboardingCompleted: \(onboardingCompleted), cards: \(cards.count)")
+    }
+    
+    // MARK: - Persistence
+    
+    private func loadPersistedData() {
+        // Load onboarding state (without triggering didSet)
+        let savedOnboarding = UserDefaults.standard.bool(forKey: Keys.onboardingCompleted)
+        let savedTos = UserDefaults.standard.bool(forKey: Keys.acceptedTos)
+        let savedFirstName = UserDefaults.standard.string(forKey: Keys.userFirstName) ?? ""
+        let savedLastName = UserDefaults.standard.string(forKey: Keys.userLastName) ?? ""
+        let savedEmail = UserDefaults.standard.string(forKey: Keys.userEmail) ?? ""
+        
+        // Set values directly to avoid triggering didSet during load
+        _onboardingCompleted = Published(initialValue: savedOnboarding)
+        _acceptedTos = Published(initialValue: savedTos)
+        _userFirstName = Published(initialValue: savedFirstName)
+        _userLastName = Published(initialValue: savedLastName)
+        _userEmail = Published(initialValue: savedEmail)
+        
+        // Load cards
+        loadCards()
+        
+        print("📂 Loaded persisted data - onboarding: \(savedOnboarding), cards: \(cards.count)")
+    }
+    
+    private func saveCards() {
+        do {
+            let data = try JSONEncoder().encode(cards)
+            UserDefaults.standard.set(data, forKey: Keys.cards)
+            print("💾 Saved \(cards.count) cards to UserDefaults")
+        } catch {
+            print("❌ Failed to save cards: \(error)")
+        }
+    }
+    
+    private func loadCards() {
+        guard let data = UserDefaults.standard.data(forKey: Keys.cards) else {
+            print("ℹ️ No saved cards found")
+            return
+        }
+        
+        do {
+            let loadedCards = try JSONDecoder().decode([Card].self, from: data)
+            _cards = Published(initialValue: loadedCards)
+            print("📂 Loaded \(loadedCards.count) cards from UserDefaults")
+        } catch {
+            print("❌ Failed to load cards: \(error)")
         }
     }
     
@@ -125,6 +208,22 @@ final class AppState: ObservableObject {
     
     // MARK: - Mock / Test Data Helpers
     
+    /// Adds a card to the user's wallet
+    func addCard(_ card: Card) {
+        if !cards.contains(where: { $0.cardKey == card.cardKey || $0.name == card.name }) {
+            cards.append(card)
+            print("✅ Added card to wallet: \(card.name)")
+        } else {
+            print("⚠️ Card already exists: \(card.name)")
+        }
+    }
+    
+    /// Removes a card from the user's wallet
+    func removeCard(_ card: Card) {
+        cards.removeAll { $0.id == card.id }
+        print("🗑️ Removed card: \(card.name)")
+    }
+    
     /// Adds a sample card to the user's wallet for testing / onboarding.
     func addMockCard(network: String) {
         let mockCard = Card(
@@ -138,6 +237,121 @@ final class AppState: ObservableObject {
     }
     
     // MARK: - Recommendations
+    
+    /// Fetch MCC code for a place using AI-powered matching
+    /// This is the primary method for getting accurate MCC codes from location data
+    func fetchMCCForPlace(
+        name: String,
+        category: String? = nil,
+        address: String? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
+        phoneNumber: String? = nil,
+        url: String? = nil
+    ) {
+        Task {
+            do {
+                print("🔍 Fetching MCC for: \(name)")
+                
+                let mccMatch = try await mccMatcherService.matchMCC(
+                    name: name,
+                    category: category,
+                    address: address,
+                    latitude: latitude,
+                    longitude: longitude,
+                    phoneNumber: phoneNumber,
+                    url: url
+                )
+                
+                await MainActor.run {
+                    self.lastMCCMatch = mccMatch
+                    print("✅ AI MCC Match: \(mccMatch.mcc) (\(mccMatch.confidence))")
+                    print("   Description: \(mccMatch.description ?? "N/A")")
+                    
+                    // Create recommendation using the AI-matched MCC
+                    self.createRecommendationFromMCCMatch(
+                        mccMatch: mccMatch,
+                        merchantName: name
+                    )
+                }
+            } catch {
+                await MainActor.run {
+                    print("❌ Failed to match MCC via AI: \(error.localizedDescription)")
+                    // Fallback to the old mock recommendation system
+                    self.fetchRecommendation(for: name)
+                }
+            }
+        }
+    }
+    
+    /// Create a recommendation based on AI-matched MCC code
+    private func createRecommendationFromMCCMatch(mccMatch: MCCMatchResponse, merchantName: String) {
+        let chosenCard: Card
+        if let firstCard = cards.first {
+            chosenCard = firstCard
+        } else {
+            chosenCard = Card(
+                name: "Wells Fargo Active Cash",
+                network: "Visa",
+                last4: "1234",
+                rewardSummary: "2% Everywhere"
+            )
+        }
+        
+        let description = mccMatch.description ?? "Unknown Category"
+        let irsDescription = mccMatch.irsDescription ?? description
+        
+        let rationale: String
+        let rewardText: String
+        
+        // Use the MCC code and description to provide smart recommendations
+        // MCC code ranges help determine category:
+        // 5812-5814: Eating/Drinking
+        // 5411: Grocery Stores
+        // 5541-5542: Gas Stations
+        // 4000-4999: Transportation/Travel
+        // 5311-5399: Retail/Department Stores
+        
+        let mccInt = Int(mccMatch.mcc) ?? 0
+        
+        switch mccInt {
+        case 5812...5814:
+            // Restaurants and eating places
+            rationale = "Higher cashback on dining at \(merchantName)."
+            rewardText = "3% back at restaurants"
+        case 5411:
+            // Grocery stores
+            rationale = "Great rewards on groceries."
+            rewardText = "4% back at grocery stores"
+        case 5541, 5542:
+            // Gas stations
+            rationale = "Bonus rewards on fuel purchases."
+            rewardText = "5% back at gas stations"
+        case 4000...4999:
+            // Travel & transportation
+            rationale = "Excellent rewards on travel."
+            rewardText = "3% back on travel"
+        case 5311...5399:
+            // Department stores & retail
+            rationale = "Good rewards at department stores."
+            rewardText = "2% back at retail stores"
+        case 5732:
+            // Electronics stores
+            rationale = "Solid rewards on electronics."
+            rewardText = "2% back at electronics stores"
+        default:
+            // General category - use description for context
+            rationale = "Solid rewards at \(irsDescription)."
+            rewardText = "1.5% back on this purchase"
+        }
+        
+        latestRecommendation = Recommendation(
+            card: chosenCard,
+            merchantName: merchantName,
+            rationale: rationale,
+            rewardText: rewardText
+        )
+    }
     
     /// Fetch normalized merchant data from backend and create recommendation
     func fetchNormalizedMerchantData(merchantName: String) {

@@ -32,17 +32,6 @@
 		891F5F142E941BA700A880E5 /* PlasticProphet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlasticProphet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F212E941BA800A880E5 /* PlasticProphetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		891F5F2B2E941BA800A880E5 /* PlasticProphetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlasticProphetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C533E5C02EEA558500F7FE64 /* lambda_function.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = lambda_function.py; sourceTree = "<group>"; };
-		C533E5C12EEA558500F7FE64 /* mcc_directory.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = mcc_directory.py; sourceTree = "<group>"; };
-		C533E5C22EEA558500F7FE64 /* normalization.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = normalization.py; sourceTree = "<group>"; };
-		C533E5C42EEA558500F7FE64 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		C533E5C52EEA558500F7FE64 /* requirements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
-		C533E5D42EEA55AD00F7FE64 /* mcc_codes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mcc_codes.json; sourceTree = "<group>"; };
-		C533E5D62EEA5EF800F7FE64 /* quick_test.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = quick_test.py; sourceTree = "<group>"; };
-		C533E5D72EEA5EF800F7FE64 /* test_event.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = test_event.json; sourceTree = "<group>"; };
-		C533E5D82EEA5EF800F7FE64 /* test_lambda.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = test_lambda.py; sourceTree = "<group>"; };
-		C533E5D92EEA5EF800F7FE64 /* TEST_RESULTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TEST_RESULTS.md; sourceTree = "<group>"; };
-		C533E5DA2EEA5EF800F7FE64 /* TESTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TESTING.md; sourceTree = "<group>"; };
 		C58D78DA2EC24E8200AEC9FA /* DevelopmentView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DevelopmentView.md; sourceTree = "<group>"; };
 		C58D78DB2EC24E8200AEC9FA /* LogicalView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LogicalView.md; sourceTree = "<group>"; };
 		C58D78DC2EC24E8200AEC9FA /* PhysicalView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PhysicalView.md; sourceTree = "<group>"; };
@@ -128,7 +117,6 @@
 				891F5F2E2E941BA800A880E5 /* PlasticProphetUITests */,
 				891F5F152E941BA700A880E5 /* Products */,
 				88415F672EA9351400E45262 /* Recovered References */,
-				C533E5C82EEA558500F7FE64 /* lambdafunction */,
 			);
 			sourceTree = "<group>";
 		};
@@ -140,40 +128,6 @@
 				891F5F2B2E941BA800A880E5 /* PlasticProphetUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		C533E5BC2EEA558500F7FE64 /* data */ = {
-			isa = PBXGroup;
-			children = (
-				C533E5D42EEA55AD00F7FE64 /* mcc_codes.json */,
-			);
-			path = data;
-			sourceTree = "<group>";
-		};
-		C533E5BD2EEA558500F7FE64 /* src */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = src;
-			sourceTree = "<group>";
-		};
-		C533E5C82EEA558500F7FE64 /* lambdafunction */ = {
-			isa = PBXGroup;
-			children = (
-				C533E5BC2EEA558500F7FE64 /* data */,
-				C533E5BD2EEA558500F7FE64 /* src */,
-				C533E5C02EEA558500F7FE64 /* lambda_function.py */,
-				C533E5C12EEA558500F7FE64 /* mcc_directory.py */,
-				C533E5C22EEA558500F7FE64 /* normalization.py */,
-				C533E5C42EEA558500F7FE64 /* README.md */,
-				C533E5C52EEA558500F7FE64 /* requirements.txt */,
-				C533E5D62EEA5EF800F7FE64 /* quick_test.py */,
-				C533E5D72EEA5EF800F7FE64 /* test_event.json */,
-				C533E5D82EEA5EF800F7FE64 /* test_lambda.py */,
-				C533E5D92EEA5EF800F7FE64 /* TEST_RESULTS.md */,
-				C533E5DA2EEA5EF800F7FE64 /* TESTING.md */,
-			);
-			path = lambdafunction;
 			sourceTree = "<group>";
 		};
 		C58D78DF2EC24E8200AEC9FA /* docs */ = {
@@ -510,6 +464,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = caroline.PlasticProphet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -542,6 +497,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = caroline.PlasticProphet;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -242,6 +242,7 @@ struct SignUpView: View {
     @FocusState private var focusedField: SignUpField?
     @State private var showVerification = false
     @State private var signUpEmail = ""
+    @State private var signUpPassword = ""
     
     enum SignUpField {
         case firstName, lastName, email, password, confirmPassword
@@ -446,21 +447,27 @@ struct SignUpView: View {
                 }
             }
         }
-        .sheet(isPresented: $showVerification) {
-            CognitoVerificationView(email: signUpEmail)
+        .sheet(isPresented: $showVerification, onDismiss: {
+            // When verification sheet dismisses, check if user is now authenticated
+            if app.isAuthenticated {
+                dismiss() // Also dismiss SignUpView so ContentView shows onboarding
+            }
+        }) {
+            CognitoVerificationView(email: signUpEmail, password: signUpPassword)
                 .environmentObject(app)
         }
     }
     
     private func signUp() {
         signUpEmail = email // Save for verification
+        signUpPassword = password // Save for auto sign-in after verification
         
         Task {
             await app.signUp(
                 email: email,
-                    password: password,
-                    firstName: firstName,
-                    lastName: lastName
+                password: password,
+                firstName: firstName,
+                lastName: lastName
             )
             
             await MainActor.run {
