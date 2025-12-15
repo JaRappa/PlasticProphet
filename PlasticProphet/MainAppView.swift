@@ -94,30 +94,6 @@ struct HomeView: View {
                             }
                         }
                         
-                        Button("Simulate Geofence Recommendation") {
-                            app.fetchRecommendation(for: "Coffee Shop")
-                        }
-                        .font(.custom("Montserrat", size: 16))
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(14)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(app.cards.isEmpty ? Color.ppGreen.opacity(0.3) : Color.ppGreen)
-                        )
-                        .disabled(app.cards.isEmpty)
-                        .padding(.horizontal)
-                        
-                        if app.cards.isEmpty {
-                            Text("Add at least one card to get recommendations.")
-                                .font(.custom("Montserrat", size: 12))
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal)
-                        }
-                        
                         // Extra padding for FAB
                         Color.clear.frame(height: 80)
                     }
