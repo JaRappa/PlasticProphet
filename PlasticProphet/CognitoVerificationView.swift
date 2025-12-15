@@ -1,6 +1,5 @@
 // CognitoVerificationView.swift
-// Add this as a NEW file to your project
-// This handles AWS Cognito email verification with your design style
+// Handles AWS Cognito email verification
 
 import SwiftUI
 
@@ -9,10 +8,17 @@ struct CognitoVerificationView: View {
     @Environment(\.dismiss) private var dismiss
     
     let email: String
+    let password: String? // Optional - if provided, auto sign-in after verification
+    
     @State private var code: [String] = ["", "", "", "", "", ""] // 6 digits for AWS Cognito
     @FocusState private var focusedField: Int?
     @State private var isLoading = false
     @State private var errorMessage = ""
+    
+    init(email: String, password: String? = nil) {
+        self.email = email
+        self.password = password
+    }
     
     var body: some View {
         NavigationStack {
@@ -31,7 +37,6 @@ struct CognitoVerificationView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.black)
                     
-                    // Fixed text without concatenation
                     VStack(spacing: 4) {
                         Text("We sent a verification code to")
                             .font(.custom("Montserrat", size: 16))
@@ -75,7 +80,6 @@ struct CognitoVerificationView: View {
                                     } else if newValue.isEmpty && index > 0 {
                                         focusedField = index - 1
                                     }
-                                    // Limit to 1 character
                                     if newValue.count > 1 {
                                         code[index] = String(newValue.prefix(1))
                                     }
@@ -83,6 +87,14 @@ struct CognitoVerificationView: View {
                         }
                     }
                     .padding(.top, 32)
+                    
+                    // Resend code button
+                    Button(action: resendCode) {
+                        Text("Didn't receive a code? Resend")
+                            .font(.custom("Montserrat", size: 14))
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.top, 8)
                     
                     Spacer()
                     
@@ -135,27 +147,56 @@ struct CognitoVerificationView: View {
         errorMessage = ""
         isLoading = true
         
-        let verificationCode = code.joined() // Combine all digits
+        let verificationCode = code.joined()
         
         Task {
-            await app.confirmSignUp(email: email, code: verificationCode)
-            
-            await MainActor.run {
-                isLoading = false
+            do {
+                // Step 1: Confirm the sign up with the verification code
+                try await app.authService.confirmSignUp(email: email, code: verificationCode)
+                print("✅ Email verification successful!")
                 
-                // Check if verification was successful
-                if app.authService.isAuthenticated {
-                    dismiss() // Close verification view
-                    // User can now sign in
-                } else {
+                // Step 2: Auto sign-in if we have the password
+                if let password = password {
+                    print("🔐 Auto signing in after verification...")
+                    await app.signIn(email: email, password: password)
+                }
+                
+                await MainActor.run {
+                    isLoading = false
+                    
+                    // If we have password, we should be authenticated now
+                    // If not, just mark as authenticated so user can proceed
+                    if password != nil && app.isAuthenticated {
+                        print("✅ Auto sign-in successful, proceeding to onboarding")
+                        dismiss()
+                    } else if password == nil {
+                        // No password provided - just mark verified and let user sign in manually
+                        print("✅ Verification complete - user needs to sign in")
+                        app.isAuthenticated = true
+                        dismiss()
+                    } else {
+                        errorMessage = "Verification succeeded but sign-in failed. Please sign in manually."
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    isLoading = false
+                    print("❌ Verification failed: \(error)")
                     errorMessage = "Invalid code. Please try again."
                 }
             }
         }
     }
+    
+    private func resendCode() {
+        Task {
+            await app.resendCode(email: email)
+            print("📧 Verification code resent to \(email)")
+        }
+    }
 }
 
 #Preview {
-    CognitoVerificationView(email: "test@example.com")
+    CognitoVerificationView(email: "test@example.com", password: "TestPass123!")
         .environmentObject(AppState())
 }
