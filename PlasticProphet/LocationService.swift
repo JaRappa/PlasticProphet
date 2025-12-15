@@ -36,6 +36,9 @@ class LocationService: NSObject, ObservableObject {
     /// When a region is entered, we pass the merchant name.
     var onMerchantRegionEntered: ((String) -> Void)?
     
+    /// Callback for background geofence events - passes merchant info for notification
+    var onBackgroundGeofenceEntered: ((TestMerchant) -> Void)?
+    
     // MARK: - Init
     
     override init() {
@@ -203,6 +206,9 @@ extension LocationService: CLLocationManagerDelegate {
             
             // Notify whoever is listening (AppState) so it can fetch a recommendation.
             onMerchantRegionEntered?(merchant.name)
+            
+            // Also trigger background notification callback
+            onBackgroundGeofenceEntered?(merchant)
             
         } else {
             print("⚠️ Entered unknown region: \(region.identifier)")

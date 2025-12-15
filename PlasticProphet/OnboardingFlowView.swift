@@ -3,12 +3,18 @@
 
 import SwiftUI
 import CoreLocation
+import UserNotifications
 
 struct OnboardingFlowView: View {
     enum Step { case intro, tos, permissions, addCards, done }
     @EnvironmentObject var app: AppState
     @State private var step: Step = .intro
+    @State private var showManualEntry: Bool = false
+    @State private var manualCardNumber: String = ""
+    @State private var manualNetwork: String = ""
+    @State private var manualRewards: String = ""
     @State private var locationStatus: CLAuthorizationStatus = .notDetermined
+    @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
     @State private var locationCheckTimer: Timer?
 
     var body: some View {
@@ -34,26 +40,36 @@ struct OnboardingFlowView: View {
         }
         .onAppear {
             locationStatus = app.locationService.authorizationStatus
-            app.markPermissions(location: locationStatus == .authorizedAlways)
+            checkNotificationStatus()
         }
         .onDisappear { stopLocationStatusPolling() }
+    }
+    
+    private func checkNotificationStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                notificationStatus = settings.authorizationStatus
+            }
+        }
     }
     
     // MARK: - Permissions Step
     private var permissionsStepContent: some View {
         VStack(spacing: 0) {
             permissionsHeader
-            VStack(spacing: 20) {
-                cameraSection
-                locationSection
-            }.padding(.horizontal).padding(.top, 24)
+            ScrollView {
+                VStack(spacing: 20) {
+                    notificationSection
+                    locationSection
+                }.padding(.horizontal).padding(.top, 24)
+            }
             Spacer()
             continueButton
         }
         .padding(.vertical)
         .onAppear {
             locationStatus = app.locationService.authorizationStatus
-            app.markPermissions(location: locationStatus == .authorizedAlways)
+            checkNotificationStatus()
         }
     }
     
@@ -62,26 +78,53 @@ struct OnboardingFlowView: View {
             Text("Permissions")
                 .font(.custom("Montserrat", size: 28)).fontWeight(.bold)
                 .foregroundColor(.black).tracking(-1.5)
-            Text("To provide you with the best experience, PlasticProphet needs access to your camera and location.")
+            Text("To provide you with the best experience, PlasticProphet needs access to your location and notifications.")
                 .font(.custom("Montserrat", size: 15)).foregroundColor(.secondary)
                 .multilineTextAlignment(.center).padding(.horizontal)
         }.padding(.top, 20)
     }
     
-    private var cameraSection: some View {
+    private var notificationSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Image(systemName: "camera.fill").foregroundColor(Color(hex: "2ac33c")).font(.title2)
-                Text("Camera Access").font(.custom("Montserrat", size: 18)).fontWeight(.semibold).foregroundColor(.black)
+                Image(systemName: "bell.fill").foregroundColor(Color(hex: "2ac33c")).font(.title2)
+                Text("Notification Access").font(.custom("Montserrat", size: 18)).fontWeight(.semibold).foregroundColor(.black)
                 Spacer()
             }
-            Text("Scan your credit cards quickly for instant card entry and recognition.")
+            Text("Get notified which card to use when you arrive at stores, gas stations, and restaurants.")
                 .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
-            Toggle("Camera Authorized", isOn: Binding(
-                get: { app.permissions.cameraAuthorized },
-                set: { newValue in app.markPermissions(camera: newValue) }
-            )).font(.custom("Montserrat", size: 18)).fontWeight(.medium).tint(Color(hex: "2ac33c"))
+            notificationStatusRow
+            notificationButton
         }.padding().background(Color.gray.opacity(0.05)).cornerRadius(12)
+    }
+    
+    private var notificationStatusRow: some View {
+        HStack(spacing: 8) {
+            if notificationStatus == .authorized {
+                Image(systemName: "checkmark.circle.fill").foregroundColor(Color(hex: "2ac33c"))
+                Text("Notifications: Enabled ✓").font(.custom("Montserrat", size: 16)).foregroundColor(.primary)
+            } else if notificationStatus == .denied {
+                Image(systemName: "xmark.circle.fill").foregroundColor(.red)
+                Text("Notifications: Denied").font(.custom("Montserrat", size: 16)).foregroundColor(.primary)
+            } else {
+                Image(systemName: "bell.badge").foregroundColor(.orange)
+                Text("Notifications: Not Set").font(.custom("Montserrat", size: 16)).foregroundColor(.primary)
+            }
+        }
+    }
+    
+    private var notificationButton: some View {
+        Button {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in
+                DispatchQueue.main.async { checkNotificationStatus() }
+            }
+        } label: {
+            Text(notificationStatus == .authorized ? "Notifications Enabled ✓" : "Enable Notifications")
+                .font(.custom("Montserrat", size: 16)).fontWeight(.semibold)
+                .foregroundColor(.white).frame(maxWidth: .infinity).padding(12)
+                .background(RoundedRectangle(cornerRadius: 10)
+                    .fill(notificationStatus == .authorized ? Color.gray.opacity(0.5) : Color(hex: "2ac33c")))
+        }.disabled(notificationStatus == .authorized)
     }
     
     private var locationSection: some View {
@@ -132,10 +175,10 @@ struct OnboardingFlowView: View {
     @ViewBuilder
     private var locationInstructions: some View {
         if locationStatus == .authorizedWhenInUse {
-            Text("You selected 'While Using'. Tap below to request 'Always Allow' for background notifications when you arrive at merchants.")
+            Text("You selected 'While Using'. Tap below to request 'Always Allow' for background notifications.")
                 .font(.custom("Montserrat", size: 12)).foregroundColor(.orange)
         } else if locationStatus == .notDetermined {
-            Text("When prompted, please select 'Allow While Using App' first. Then tap the button again to upgrade to 'Always Allow'.")
+            Text("When prompted, please select 'Allow While Using App' first, then tap again to upgrade to 'Always Allow'.")
                 .font(.custom("Montserrat", size: 12)).foregroundColor(.secondary)
         }
     }
@@ -162,7 +205,7 @@ struct OnboardingFlowView: View {
     }
     
     private var continueButton: some View {
-        let canContinue = app.permissions.cameraAuthorized && locationStatus == .authorizedAlways
+        let canContinue = notificationStatus == .authorized && locationStatus == .authorizedAlways
         return Button(action: { step = .addCards }) {
             Text("Continue")
                 .font(.custom("Montserrat", size: 20)).fontWeight(.black)
@@ -239,7 +282,7 @@ struct TOSStepView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Terms and Conditions").font(.custom("Montserrat", size: 18)).fontWeight(.semibold).foregroundColor(.black)
-                Text("By using PlasticProphet you agree to our terms and conditions. This is a placeholder Terms of Service.")
+                Text("By using PlasticProphet you agree to our terms and conditions.")
                     .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
                 Text("1. Acceptance of Terms").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
                 Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.").font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
@@ -268,119 +311,83 @@ struct TOSStepView: View {
     }
 }
 
-// MARK: - Add Cards Step
+// MARK: - Add Cards Step (uses AddCardView)
 struct AddCardsStepView: View {
     @Binding var step: OnboardingFlowView.Step
-    @State private var showAddCard: Bool = false
     @EnvironmentObject var app: AppState
+    @State private var showAddCard = false
     
     var body: some View {
         VStack(spacing: 16) {
-            Text("Add Your Cards").font(.custom("Montserrat", size: 28)).fontWeight(.bold).foregroundColor(.black).tracking(-1.5)
-            Text("Search to add your credit cards.")
+            Text("Add Your Cards")
+                .font(.custom("Montserrat", size: 28)).fontWeight(.bold)
+                .foregroundColor(.black).tracking(-1.5)
+            
+            Text("Add your credit cards to get personalized recommendations.")
                 .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
                 .multilineTextAlignment(.center).padding(.horizontal)
             
-            // Show current cards or empty state
-            if app.cards.isEmpty {
-                VStack(spacing: 16) {
-                    Image(systemName: "creditcard")
-                        .font(.system(size: 60))
-                        .foregroundColor(.gray.opacity(0.4))
-                    Text("No cards added yet")
-                        .font(.custom("Montserrat", size: 16))
-                        .foregroundColor(.secondary)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(.vertical, 40)
-            } else {
+            // Show current cards
+            if !app.cards.isEmpty {
                 ScrollView {
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         ForEach(app.cards) { card in
-                            HStack(spacing: 12) {
-                                // Card image
-                                if let cardKey = card.cardKey,
-                                   let imageName = CardImageHelper.imageNameForCardKey(cardKey),
-                                   let uiImage = UIImage(named: imageName) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 44, height: 44)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                } else {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color.ppGreen.opacity(0.15))
-                                            .frame(width: 44, height: 44)
-                                        Image(systemName: "creditcard.fill")
-                                            .font(.system(size: 18))
-                                            .foregroundColor(.ppGreen)
-                                    }
-                                }
-                                
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(card.name)
-                                        .font(.custom("Montserrat", size: 16))
-                                        .fontWeight(.semibold)
-                                    Text(card.rewardSummary)
-                                        .font(.custom("Montserrat", size: 12))
-                                        .foregroundColor(.secondary)
-                                }
+                            HStack {
+                                Image(systemName: "creditcard.fill")
+                                    .foregroundColor(.ppGreen)
+                                Text(card.name)
+                                    .font(.custom("Montserrat", size: 14))
                                 Spacer()
-                                Button {
-                                    app.removeCard(card)
-                                } label: {
-                                    Image(systemName: "xmark.circle.fill")
-                                        .foregroundColor(.red.opacity(0.7))
-                                }
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.ppGreen)
                             }
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .shadow(radius: 1)
+                            .padding(12)
+                            .background(Color.gray.opacity(0.05))
+                            .cornerRadius(8)
                         }
                     }
                     .padding(.horizontal)
                 }
+                .frame(maxHeight: 200)
             }
             
             // Add card button
             Button(action: { showAddCard = true }) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
-                    Text("Add Card")
+                    Text(app.cards.isEmpty ? "Add Your First Card" : "Add Another Card")
                 }
-                .font(.custom("Montserrat", size: 18)).fontWeight(.semibold)
-                .foregroundColor(.white).padding(14).frame(maxWidth: .infinity)
-                .background(Color.ppGreen).cornerRadius(12)
-            }.padding(.horizontal)
-            
-            actionButtons
-        }
-        .padding()
-        .sheet(isPresented: $showAddCard) {
-            AddCardView()
-                .environmentObject(app)
-        }
-    }
-    
-    private var actionButtons: some View {
-        HStack(spacing: 12) {
-            Button(action: { app.onboardingCompleted = true; step = .done }) {
-                Text("Skip for now")
-                    .font(.custom("Montserrat", size: 20)).fontWeight(.bold).foregroundColor(.gray)
-                    .frame(maxWidth: .infinity).padding(.vertical, 16)
-                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
+                .font(.custom("Montserrat", size: 16)).fontWeight(.semibold)
+                .foregroundColor(.white).frame(maxWidth: .infinity).padding(14)
+                .background(RoundedRectangle(cornerRadius: 12).fill(Color.ppGreen))
             }
-            Button(action: { app.proceedIfReady(); step = .done }) {
-                Text("Finish")
-                    .font(.custom("Montserrat", size: 20)).fontWeight(.black).foregroundColor(.white)
-                    .frame(maxWidth: .infinity).padding(.vertical, 16)
-                    .background(RoundedRectangle(cornerRadius: 12)
-                        .fill(app.cards.isEmpty ? Color.ppGreen.opacity(0.3) : Color(hex: "2ac33c")))
-                    .shadow(color: Color(hex: "0a3a0e").opacity(0.3), radius: 4, x: 0, y: 2)
-            }.disabled(app.cards.isEmpty)
-        }.padding(.horizontal)
+            .padding(.horizontal)
+            
+            Spacer()
+            
+            // Action buttons
+            HStack(spacing: 12) {
+                Button(action: { app.onboardingCompleted = true; step = .done }) {
+                    Text("Skip for now")
+                        .font(.custom("Montserrat", size: 18)).fontWeight(.bold).foregroundColor(.gray)
+                        .frame(maxWidth: .infinity).padding(.vertical, 16)
+                        .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.1)))
+                }
+                Button(action: { app.onboardingCompleted = true; step = .done }) {
+                    Text("Continue")
+                        .font(.custom("Montserrat", size: 18)).fontWeight(.black).foregroundColor(.white)
+                        .frame(maxWidth: .infinity).padding(.vertical, 16)
+                        .background(RoundedRectangle(cornerRadius: 12)
+                            .fill(app.cards.isEmpty ? Color.ppGreen.opacity(0.4) : Color(hex: "2ac33c")))
+                }
+                .disabled(app.cards.isEmpty)
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 20)
+        }
+        .sheet(isPresented: $showAddCard) {
+            AddCardView().environmentObject(app)
+        }
     }
 }
 
