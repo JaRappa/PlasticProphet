@@ -288,7 +288,7 @@ struct HomeManualAddView: View {
                             let last4 = String(digits.suffix(4))
                             let name = network.isEmpty ? "Manual Card ••••\(last4)" : "\(network) ••••\(last4)"
                             let card = Card(name: name, network: network.isEmpty ? "Unknown" : network, last4: last4, rewardSummary: rewards)
-                            app.cards.append(card)
+                            app.addCard(card)
                             dismiss()
                         }
                         .font(.custom("Montserrat", size: 16))

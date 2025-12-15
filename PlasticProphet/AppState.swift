@@ -42,20 +42,89 @@ final class AppState: ObservableObject {
     let mccMatcherService = MCCMatcherService.shared
     @Published var lastMCCMatch: MCCMatchResponse? = nil
     
+    // Card service for API-based card lookups
+    let cardService = CardService.shared
+    
     @Published var showingScanner: Bool = false
     @Published var showingSettings: Bool = false
     
     // 0 = Wallet, 1 = Home, 2 = Profile
     @Published var selectedTab: Int = 0
     
+    // MARK: - User Defaults Keys for Persistence
+    
+    private let cardsKey = "userCards"
+    
     // MARK: - Init
     
     init() {
+        // Load saved cards from UserDefaults
+        loadSavedCards()
+        
         // Connect geofence events → fetch normalized merchant data from backend
         locationService.onMerchantRegionEntered = { [weak self] merchantName in
             guard let self else { return }
             print("🔥 AppState received geofence enter for: \(merchantName)")
             self.fetchNormalizedMerchantData(merchantName: merchantName)
+        }
+    }
+    
+    // MARK: - Card Management
+    
+    /// Add a card to the wallet
+    func addCard(_ card: Card) {
+        // Check for duplicates by cardKey or name
+        if !cards.contains(where: {
+            ($0.cardKey != nil && $0.cardKey == card.cardKey) ||
+            $0.name == card.name
+        }) {
+            cards.append(card)
+            saveCards()
+            print("✅ Added card: \(card.name)")
+        } else {
+            print("⚠️ Card already exists: \(card.name)")
+        }
+    }
+    
+    /// Remove a card from the wallet
+    func removeCard(_ card: Card) {
+        cards.removeAll { $0.id == card.id }
+        saveCards()
+        print("🗑️ Removed card: \(card.name)")
+    }
+    
+    /// Remove card by index
+    func removeCard(at index: Int) {
+        guard index >= 0 && index < cards.count else { return }
+        let card = cards[index]
+        cards.remove(at: index)
+        saveCards()
+        print("🗑️ Removed card: \(card.name)")
+    }
+    
+    /// Save cards to UserDefaults
+    private func saveCards() {
+        do {
+            let data = try JSONEncoder().encode(cards)
+            UserDefaults.standard.set(data, forKey: cardsKey)
+            print("💾 Saved \(cards.count) cards to UserDefaults")
+        } catch {
+            print("❌ Failed to save cards: \(error)")
+        }
+    }
+    
+    /// Load cards from UserDefaults
+    private func loadSavedCards() {
+        guard let data = UserDefaults.standard.data(forKey: cardsKey) else {
+            print("📂 No saved cards found")
+            return
+        }
+        
+        do {
+            cards = try JSONDecoder().decode([Card].self, from: data)
+            print("📂 Loaded \(cards.count) cards from UserDefaults")
+        } catch {
+            print("❌ Failed to load saved cards: \(error)")
         }
     }
     

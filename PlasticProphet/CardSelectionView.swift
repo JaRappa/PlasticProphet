@@ -119,14 +119,14 @@ struct CardSelectionView: View {
     }
 
     private func isSelected(_ card: Card) -> Bool {
-        app.cards.contains(where: { $0.id == card.id })
+        app.cards.contains(where: { $0.name == card.name })
     }
 
     private func toggle(_ card: Card) {
-        if let idx = app.cards.firstIndex(where: { $0.id == card.id }) {
-            app.cards.remove(at: idx)
+        if let existingCard = app.cards.first(where: { $0.name == card.name }) {
+            app.removeCard(existingCard)
         } else {
-            app.cards.append(card)
+            app.addCard(card)
         }
     }
 }

@@ -331,7 +331,7 @@ struct AddCardsStepView: View {
                         guard digits.count >= 4 else { return }
                         let last4 = String(digits.suffix(4))
                         let name = manualNetwork.isEmpty ? "Manual Card ••••\(last4)" : "\(manualNetwork) ••••\(last4)"
-                        app.cards.append(Card(name: name, network: manualNetwork.isEmpty ? "Unknown" : manualNetwork, last4: last4, rewardSummary: manualRewards))
+                        app.addCard(Card(name: name, network: manualNetwork.isEmpty ? "Unknown" : manualNetwork, last4: last4, rewardSummary: manualRewards))
                         manualCardNumber = ""; manualNetwork = ""; manualRewards = ""; showManualEntry = false
                     }.disabled(manualCardNumber.filter { $0.isNumber }.count < 4)
                     Button("Cancel") { showManualEntry = false }.tint(.red)
