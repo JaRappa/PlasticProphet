@@ -4,8 +4,8 @@
 import Foundation
 import CoreLocation
 
-struct Card: Identifiable, Hashable {
-    let id = UUID()
+struct Card: Identifiable, Hashable, Codable {
+    var id = UUID()
     var name: String
     var network: String
     var last4: String
@@ -13,6 +13,7 @@ struct Card: Identifiable, Hashable {
     var cardKey: String?
     
     init(name: String, network: String, last4: String, rewardSummary: String, cardKey: String? = nil) {
+        self.id = UUID()
         self.name = name
         self.network = network
         self.last4 = last4
@@ -23,10 +24,12 @@ struct Card: Identifiable, Hashable {
 
 extension Card {
     init(from apiResponse: CardAPIResponse) {
+        self.id = UUID()
         self.name = apiResponse.cardName ?? "Unknown Card"
         self.network = apiResponse.cardNetwork ?? "Unknown"
         self.last4 = "••••"
         self.cardKey = apiResponse.cardKey
+        
         if let categories = apiResponse.spendBonusCategory, !categories.isEmpty {
             let top = categories.prefix(3).compactMap { cat -> String? in
                 guard let n = cat.spendBonusCategoryName, let m = cat.earnMultiplier else { return nil }

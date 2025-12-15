@@ -9,20 +9,40 @@ import SwiftUI
 @MainActor
 final class AppState: ObservableObject {
     
+    // MARK: - UserDefaults Keys
+    private enum Keys {
+        static let cards = "saved_cards"
+        static let onboardingCompleted = "onboarding_completed"
+        static let acceptedTos = "accepted_tos"
+        static let userFirstName = "user_first_name"
+        static let userLastName = "user_last_name"
+        static let userEmail = "user_email"
+    }
+    
     // MARK: - Authentication
     
     @Published var isAuthenticated: Bool = false
-    @Published var userFirstName: String = ""
-    @Published var userLastName: String = ""
-    @Published var userEmail: String = ""
+    @Published var userFirstName: String = "" {
+        didSet { UserDefaults.standard.set(userFirstName, forKey: Keys.userFirstName) }
+    }
+    @Published var userLastName: String = "" {
+        didSet { UserDefaults.standard.set(userLastName, forKey: Keys.userLastName) }
+    }
+    @Published var userEmail: String = "" {
+        didSet { UserDefaults.standard.set(userEmail, forKey: Keys.userEmail) }
+    }
     
     // Cognito Authentication service
     @Published var authService = CognitoAuthService()
     
     // MARK: - Onboarding & Permissions
     
-    @Published var onboardingCompleted: Bool = false
-    @Published var acceptedTos: Bool = false
+    @Published var onboardingCompleted: Bool = false {
+        didSet { UserDefaults.standard.set(onboardingCompleted, forKey: Keys.onboardingCompleted) }
+    }
+    @Published var acceptedTos: Bool = false {
+        didSet { UserDefaults.standard.set(acceptedTos, forKey: Keys.acceptedTos) }
+    }
     @Published var permissions = PermissionsStatus()
     
     // MARK: - Location
@@ -31,7 +51,9 @@ final class AppState: ObservableObject {
     
     // MARK: - App Data
     
-    @Published var cards: [Card] = []
+    @Published var cards: [Card] = [] {
+        didSet { saveCards() }
+    }
     @Published var latestRecommendation: Recommendation? = nil
     
     // Backend service for merchant data
@@ -51,11 +73,68 @@ final class AppState: ObservableObject {
     // MARK: - Init
     
     init() {
+        // Load persisted data first
+        loadPersistedData()
+        
+        // Check if user has a valid session
+        authService.checkSession()
+        isAuthenticated = authService.isAuthenticated
+        
         // Connect geofence events → fetch normalized merchant data from backend
         locationService.onMerchantRegionEntered = { [weak self] merchantName in
             guard let self else { return }
             print("🔥 AppState received geofence enter for: \(merchantName)")
             self.fetchNormalizedMerchantData(merchantName: merchantName)
+        }
+        
+        print("📱 AppState initialized - isAuthenticated: \(isAuthenticated), onboardingCompleted: \(onboardingCompleted), cards: \(cards.count)")
+    }
+    
+    // MARK: - Persistence
+    
+    private func loadPersistedData() {
+        // Load onboarding state (without triggering didSet)
+        let savedOnboarding = UserDefaults.standard.bool(forKey: Keys.onboardingCompleted)
+        let savedTos = UserDefaults.standard.bool(forKey: Keys.acceptedTos)
+        let savedFirstName = UserDefaults.standard.string(forKey: Keys.userFirstName) ?? ""
+        let savedLastName = UserDefaults.standard.string(forKey: Keys.userLastName) ?? ""
+        let savedEmail = UserDefaults.standard.string(forKey: Keys.userEmail) ?? ""
+        
+        // Set values directly to avoid triggering didSet during load
+        _onboardingCompleted = Published(initialValue: savedOnboarding)
+        _acceptedTos = Published(initialValue: savedTos)
+        _userFirstName = Published(initialValue: savedFirstName)
+        _userLastName = Published(initialValue: savedLastName)
+        _userEmail = Published(initialValue: savedEmail)
+        
+        // Load cards
+        loadCards()
+        
+        print("📂 Loaded persisted data - onboarding: \(savedOnboarding), cards: \(cards.count)")
+    }
+    
+    private func saveCards() {
+        do {
+            let data = try JSONEncoder().encode(cards)
+            UserDefaults.standard.set(data, forKey: Keys.cards)
+            print("💾 Saved \(cards.count) cards to UserDefaults")
+        } catch {
+            print("❌ Failed to save cards: \(error)")
+        }
+    }
+    
+    private func loadCards() {
+        guard let data = UserDefaults.standard.data(forKey: Keys.cards) else {
+            print("ℹ️ No saved cards found")
+            return
+        }
+        
+        do {
+            let loadedCards = try JSONDecoder().decode([Card].self, from: data)
+            _cards = Published(initialValue: loadedCards)
+            print("📂 Loaded \(loadedCards.count) cards from UserDefaults")
+        } catch {
+            print("❌ Failed to load cards: \(error)")
         }
     }
     
@@ -129,6 +208,22 @@ final class AppState: ObservableObject {
     
     // MARK: - Mock / Test Data Helpers
     
+    /// Adds a card to the user's wallet
+    func addCard(_ card: Card) {
+        if !cards.contains(where: { $0.cardKey == card.cardKey || $0.name == card.name }) {
+            cards.append(card)
+            print("✅ Added card to wallet: \(card.name)")
+        } else {
+            print("⚠️ Card already exists: \(card.name)")
+        }
+    }
+    
+    /// Removes a card from the user's wallet
+    func removeCard(_ card: Card) {
+        cards.removeAll { $0.id == card.id }
+        print("🗑️ Removed card: \(card.name)")
+    }
+    
     /// Adds a sample card to the user's wallet for testing / onboarding.
     func addMockCard(network: String) {
         let mockCard = Card(
@@ -139,19 +234,6 @@ final class AppState: ObservableObject {
         )
         
         cards.append(mockCard)
-    }
-    
-    /// Add a card to the user's wallet
-    func addCard(_ card: Card) {
-        // Avoid duplicates
-        if !cards.contains(where: { $0.name == card.name }) {
-            cards.append(card)
-        }
-    }
-    
-    /// Remove a card from the user's wallet
-    func removeCard(_ card: Card) {
-        cards.removeAll { $0.name == card.name }
     }
     
     // MARK: - Recommendations
