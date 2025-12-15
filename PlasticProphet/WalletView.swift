@@ -26,7 +26,6 @@ struct WalletView: View {
                     .tracking(-0.5)
 
                 if app.cards.isEmpty {
-                    // empty state with dotted card
                     VStack(alignment: .leading, spacing: 8) {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
@@ -41,10 +40,8 @@ struct WalletView: View {
                             )
                     }
                     .padding(.horizontal, 16)
-
                     Spacer()
                 } else {
-                    // show cards with swipe to delete
                     List {
                         ForEach(app.cards) { card in
                             WalletCardRow(card: card) {
@@ -69,14 +66,11 @@ struct WalletView: View {
             }
             .padding(16)
             
-            // FAB Button - directly opens AddCardView
             VStack {
                 Spacer()
                 HStack {
                     Spacer()
-                    Button(action: {
-                        showAddCard = true
-                    }) {
+                    Button(action: { showAddCard = true }) {
                         ZStack {
                             Circle()
                                 .fill(
@@ -110,13 +104,9 @@ struct WalletView: View {
             }
         }
         .alert("Remove Card", isPresented: $showDeleteConfirmation) {
-            Button("Cancel", role: .cancel) {
-                cardToDelete = nil
-            }
+            Button("Cancel", role: .cancel) { cardToDelete = nil }
             Button("Remove", role: .destructive) {
-                if let card = cardToDelete {
-                    removeCard(card)
-                }
+                if let card = cardToDelete { removeCard(card) }
                 cardToDelete = nil
             }
         } message: {
@@ -125,9 +115,25 @@ struct WalletView: View {
     }
     
     private func removeCard(_ card: Card) {
-        withAnimation {
-            app.removeCard(card)
-        }
+        withAnimation { app.removeCard(card) }
+    }
+}
+
+// MARK: - Card Image Helper
+
+struct CardImageHelper {
+    static func imageNameForCardKey(_ cardKey: String) -> String? {
+        let key = cardKey.lowercased()
+        if key.contains("amex") || key.contains("american-express") { return "Amex" }
+        if key.contains("chase") { return "Chase" }
+        if key.contains("discover") { return "Discover" }
+        if key.contains("apple") || key.contains("goldmansachs") { return "Apple" }
+        if key.contains("capitalone") || key.contains("capital-one") { return "CapitalOne" }
+        if key.contains("wellsfargo") || key.contains("wells-fargo") { return "WellsFargo" }
+        if key.contains("target") || key.contains("tdbank") { return "Target" }
+        if key.contains("abbybank") || key.contains("abby-bank") { return "AbbyBank" }
+        if key.contains("americanairlines") || key.contains("aacfu") { return "AmericanAirlines" }
+        return nil
     }
 }
 
@@ -137,43 +143,37 @@ struct WalletCardRow: View {
     let card: Card
     let onTap: () -> Void
     
-    private var networkColor: Color {
-        switch card.network.lowercased() {
-        case "visa":
-            return Color.visaBlue
-        case "mastercard":
-            return Color.mastercardRed
-        case "amex", "american express":
-            return Color.amexBlue
-        case "discover":
-            return Color.discoverOrange
-        default:
-            return Color.ppGreen
-        }
+    private var cardImageName: String? {
+        guard let cardKey = card.cardKey else { return nil }
+        return CardImageHelper.imageNameForCardKey(cardKey)
     }
     
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 14) {
-                // Card Icon
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(networkColor.opacity(0.15))
+                if let imageName = cardImageName, let uiImage = UIImage(named: imageName) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: 50, height: 50)
-                    
-                    Image(systemName: "creditcard.fill")
-                        .font(.system(size: 20))
-                        .foregroundColor(networkColor)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                } else {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.ppGreen.opacity(0.15))
+                            .frame(width: 50, height: 50)
+                        Image(systemName: "creditcard.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.ppGreen)
+                    }
                 }
                 
-                // Card Info
                 VStack(alignment: .leading, spacing: 4) {
                     Text(card.name)
                         .font(.custom("Montserrat", size: 16))
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
-                        .lineLimit(1)
-                    
+                        .lineLimit(2)
                     Text(card.rewardSummary)
                         .font(.custom("Montserrat", size: 12))
                         .foregroundColor(.secondary)
@@ -181,18 +181,6 @@ struct WalletCardRow: View {
                 }
                 
                 Spacer()
-                
-                // Last 4 digits
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text("••••\(card.last4)")
-                        .font(.custom("Montserrat", size: 14))
-                        .fontWeight(.medium)
-                        .foregroundColor(.primary)
-                    
-                    Text(card.network)
-                        .font(.custom("Montserrat", size: 11))
-                        .foregroundColor(.secondary)
-                }
                 
                 Image(systemName: "chevron.right")
                     .font(.system(size: 12, weight: .semibold))
@@ -214,86 +202,58 @@ struct CardWalletDetailView: View {
     let onRemove: () -> Void
     @Environment(\.dismiss) private var dismiss
     
-    private var networkColor: Color {
-        switch card.network.lowercased() {
-        case "visa":
-            return Color.visaBlue
-        case "mastercard":
-            return Color.mastercardRed
-        case "amex", "american express":
-            return Color.amexBlue
-        case "discover":
-            return Color.discoverOrange
-        default:
-            return Color.ppGreen
-        }
+    private var cardImageName: String? {
+        guard let cardKey = card.cardKey else { return nil }
+        return CardImageHelper.imageNameForCardKey(cardKey)
     }
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Card Visual
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(
-                                LinearGradient(
-                                    colors: [networkColor, networkColor.opacity(0.7)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .frame(height: 200)
-                        
-                        VStack(alignment: .leading, spacing: 16) {
-                            HStack {
-                                Text(card.cardIssuer ?? card.network)
-                                    .font(.custom("Montserrat", size: 14))
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.white.opacity(0.8))
-                                Spacer()
-                                if let fee = card.annualFee {
-                                    Text(fee > 0 ? "$\(Int(fee))/yr" : "No Fee")
-                                        .font(.custom("Montserrat", size: 12))
-                                        .fontWeight(.medium)
-                                        .foregroundColor(.white.opacity(0.9))
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 4)
-                                        .background(Color.white.opacity(0.2))
-                                        .cornerRadius(6)
+                    VStack(spacing: 16) {
+                        if let imageName = cardImageName, let uiImage = UIImage(named: imageName) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 220)
+                                .clipShape(RoundedRectangle(cornerRadius: 16))
+                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+                        } else {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(LinearGradient(colors: [Color.ppGreen, Color.ppGreen.opacity(0.7)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .frame(height: 200)
+                                VStack(alignment: .leading, spacing: 16) {
+                                    Spacer()
+                                    Text(card.name)
+                                        .font(.custom("Montserrat", size: 20))
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
                                 }
-                            }
-                            
-                            Spacer()
-                            
-                            Text("•••• •••• •••• \(card.last4)")
-                                .font(.custom("Montserrat", size: 20))
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .tracking(2)
-                            
-                            Text(card.name)
-                                .font(.custom("Montserrat", size: 16))
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                            
-                            HStack {
-                                Text(card.network)
-                                    .font(.custom("Montserrat", size: 14))
-                                    .foregroundColor(.white.opacity(0.9))
-                                Spacer()
+                                .padding(24)
                             }
                         }
-                        .padding(24)
+                        
+                        Text(card.name)
+                            .font(.custom("Montserrat", size: 22))
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.center)
+                        
+                        if let fee = card.annualFee {
+                            Text(fee > 0 ? "$\(Int(fee)) Annual Fee" : "No Annual Fee")
+                                .font(.custom("Montserrat", size: 14))
+                                .foregroundColor(.secondary)
+                        }
                     }
                     .padding(.horizontal, 20)
                     
-                    // Rewards Summary
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Rewards Summary")
                             .font(.custom("Montserrat", size: 18))
                             .fontWeight(.semibold)
-                        
                         Text(card.rewardSummary)
                             .font(.custom("Montserrat", size: 15))
                             .foregroundColor(.secondary)
@@ -304,53 +264,25 @@ struct CardWalletDetailView: View {
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     
-                    // Bonus Categories (if available)
                     if let categories = card.spendBonusCategories, !categories.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Bonus Categories")
                                 .font(.custom("Montserrat", size: 18))
                                 .fontWeight(.semibold)
-                            
                             ForEach(categories.prefix(6), id: \.name) { category in
                                 HStack {
                                     Text(category.name)
                                         .font(.custom("Montserrat", size: 15))
-                                    
                                     Spacer()
-                                    
                                     Text("\(Int(category.multiplier))x")
                                         .font(.custom("Montserrat", size: 15))
                                         .fontWeight(.semibold)
                                         .foregroundColor(.ppGreen)
                                 }
                                 .padding(.vertical, 8)
-                                
                                 if category.name != categories.prefix(6).last?.name {
                                     Divider()
                                 }
-                            }
-                        }
-                        .padding(16)
-                        .background(Color(.systemBackground))
-                        .cornerRadius(12)
-                        .padding(.horizontal, 20)
-                    }
-                    
-                    // Card Info
-                    if card.cardKey != nil || card.cardIssuer != nil {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Card Information")
-                                .font(.custom("Montserrat", size: 18))
-                                .fontWeight(.semibold)
-                            
-                            if let issuer = card.cardIssuer {
-                                InfoRow(label: "Issuer", value: issuer)
-                            }
-                            
-                            InfoRow(label: "Network", value: card.network)
-                            
-                            if let fee = card.annualFee {
-                                InfoRow(label: "Annual Fee", value: fee > 0 ? "$\(Int(fee))" : "None")
                             }
                         }
                         .padding(16)
@@ -368,10 +300,8 @@ struct CardWalletDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                    .foregroundColor(.ppGreen)
+                    Button("Done") { dismiss() }
+                        .foregroundColor(.ppGreen)
                 }
             }
             .safeAreaInset(edge: .bottom) {
@@ -388,34 +318,13 @@ struct CardWalletDetailView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.red)
-                    )
+                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.red))
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
                 .background(Color(.systemBackground))
             }
         }
-    }
-}
-
-struct InfoRow: View {
-    let label: String
-    let value: String
-    
-    var body: some View {
-        HStack {
-            Text(label)
-                .font(.custom("Montserrat", size: 14))
-                .foregroundColor(.secondary)
-            Spacer()
-            Text(value)
-                .font(.custom("Montserrat", size: 14))
-                .fontWeight(.medium)
-        }
-        .padding(.vertical, 4)
     }
 }
 
