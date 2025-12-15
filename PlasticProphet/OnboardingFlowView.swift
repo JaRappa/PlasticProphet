@@ -178,27 +178,104 @@ struct IntroStepView: View {
 struct TOSStepView: View {
     @Binding var step: OnboardingFlowView.Step
     @EnvironmentObject var app: AppState
+    @State private var isOver18: Bool = false
+    @State private var acceptedPrivacyPolicy: Bool = false
+    
+    private var canContinue: Bool {
+        app.acceptedTos && isOver18 && acceptedPrivacyPolicy
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
-            Text("Terms of Service").font(.custom("Montserrat", size: 28)).fontWeight(.bold).foregroundColor(.black).tracking(-1.5).padding(.top, 20).padding(.bottom, 16)
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Terms and Conditions").font(.custom("Montserrat", size: 18)).fontWeight(.semibold)
-                    Text("By using PlasticProphet you agree to our terms and conditions.").font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
-                    Text("1. Acceptance of Terms").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).padding(.top, 8)
-                    Text("Lorem ipsum dolor sit amet.").font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
-                }.padding()
-            }.background(Color.gray.opacity(0.05)).cornerRadius(12).padding(.horizontal)
+            Text("Terms of Service")
+                .font(.custom("Montserrat", size: 28)).fontWeight(.bold)
+                .foregroundColor(.black).tracking(-1.5)
+                .padding(.top, 20).padding(.bottom, 16)
+            tosScrollView
             Spacer()
-            VStack(spacing: 16) {
-                Toggle("I accept Terms of Service", isOn: $app.acceptedTos).font(.custom("Montserrat", size: 20)).fontWeight(.medium).tint(Color(hex: "2ac33c")).padding(.horizontal)
-                Button(action: { step = .permissions }) {
-                    Text("Continue").font(.custom("Montserrat", size: 20)).fontWeight(.black).foregroundColor(.white)
-                        .frame(maxWidth: .infinity).padding(16)
-                        .background(RoundedRectangle(cornerRadius: 12).fill(app.acceptedTos ? Color(hex: "2ac33c") : Color.ppGreen.opacity(0.4)))
-                }.disabled(!app.acceptedTos).padding(.horizontal).padding(.bottom, 20)
-            }
+            tosFooter
         }.padding(.vertical)
+    }
+    
+    private var tosScrollView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Terms and Conditions").font(.custom("Montserrat", size: 18)).fontWeight(.semibold).foregroundColor(.black)
+                Text("Last Updated: December 15, 2025")
+                    .font(.custom("Montserrat", size: 12)).foregroundColor(.secondary).italic()
+                
+                Text("Please read these Terms of Service carefully before using PlasticProphet.")
+                    .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                
+                Group {
+                    Text("1. Acceptance of Terms").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("By accessing or using PlasticProphet, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using this application.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                    
+                    Text("2. Description of Service").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("PlasticProphet provides credit card recommendation services based on your location and merchant category codes (MCC). The app suggests which credit card may offer the best rewards for purchases at nearby establishments. These recommendations are for informational purposes only and should not be considered financial advice.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                    
+                    Text("3. User Responsibilities").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account. You agree to provide accurate, current, and complete information during registration.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                }
+                
+                Group {
+                    Text("4. Location Services").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("PlasticProphet uses location services to provide relevant recommendations. By enabling location services, you consent to the collection and use of your location data as described in our Privacy Policy.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                    
+                    Text("5. No Financial Advice").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("The information provided by PlasticProphet is for general informational purposes only. It is not intended to be financial, legal, or professional advice. Always consult with qualified professionals before making financial decisions.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                    
+                    Text("6. Limitation of Liability").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("In no event shall PlasticProphet be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the service.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                    
+                    Text("7. Contact Us").font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.black).padding(.top, 8)
+                    Text("If you have any questions about these Terms, please contact us at support@plasticprophet.com.")
+                        .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
+                }
+            }.padding()
+        }.background(Color.gray.opacity(0.05)).cornerRadius(12).padding(.horizontal)
+    }
+    
+    private var tosFooter: some View {
+        VStack(spacing: 12) {
+            Toggle(isOn: $isOver18) {
+                Text("I confirm that I am 18 years or older")
+                    .font(.custom("Montserrat", size: 14)).fontWeight(.medium)
+            }
+            .tint(Color(hex: "2ac33c")).padding(.horizontal)
+            
+            HStack {
+                Toggle(isOn: $acceptedPrivacyPolicy) {
+                    HStack(spacing: 4) {
+                        Text("I agree to the")
+                            .font(.custom("Montserrat", size: 14)).fontWeight(.medium)
+                        Link("Privacy Policy", destination: URL(string: "https://plasticprophet.com/privacy")!)
+                            .font(.custom("Montserrat", size: 14)).fontWeight(.semibold)
+                            .foregroundColor(Color(hex: "2ac33c"))
+                    }
+                }
+                .tint(Color(hex: "2ac33c"))
+            }
+            .padding(.horizontal)
+            
+            Toggle("I accept the Terms of Service", isOn: $app.acceptedTos)
+                .font(.custom("Montserrat", size: 14)).fontWeight(.medium)
+                .tint(Color(hex: "2ac33c")).padding(.horizontal)
+            
+            Button(action: { step = .permissions }) {
+                Text("Continue")
+                    .font(.custom("Montserrat", size: 20)).fontWeight(.black)
+                    .foregroundColor(.white).frame(maxWidth: .infinity).padding(16)
+                    .background(RoundedRectangle(cornerRadius: 12)
+                        .fill(canContinue ? Color(hex: "2ac33c") : Color.ppGreen.opacity(0.4)))
+            }.disabled(!canContinue).padding(.horizontal).padding(.bottom, 20)
+        }
     }
 }
 
