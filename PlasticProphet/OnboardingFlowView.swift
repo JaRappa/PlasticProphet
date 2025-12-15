@@ -195,11 +195,11 @@ struct IntroStepView: View {
     @Binding var step: OnboardingFlowView.Step
     var body: some View {
         ZStack {
-            Color.clear
-            VStack(spacing: 20) {
-                VStack(spacing: 8) {
-                    Text("PlasticProphet")
-                        .font(.custom("Montserrat", size: 36)).fontWeight(.black)
+            Color.white
+            VStack(spacing: 40) {
+                VStack(spacing: 12) {
+                    Text("Welcome to")
+                        .font(.custom("Montserrat", size: 38)).fontWeight(.black)
                         .foregroundColor(.black).multilineTextAlignment(.center).tracking(-1.5)
                         .shadow(color: Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.25), radius: 2, x: 0, y: 4)
                         .minimumScaleFactor(0.5).lineLimit(1)
@@ -297,7 +297,27 @@ struct AddCardsStepView: View {
                 ScrollView {
                     VStack(spacing: 12) {
                         ForEach(app.cards) { card in
-                            HStack {
+                            HStack(spacing: 12) {
+                                // Card image
+                                if let cardKey = card.cardKey,
+                                   let imageName = CardImageHelper.imageNameForCardKey(cardKey),
+                                   let uiImage = UIImage(named: imageName) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 44, height: 44)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                } else {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color.ppGreen.opacity(0.15))
+                                            .frame(width: 44, height: 44)
+                                        Image(systemName: "creditcard.fill")
+                                            .font(.system(size: 18))
+                                            .foregroundColor(.ppGreen)
+                                    }
+                                }
+                                
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(card.name)
                                         .font(.custom("Montserrat", size: 16))
