@@ -1,0 +1,42 @@
+[
+  {
+    "cardName": "american express gold",
+    "cardKey": "amex-gold"
+  },
+  {
+    "cardName": "discover it",
+    "cardKey": "discover-biz-itbusiness"
+  },
+  {
+    "cardName": "apple card",
+    "cardKey": "goldmansachs-applecard"
+  },
+  {
+    "cardName": "Chase Sapphire Preferred\u00ae Credit Card",
+    "cardKey": "chase-sapphirepreferred"
+  },
+  {
+    "cardName": "Chase Freedom Unlimited\u00ae Credit Card",
+    "cardKey": "chase-freedomunlimited"
+  },
+  {
+    "cardName": "Capital One Walmart Rewards\u00ae Mastercard\u00ae",
+    "cardKey": "capitalone-walmartrewards"
+  },
+  {
+    "cardName": "American Airlines Credit Union Visa Business Platinum",
+    "cardKey": "aacfu-biz-plat"
+  },
+  {
+    "cardName": "Abby Bank Visa\u00ae Business",
+    "cardKey": "abbybank-biz-business"
+  },
+  {
+    "cardName": "Target Circle\u2122\ufe0f Credit Card",
+    "cardKey": "tdbank-targetredcard"
+  },
+  {
+    "cardName": "Wells Fargo Business Elite Signature",
+    "cardKey": "wellsfargo-biz-elite"
+  }
+]
