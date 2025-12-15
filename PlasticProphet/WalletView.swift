@@ -3,39 +3,26 @@ import SwiftUI
 
 struct WalletView: View {
     @EnvironmentObject var app: AppState
-    @State private var showFABMenu: Bool = false
-    @State private var showManualEntry: Bool = false
     @State private var showAddCard: Bool = false
+    @State private var showManualEntry: Bool = false
     @State private var selectedCardForDetail: Card? = nil
-    @State private var showDeleteConfirmation: Bool = false
-    @State private var cardToDelete: Card? = nil
 
     var body: some View {
         ZStack {
             mainContent
-            if showFABMenu { backdrop }
-            fabMenu
+            fabButton
         }
         .navigationBarHidden(true)
+        .sheet(isPresented: $showAddCard) {
+            AddCardView().environmentObject(app)
+        }
         .sheet(isPresented: $showManualEntry) {
             NavigationStack {
                 ManualAddView(showManual: $showManualEntry).environmentObject(app)
             }
         }
-        .sheet(isPresented: $showAddCard) {
-            AddCardView().environmentObject(app)
-        }
         .sheet(item: $selectedCardForDetail) { card in
-            CardWalletDetailView(card: card) { removeCard(card) }
-        }
-        .alert("Remove Card", isPresented: $showDeleteConfirmation) {
-            Button("Cancel", role: .cancel) { cardToDelete = nil }
-            Button("Remove", role: .destructive) {
-                if let card = cardToDelete { removeCard(card) }
-                cardToDelete = nil
-            }
-        } message: {
-            Text("Are you sure you want to remove \(cardToDelete?.name ?? "this card") from your wallet?")
+            CardWalletDetailView(card: card) { app.removeCard(card) }
         }
     }
     
@@ -43,7 +30,12 @@ struct WalletView: View {
         VStack(alignment: .leading, spacing: 18) {
             Text("Wallet").font(.custom("Montserrat", size: 32)).fontWeight(.bold).foregroundColor(.black).padding(.top, 20).tracking(-1.5)
             Text("Your Cards").font(.custom("Montserrat", size: 20)).fontWeight(.semibold).foregroundColor(.ppGreen).tracking(-0.5)
-            if app.cards.isEmpty { emptyState } else { cardsList }
+            
+            if app.cards.isEmpty {
+                emptyState
+            } else {
+                cardsList
+            }
         }
         .padding(16)
     }
@@ -68,53 +60,27 @@ struct WalletView: View {
         }
     }
     
-    private var backdrop: some View {
-        Color.black.opacity(0.3).ignoresSafeArea()
-            .onTapGesture { withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { showFABMenu = false } }
-            .transition(.opacity)
-    }
-    
-    private var fabMenu: some View {
+    private var fabButton: some View {
         VStack {
             Spacer()
             HStack {
                 Spacer()
-                VStack(alignment: .trailing, spacing: 16) {
-                    if showFABMenu {
-                        fabMenuItem(icon: "magnifyingglass", title: "Search Cards") { withAnimation { showFABMenu = false }; showAddCard = true }
-                        fabMenuItem(icon: "pencil", title: "Manual Entry") { withAnimation { showFABMenu = false }; showManualEntry = true }
+                Button(action: { showAddCard = true }) {
+                    ZStack {
+                        Circle()
+                            .fill(LinearGradient(colors: [Color.ppGreen, Color.ppGreen.opacity(0.8)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                            .frame(width: 60, height: 60)
+                            .shadow(color: Color.ppShadow.opacity(0.4), radius: 12, x: 0, y: 6)
+                        Image(systemName: "plus")
+                            .font(.system(size: 24, weight: .semibold))
+                            .foregroundColor(.white)
                     }
-                    mainFABButton
-                }.padding(.trailing, 20).padding(.bottom, 100)
-            }
-        }
-    }
-    
-    private func fabMenuItem(icon: String, title: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack(spacing: 12) {
-                Text(title).font(.custom("Montserrat", size: 14)).fontWeight(.semibold).foregroundColor(.primary)
-                ZStack {
-                    Circle().fill(Color.ppGreen).frame(width: 44, height: 44)
-                    Image(systemName: icon).font(.system(size: 16, weight: .semibold)).foregroundColor(.white)
                 }
-            }
-            .padding(.leading, 16).padding(.trailing, 4).padding(.vertical, 4)
-            .background(Color(.systemBackground)).cornerRadius(24)
-            .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
-        }.transition(.scale.combined(with: .opacity))
-    }
-    
-    private var mainFABButton: some View {
-        Button(action: { withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { showFABMenu.toggle() } }) {
-            ZStack {
-                Circle().fill(LinearGradient(colors: [Color.ppGreen, Color.ppGreen.opacity(0.8)], startPoint: .topLeading, endPoint: .bottomTrailing)).frame(width: 60, height: 60).shadow(color: Color.ppShadow.opacity(0.4), radius: 12, x: 0, y: 6)
-                Image(systemName: showFABMenu ? "xmark" : "plus").font(.system(size: 24, weight: .semibold)).foregroundColor(.white).rotationEffect(.degrees(showFABMenu ? 90 : 0))
+                .padding(.trailing, 20)
+                .padding(.bottom, 100)
             }
         }
     }
-    
-    private func removeCard(_ card: Card) { withAnimation { app.removeCard(card) } }
 }
 
 struct ManualAddView: View {
@@ -150,24 +116,39 @@ struct WalletCardRow: View {
     let card: Card
     let onTap: () -> Void
     
+    private var logoName: String? {
+        let name = card.name.lowercased()
+        let key = (card.cardKey ?? "").lowercased()
+        if name.contains("chase") || key.contains("chase") { return "Chase" }
+        if name.contains("amex") || name.contains("american express") || key.contains("amex") { return "Amex" }
+        if name.contains("capital one") || key.contains("capitalone") { return "CapitalOne" }
+        if name.contains("discover") || key.contains("discover") { return "Discover" }
+        if name.contains("wells fargo") || key.contains("wellsfargo") { return "WellsFargo" }
+        if name.contains("apple") || key.contains("apple") { return "Apple" }
+        if name.contains("target") || key.contains("target") { return "Target" }
+        return nil
+    }
+    
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 14) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8).fill(Color.ppGreen.opacity(0.15)).frame(width: 50, height: 50)
-                    Image(systemName: "creditcard.fill").font(.system(size: 20)).foregroundColor(.ppGreen)
+                if let logo = logoName {
+                    Image(logo).resizable().scaledToFit().frame(width: 50, height: 50).clipShape(RoundedRectangle(cornerRadius: 8))
+                } else {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8).fill(Color.ppGreen.opacity(0.15)).frame(width: 50, height: 50)
+                        Image(systemName: "creditcard.fill").font(.system(size: 20)).foregroundColor(.ppGreen)
+                    }
                 }
                 VStack(alignment: .leading, spacing: 4) {
                     Text(card.name).font(.custom("Montserrat", size: 16)).fontWeight(.semibold).lineLimit(1)
                     Text(card.rewardSummary).font(.custom("Montserrat", size: 12)).foregroundColor(.secondary).lineLimit(1)
                 }
                 Spacer()
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text("••••\(card.last4)").font(.custom("Montserrat", size: 14)).fontWeight(.medium)
-                    Text(card.network).font(.custom("Montserrat", size: 11)).foregroundColor(.secondary)
-                }
                 Image(systemName: "chevron.right").font(.system(size: 12, weight: .semibold)).foregroundColor(.gray)
-            }.padding(14).background(Color(.systemBackground)).cornerRadius(12).shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+            }
+            .padding(14).background(Color(.systemBackground)).cornerRadius(12)
+            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
         }.buttonStyle(.plain).padding(.horizontal)
     }
 }
@@ -196,7 +177,9 @@ struct CardWalletDetailView: View {
     
     private var cardVisual: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 16).fill(LinearGradient(colors: [Color.ppGreen, Color.ppGreen.opacity(0.7)], startPoint: .topLeading, endPoint: .bottomTrailing)).frame(height: 200)
+            RoundedRectangle(cornerRadius: 16)
+                .fill(LinearGradient(colors: [Color.ppGreen, Color.ppGreen.opacity(0.7)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .frame(height: 200)
             VStack(alignment: .leading, spacing: 16) {
                 Text(card.network).font(.custom("Montserrat", size: 14)).foregroundColor(.white.opacity(0.8))
                 Spacer()
@@ -217,7 +200,8 @@ struct CardWalletDetailView: View {
         Button { onRemove(); dismiss() } label: {
             HStack { Image(systemName: "trash"); Text("Remove from Wallet") }
                 .font(.custom("Montserrat", size: 16)).fontWeight(.semibold).foregroundColor(.white)
-                .frame(maxWidth: .infinity).padding(16).background(RoundedRectangle(cornerRadius: 12).fill(Color.red))
+                .frame(maxWidth: .infinity).padding(16)
+                .background(RoundedRectangle(cornerRadius: 12).fill(Color.red))
         }.padding(.horizontal, 20).padding(.vertical, 12).background(Color(.systemBackground))
     }
 }
