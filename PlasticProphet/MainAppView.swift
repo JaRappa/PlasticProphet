@@ -107,103 +107,11 @@ struct HomeView: View {
                                 .frame(maxWidth: .infinity)
                                 .padding(.horizontal)
                         }
-                        
-                        // Extra padding for FAB
-                        Color.clear.frame(height: 80)
                     }
                     .padding(.vertical)
                 }
                 .background(Color(.systemGroupedBackground))
-                
-                // Backdrop when menu is open - behind everything
-                if showFABMenu {
-                    Color.black.opacity(0.3)
-                        .ignoresSafeArea()
-                        .onTapGesture {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                showFABMenu = false
-                            }
-                        }
-                        .transition(.opacity)
-                }
-                
-                // FAB Menu - on top
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: 16) {
-                            // Menu options
-                            if showFABMenu {
-                                FABMenuItem(
-                                    icon: "magnifyingglass",
-                                    title: "Search Cards",
-                                    color: Color.ppGreen
-                                ) {
-                                    withAnimation { showFABMenu = false }
-                                    showCardSelection = true
-                                }
-                                .transition(.scale.combined(with: .opacity))
-                                
-                                FABMenuItem(
-                                    icon: "camera.fill",
-                                    title: "Scan Card",
-                                    color: Color.ppGreen
-                                ) {
-                                    withAnimation { showFABMenu = false }
-                                    app.showingScanner = true
-                                }
-                                .transition(.scale.combined(with: .opacity))
-                                
-                                FABMenuItem(
-                                    icon: "pencil",
-                                    title: "Manual Entry",
-                                    color: Color.ppGreen
-                                ) {
-                                    withAnimation { showFABMenu = false }
-                                    showManualEntry = true
-                                }
-                                .transition(.scale.combined(with: .opacity))
-                            }
-                            
-                            // Main FAB Button
-                            Button(action: {
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                    showFABMenu.toggle()
-                                }
-                            }) {
-                                ZStack {
-                                    Circle()
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [Color.ppGreen, Color.ppGreen.opacity(0.8)],
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            )
-                                        )
-                                        .frame(width: 60, height: 60)
-                                        .shadow(color: Color.ppShadow.opacity(0.4), radius: 12, x: 0, y: 6)
-                                    
-                                    Image(systemName: showFABMenu ? "xmark" : "plus")
-                                        .font(.system(size: 24, weight: .semibold))
-                                        .foregroundColor(.white)
-                                        .rotationEffect(.degrees(showFABMenu ? 90 : 0))
-                                }
-                            }
-                        }
-                        .padding(.trailing, 20)
-                        .padding(.bottom, 100)
-                    }
-                }
             }
-        }
-        .sheet(isPresented: $showManualEntry) {
-            HomeManualAddView(showManual: $showManualEntry)
-                .environmentObject(app)
-        }
-        .sheet(isPresented: $showCardSelection) {
-            CardSelectionView()
-                .environmentObject(app)
         }
     }
 }
@@ -288,7 +196,7 @@ struct HomeManualAddView: View {
                             let last4 = String(digits.suffix(4))
                             let name = network.isEmpty ? "Manual Card ••••\(last4)" : "\(network) ••••\(last4)"
                             let card = Card(name: name, network: network.isEmpty ? "Unknown" : network, last4: last4, rewardSummary: rewards)
-                            app.addCard(card)
+                            app.cards.append(card)
                             dismiss()
                         }
                         .font(.custom("Montserrat", size: 16))
