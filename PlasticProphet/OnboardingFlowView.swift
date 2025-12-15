@@ -8,10 +8,6 @@ struct OnboardingFlowView: View {
     enum Step { case intro, tos, permissions, addCards, done }
     @EnvironmentObject var app: AppState
     @State private var step: Step = .intro
-    @State private var showManualEntry: Bool = false
-    @State private var manualCardNumber: String = ""
-    @State private var manualNetwork: String = ""
-    @State private var manualRewards: String = ""
     @State private var locationStatus: CLAuthorizationStatus = .notDetermined
     @State private var locationCheckTimer: Timer?
 
@@ -21,7 +17,7 @@ struct OnboardingFlowView: View {
             case .intro: IntroStepView(step: $step)
             case .tos: TOSStepView(step: $step).environmentObject(app)
             case .permissions: permissionsStepContent
-            case .addCards: AddCardsStepView(step: $step, showManualEntry: $showManualEntry, manualCardNumber: $manualCardNumber, manualNetwork: $manualNetwork, manualRewards: $manualRewards).environmentObject(app)
+            case .addCards: AddCardsStepView(step: $step).environmentObject(app)
             case .done: DoneStepView().environmentObject(app)
             }
             if step != .done { Spacer(minLength: 0) }
@@ -36,7 +32,10 @@ struct OnboardingFlowView: View {
             app.markPermissions(location: newStatus == .authorizedAlways)
             if newStatus == .authorizedAlways { stopLocationStatusPolling() }
         }
-        .onAppear { locationStatus = app.locationService.authorizationStatus }
+        .onAppear {
+            locationStatus = app.locationService.authorizationStatus
+            app.markPermissions(location: locationStatus == .authorizedAlways)
+        }
         .onDisappear { stopLocationStatusPolling() }
     }
     
@@ -52,7 +51,10 @@ struct OnboardingFlowView: View {
             continueButton
         }
         .padding(.vertical)
-        .onAppear { locationStatus = app.locationService.authorizationStatus }
+        .onAppear {
+            locationStatus = app.locationService.authorizationStatus
+            app.markPermissions(location: locationStatus == .authorizedAlways)
+        }
     }
     
     private var permissionsHeader: some View {
@@ -193,11 +195,11 @@ struct IntroStepView: View {
     @Binding var step: OnboardingFlowView.Step
     var body: some View {
         ZStack {
-            Color.white
-            VStack(spacing: 40) {
-                VStack(spacing: 12) {
-                    Text("Welcome to")
-                        .font(.custom("Montserrat", size: 38)).fontWeight(.black)
+            Color.clear
+            VStack(spacing: 20) {
+                VStack(spacing: 8) {
+                    Text("PlasticProphet")
+                        .font(.custom("Montserrat", size: 36)).fontWeight(.black)
                         .foregroundColor(.black).multilineTextAlignment(.center).tracking(-1.5)
                         .shadow(color: Color(red: 0.04, green: 0.23, blue: 0.05).opacity(0.25), radius: 2, x: 0, y: 4)
                         .minimumScaleFactor(0.5).lineLimit(1)
@@ -269,33 +271,77 @@ struct TOSStepView: View {
 // MARK: - Add Cards Step
 struct AddCardsStepView: View {
     @Binding var step: OnboardingFlowView.Step
-    @Binding var showManualEntry: Bool
-    @Binding var manualCardNumber: String
-    @Binding var manualNetwork: String
-    @Binding var manualRewards: String
+    @State private var showAddCard: Bool = false
     @EnvironmentObject var app: AppState
     
     var body: some View {
         VStack(spacing: 16) {
             Text("Add Your Cards").font(.custom("Montserrat", size: 28)).fontWeight(.bold).foregroundColor(.black).tracking(-1.5)
-            Text("Search or scan to add your cards.")
+            Text("Search to add your credit cards.")
                 .font(.custom("Montserrat", size: 14)).foregroundColor(.secondary)
                 .multilineTextAlignment(.center).padding(.horizontal)
-            CardSelectionView(showHeader: false, showDoneButton: false).environmentObject(app)
-            manualEntryButton
+            
+            // Show current cards or empty state
+            if app.cards.isEmpty {
+                VStack(spacing: 16) {
+                    Image(systemName: "creditcard")
+                        .font(.system(size: 60))
+                        .foregroundColor(.gray.opacity(0.4))
+                    Text("No cards added yet")
+                        .font(.custom("Montserrat", size: 16))
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(.vertical, 40)
+            } else {
+                ScrollView {
+                    VStack(spacing: 12) {
+                        ForEach(app.cards) { card in
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(card.name)
+                                        .font(.custom("Montserrat", size: 16))
+                                        .fontWeight(.semibold)
+                                    Text(card.rewardSummary)
+                                        .font(.custom("Montserrat", size: 12))
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                Button {
+                                    app.removeCard(card)
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.red.opacity(0.7))
+                                }
+                            }
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 1)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+            }
+            
+            // Add card button
+            Button(action: { showAddCard = true }) {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text("Add Card")
+                }
+                .font(.custom("Montserrat", size: 18)).fontWeight(.semibold)
+                .foregroundColor(.white).padding(14).frame(maxWidth: .infinity)
+                .background(Color.ppGreen).cornerRadius(12)
+            }.padding(.horizontal)
+            
             actionButtons
-        }.padding().sheet(isPresented: $showManualEntry) { manualEntrySheet }
-    }
-    
-    private var manualEntryButton: some View {
-        Button(action: { showManualEntry = true }) {
-            HStack {
-                Image(systemName: "pencil")
-                Text("Add Manually")
-            }.font(.custom("Montserrat", size: 16)).fontWeight(.semibold)
-            .foregroundColor(Color(hex: "2ac33c")).padding(12).frame(maxWidth: .infinity)
-            .background(Color(hex: "2ac33c").opacity(0.1)).cornerRadius(10)
-        }.padding(.horizontal)
+        }
+        .padding()
+        .sheet(isPresented: $showAddCard) {
+            AddCardView()
+                .environmentObject(app)
+        }
     }
     
     private var actionButtons: some View {
@@ -315,29 +361,6 @@ struct AddCardsStepView: View {
                     .shadow(color: Color(hex: "0a3a0e").opacity(0.3), radius: 4, x: 0, y: 2)
             }.disabled(app.cards.isEmpty)
         }.padding(.horizontal)
-    }
-    
-    private var manualEntrySheet: some View {
-        NavigationStack {
-            Form {
-                Section(header: Text("Card Info")) {
-                    TextField("Card number", text: $manualCardNumber).keyboardType(.numberPad)
-                    TextField("Card type (e.g. Visa)", text: $manualNetwork)
-                    TextField("Rewards summary", text: $manualRewards)
-                }
-                Section {
-                    Button("Add Card") {
-                        let digits = manualCardNumber.filter { $0.isNumber }
-                        guard digits.count >= 4 else { return }
-                        let last4 = String(digits.suffix(4))
-                        let name = manualNetwork.isEmpty ? "Manual Card ••••\(last4)" : "\(manualNetwork) ••••\(last4)"
-                        app.addCard(Card(name: name, network: manualNetwork.isEmpty ? "Unknown" : manualNetwork, last4: last4, rewardSummary: manualRewards))
-                        manualCardNumber = ""; manualNetwork = ""; manualRewards = ""; showManualEntry = false
-                    }.disabled(manualCardNumber.filter { $0.isNumber }.count < 4)
-                    Button("Cancel") { showManualEntry = false }.tint(.red)
-                }
-            }.navigationTitle("Add Card Manually").navigationBarTitleDisplayMode(.inline)
-        }
     }
 }
 
