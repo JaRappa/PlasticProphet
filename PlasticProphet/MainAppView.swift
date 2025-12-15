@@ -51,33 +51,43 @@ struct HomeView: View {
                             .padding(.horizontal)
                             .padding(.top, 8)
                         
-                        Text("Best Deals Near You")
+                        // Best Card for Nearest Establishment section
+                        Text("Best Card Nearby")
                             .font(.custom("Montserrat", size: 20))
                             .fontWeight(.semibold)
                             .foregroundColor(Color.ppGreen)
                             .padding(.horizontal)
                         
+                        // Auto-updates every minute when on home screen
+                        NearbyBestCardView()
+                            .padding(.horizontal)
+                        
+                        // Recent Recommendations section
+                        Text("Recent Recommendations")
+                            .font(.custom("Montserrat", size: 20))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.ppGreen)
+                            .padding(.horizontal)
+                            .padding(.top, 8)
+                        
                         if let rec = app.latestRecommendation {
                             RecommendationCard(rec: rec)
                                 .padding(.horizontal)
                         } else {
-                            // Empty state
+                            // Empty state for recent recommendations
                             VStack(spacing: 16) {
                                 RoundedRectangle(cornerRadius: 12)
                                     .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [6]))
-                                    .frame(height: 160)
+                                    .frame(height: 100)
                                     .overlay(
-                                        VStack(spacing: 8) {
-                                            Image(systemName: "location.circle")
-                                                .font(.system(size: 40))
-                                                .foregroundColor(.ppGreen.opacity(0.5))
-                                            Text("No recommendations yet")
-                                                .font(.custom("Montserrat", size: 16))
+                                        VStack(spacing: 6) {
+                                            Image(systemName: "clock.arrow.circlepath")
+                                                .font(.system(size: 28))
+                                                .foregroundColor(.gray.opacity(0.4))
+                                            Text("No recent recommendations")
+                                                .font(.custom("Montserrat", size: 13))
                                                 .fontWeight(.medium)
                                                 .foregroundColor(.gray)
-                                            Text("Add cards and enable location")
-                                                .font(.custom("Montserrat", size: 12))
-                                                .foregroundColor(.gray.opacity(0.7))
                                         }
                                     )
                                     .padding(.horizontal)
@@ -107,11 +117,103 @@ struct HomeView: View {
                                 .frame(maxWidth: .infinity)
                                 .padding(.horizontal)
                         }
+                        
+                        // Extra padding for FAB
+                        Color.clear.frame(height: 80)
                     }
                     .padding(.vertical)
                 }
                 .background(Color(.systemGroupedBackground))
+                
+                // Backdrop when menu is open - behind everything
+                if showFABMenu {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                showFABMenu = false
+                            }
+                        }
+                        .transition(.opacity)
+                }
+                
+                // FAB Menu - on top
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 16) {
+                            // Menu options
+                            if showFABMenu {
+                                FABMenuItem(
+                                    icon: "magnifyingglass",
+                                    title: "Search Cards",
+                                    color: Color.ppGreen
+                                ) {
+                                    withAnimation { showFABMenu = false }
+                                    showCardSelection = true
+                                }
+                                .transition(.scale.combined(with: .opacity))
+                                
+                                FABMenuItem(
+                                    icon: "camera.fill",
+                                    title: "Scan Card",
+                                    color: Color.ppGreen
+                                ) {
+                                    withAnimation { showFABMenu = false }
+                                    app.showingScanner = true
+                                }
+                                .transition(.scale.combined(with: .opacity))
+                                
+                                FABMenuItem(
+                                    icon: "pencil",
+                                    title: "Manual Entry",
+                                    color: Color.ppGreen
+                                ) {
+                                    withAnimation { showFABMenu = false }
+                                    showManualEntry = true
+                                }
+                                .transition(.scale.combined(with: .opacity))
+                            }
+                            
+                            // Main FAB Button
+                            Button(action: {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                    showFABMenu.toggle()
+                                }
+                            }) {
+                                ZStack {
+                                    Circle()
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [Color.ppGreen, Color.ppGreen.opacity(0.8)],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .frame(width: 60, height: 60)
+                                        .shadow(color: Color.ppShadow.opacity(0.4), radius: 12, x: 0, y: 6)
+                                    
+                                    Image(systemName: showFABMenu ? "xmark" : "plus")
+                                        .font(.system(size: 24, weight: .semibold))
+                                        .foregroundColor(.white)
+                                        .rotationEffect(.degrees(showFABMenu ? 90 : 0))
+                                }
+                            }
+                        }
+                        .padding(.trailing, 20)
+                        .padding(.bottom, 100)
+                    }
+                }
             }
+        }
+        .sheet(isPresented: $showManualEntry) {
+            HomeManualAddView(showManual: $showManualEntry)
+                .environmentObject(app)
+        }
+        .sheet(isPresented: $showCardSelection) {
+            CardSelectionView()
+                .environmentObject(app)
         }
     }
 }
